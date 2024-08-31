@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 const MenuModel = ({
     isModelOpen,
     hanldeCloseModel,
-    onSubscriptionOpen,
 }) => {
     const { userdetails } = useSelector((state) => state.user);
     const navigation = useNavigation();
@@ -39,94 +38,6 @@ const MenuModel = ({
                     </View>
                     <View style={styles.separator2} />
 
-                    <View style={styles.weightInfo}>
-                        <View style={{
-                            flexDirection: 'row',
-                        }}>
-                            <Text style={styles.infoText}>
-                                {"Weight\n"}
-                                <Text style={styles.boldText}>{"98 kg"}</Text>
-                            </Text>
-                            <View style={styles.verticalSeparator} />
-                            <Text style={styles.infoText}>
-                                {"Target weight\n"}
-                                <Text style={styles.boldText}>{"75 kg"}</Text>
-                            </Text>
-                        </View>
-                        <View style={{
-                            alignSelf: "flex-end"
-                        }}>
-                            <Text style={[styles.infoText, styles.goalText]}>
-                                {"Goal\n"}
-                                <Text style={styles.boldText}>{"Dec 25th, 2023"}</Text>
-                            </Text>
-                        </View>
-                    </View>
-
-                    <Image source={require('../../../assets/afterscreen/Profile/Chart.png')} style={styles.chartImage} resizeMode='contain' />
-                    <Text style={styles.currentWeight}>
-                        {"Current weight:"}
-                        <Text style={styles.boldText}>{"82 kg"}</Text>
-                    </Text>
-
-                    <View style={styles.card}>
-                        <View style={styles.cardRow}>
-                            <Image source={require('../../../assets/afterscreen/Profile/Setting.png')} style={styles.cardIcon} resizeMode='contain' />
-                            <Text style={styles.cardText}>
-                                {"Settings\n"}
-                                <Text style={styles.cardSubtitle}>{"Change your preferences"}</Text>
-                            </Text>
-                            <TouchableOpacity onPress={() => onClickHandle("SettingScreen")} style={styles.forwardButton2}>
-                                <Image source={require('../../../assets/afterscreen/Profile/BackArrow.png')} style={styles.forwardIcon} tintColor={"#000"} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.separator} />
-                        <View style={styles.cardRow}>
-                            <Image source={require('../../../assets/afterscreen/Profile/instant.png')} style={styles.cardIcon} resizeMode='contain' />
-                            <Text style={styles.cardText}>
-                                {"Subscription\n"}
-                                <Text style={styles.cardSubtitle}>{"Upgrade or downgrade your plan"}</Text>
-                            </Text>
-                            <TouchableOpacity onPress={onSubscriptionOpen} style={styles.forwardButton2}>
-                                <Image source={require('../../../assets/afterscreen/Profile/BackArrow.png')} style={styles.forwardIcon} tintColor={"#000"} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={[styles.card, styles.largerCard]}>
-                        <View style={styles.cardRow}>
-                            <Image source={require('../../../assets/afterscreen/Profile/Chat.png')} style={styles.cardIcon} resizeMode='contain' />
-                            <Text style={styles.cardText}>
-                                {"Good read !\n"}
-                                <Text style={styles.cardSubtitle}>{"Health related topics & videos"}</Text>
-                            </Text>
-                            <TouchableOpacity onPress={() => onClickHandle("GoodReadScreen")} style={styles.forwardButton2}>
-                                <Image source={require('../../../assets/afterscreen/Profile/BackArrow.png')} style={styles.forwardIcon} tintColor={"#000"} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.separator} />
-                        <View style={styles.cardRow}>
-                            <Image source={require('../../../assets/afterscreen/Profile/email.png')} style={styles.cardIcon} resizeMode='contain' />
-                            <Text style={styles.cardText}>
-                                {"Help center\n"}
-                                <Text style={styles.cardSubtitle}>{"Feature request or general feedback"}</Text>
-                            </Text>
-                            <TouchableOpacity onPress={() => onClickHandle("HelpCenterScreen")} style={styles.forwardButton2}>
-                                <Image source={require('../../../assets/afterscreen/Profile/BackArrow.png')} style={styles.forwardIcon} tintColor={"#000"} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.separator} />
-                        <View style={styles.cardRow}>
-                            <Image source={require('../../../assets/afterscreen/Profile/star.png')} style={styles.cardIcon} resizeMode='contain' />
-                            <Text style={styles.cardText}>
-                                {"About FastBetter\n"}
-                                <Text style={styles.cardSubtitle}>{"Terms, privacy and disclaimers"}</Text>
-                            </Text>
-                            <TouchableOpacity onPress={() => onClickHandle("AboutScreen")} style={[styles.forwardButton2]}>
-                                <Image source={require('../../../assets/afterscreen/Profile/BackArrow.png')} style={styles.forwardIcon} tintColor={"#000"} resizeMode='contain' />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
                 </ScrollView>
                 <View style={{
                     position: "relative",

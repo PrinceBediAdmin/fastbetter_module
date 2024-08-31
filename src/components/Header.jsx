@@ -10,10 +10,6 @@ const Header = ({ viewClassName }) => {
     const navigation = useNavigation();
     const [isProfileModelOpen, setIsProfileModelOpen] = useState(false);
 
-    const handleSubscription = () => {
-        setIsProfileModelOpen(false);
-    };
-
     return (
         <View>
             <View style={[styles.headerContainer, viewClassName]}>
@@ -37,7 +33,6 @@ const Header = ({ viewClassName }) => {
                 isModelOpen={isProfileModelOpen}
                 hanldeCloseModel={() => setIsProfileModelOpen(false)}
                 onSubscriptionOpen={() => handleSubscription()} />
-
         </View>
     );
 };

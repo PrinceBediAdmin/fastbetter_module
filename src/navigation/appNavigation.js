@@ -4,10 +4,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoadingScreen from '../screens/LoadingScreen';
 
-// Before
 // Fasting 
 import Fasting from '../screens/fasting/Fasting';
 import FastingSchedule from '../screens/fasting/FastingSchedule';
+
 
 import DashboardNavigation from './DashboardNavigation';
 
@@ -28,11 +28,11 @@ export default function AppNavigation() {
       {isLoading ? (
         <LoadingScreen />
       ) : (
-        <Stack.Navigator initialRouteName={'Fasting'}>
+        <Stack.Navigator initialRouteName={'DashboardNavigation'}>
 
-          {/* <Stack.Screen name="Fasting" options={disabledHeader} component={Fasting} />          
+          <Stack.Screen name="Fasting" options={disabledHeader} component={Fasting} />          
           <Stack.Screen name="FastingSchedule" options={disabledHeader} component={FastingSchedule} />
-          <Stack.Screen name="DashboardNavigation" options={disabledHeader} component={DashboardNavigation} /> */}
+          <Stack.Screen name="DashboardNavigation" options={disabledHeader} component={DashboardNavigation} />
 
         </Stack.Navigator>
       )}

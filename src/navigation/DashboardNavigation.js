@@ -4,17 +4,33 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Header from "../components/Header";
 
-//screen
+// Screens
 import HomeScreen from '../screens/after/HomeScreen';
 
 import { SvgXml } from 'react-native-svg';
 import { homeIcon, eatIcon, gymIcon, trackIcon } from '../assets/svg/icons';
 
-
 const Tab = createBottomTabNavigator();
 
-const DashboardNavigation = () => {
+const GymScreen = () => (
+    <View>
+        <Text>GYM</Text>
+    </View>
+);
 
+const EatScreen = () => (
+    <View>
+        <Text>EAT</Text>
+    </View>
+);
+
+const TrackScreen = () => (
+    <View>
+        <Text>Track</Text>
+    </View>
+);
+
+const DashboardNavigation = () => {
     return (
         <Tab.Navigator
             initialRouteName={'Home'}
@@ -30,135 +46,71 @@ const DashboardNavigation = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: "#fff",
-                    // elevation: 5, // Android box shadow
-                    // shadowColor: 'black', // iOS box shadow
-                    // shadowOffset: { width: 0, height: 2 },
-                    // shadowOpacity: 0.2,
-                    // shadowRadius: 4,
                 },
-            }}>
+            }}
+        >
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
                 options={{
-                    headerShown: false,
-                    headerStyle: {
-                        backgroundColor: "#fff",
-                    },
-                    headerTitleStyle: {
-                    },
-                    header: ({ focused }) => {
-                        return <Header />
-                    },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View
-                                className={`flex-col items-center justify-center bg-white ${focused && 'border-b-2 border-b-white'}`}
-                            >
-                                <SvgXml xml={homeIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
-                                <Text className={`text-[#a3a1a8] font-medium mt-1 text-xs ${focused && 'text-[#FF9950]'}`}>
-                                    Home
-                                </Text>
-                                <View className={`w-2 h-2 rounded-full mt-2 ${focused ? 'bg-[#FF9950]' : 'bg-[#fff]'}`}></View>
-                            </View>
-                        );
-                    },
-
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                            <SvgXml xml={homeIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
+                            <Text style={{ color: focused ? '#FF9950' : '#a3a1a8', marginTop: 4, fontSize: 10 }}>
+                                Home
+                            </Text>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, marginTop: 4, backgroundColor: focused ? '#FF9950' : '#fff' }} />
+                        </View>
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Gym"
-                component={
-                    <View style={{ alignItems: "center" }}>
-                        <Text>GYM</Text>
-                    </View>
-                }
+                component={GymScreen}
                 options={{
-                    headerShown: false,
-                    headerStyle: {
-                        backgroundColor: "#fff",
-                    },
-                    header: ({ focused }) => {
-                        return <Header />
-                    },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View
-                                className={`flex-col items-center justify-center bg-white ${focused && 'border-b-2 border-b-white'}`}
-                            >
-                                <SvgXml xml={gymIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
-                                <Text className={`text-[#a3a1a8] font-medium mt-1 text-xs ${focused && 'text-[#FF9950]'}`}>
-                                    Gym
-                                </Text>
-                                <View className={`w-2 h-2 rounded-full mt-2 ${focused ? 'bg-[#FF9950]' : 'bg-[#fff]'}`}></View>
-                            </View>
-                        );
-                    },
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                            <SvgXml xml={gymIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
+                            <Text style={{ color: focused ? '#FF9950' : '#a3a1a8', marginTop: 4, fontSize: 10 }}>
+                                Gym
+                            </Text>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, marginTop: 4, backgroundColor: focused ? '#FF9950' : '#fff' }} />
+                        </View>
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Eat"
-                component={<View style={{ alignItems: "center" }}>
-                    <Text>EAT</Text>
-                </View>}
+                component={EatScreen}
                 options={{
-                    headerShown: false,
-                    headerStyle: {
-                        backgroundColor: "#fff",
-                    },
-                    header: ({ focused }) => {
-                        return <Header />
-                    },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View
-                                className={`flex-col items-center justify-center bg-white ${focused && 'border-b-2 border-b-white'}`}
-                            >
-                                <SvgXml xml={eatIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
-                                <Text className={`text-[#a3a1a8] font-medium mt-1 text-xs ${focused && 'text-[#FF9950]'}`}>
-                                    Eat
-                                </Text>
-                                <View className={`w-2 h-2 rounded-full mt-2 ${focused ? 'bg-[#FF9950]' : 'bg-[#fff]'}`}></View>
-                            </View>
-                        );
-                    },
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                            <SvgXml xml={eatIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
+                            <Text style={{ color: focused ? '#FF9950' : '#a3a1a8', marginTop: 4, fontSize: 10 }}>
+                                Eat
+                            </Text>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, marginTop: 4, backgroundColor: focused ? '#FF9950' : '#fff' }} />
+                        </View>
+                    ),
                 }}
             />
-
             <Tab.Screen
                 name="Track"
-                component={
-                    <View style={{ alignItems: "center" }}>
-                    <Text>Track</Text>
-                </View>
-                }
+                component={TrackScreen}
                 options={{
-                    headerShown: false,
-                    headerStyle: {
-                        backgroundColor: "#fff",
-                    },
-                    header: ({ focused }) => {
-                        return <Header />
-                    },
-                    tabBarIcon: ({ focused }) => {
-                        return (
-                            <View
-                                className={`flex-col items-center justify-center bg-white ${focused && 'border-b-2 border-b-white'}`}
-                            >
-                                <SvgXml xml={trackIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
-                                <Text className={`text-[#a3a1a8] font-medium mt-1 text-xs ${focused && 'text-[#FF9950]'}`}>
-                                    Track
-                                </Text>
-                                <View className={`w-2 h-2 rounded-full mt-2 ${focused ? 'bg-[#FF9950]' : 'bg-[#fff]'}`}></View>
-                            </View>
-                        );
-                    },
+                    tabBarIcon: ({ focused }) => (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
+                            <SvgXml xml={trackIcon(focused ? '#FF9950' : '#a3a1a8')} width={26} height={26} />
+                            <Text style={{ color: focused ? '#FF9950' : '#a3a1a8', marginTop: 4, fontSize: 10 }}>
+                                Track
+                            </Text>
+                            <View style={{ width: 8, height: 8, borderRadius: 4, marginTop: 4, backgroundColor: focused ? '#FF9950' : '#fff' }} />
+                        </View>
+                    ),
                 }}
             />
-
         </Tab.Navigator>
     );
 };
-
 
 export default DashboardNavigation;

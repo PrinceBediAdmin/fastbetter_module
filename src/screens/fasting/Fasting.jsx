@@ -11,7 +11,6 @@ import bgimage2 from '../../assets/common/base2.png';
 import bgimage3 from '../../assets/common/base3.png';
 
 export default function Fasting() {
-
   const navigation = useNavigation();
   const [continueBtn, setContinueBtn] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState(1);
@@ -20,10 +19,10 @@ export default function Fasting() {
   const [fastingPlans, setFastingPlans] = useState([]);
 
   useEffect(() => {
-    if (dashboardData.fastingsetup) {
-      setFastingPlans(dashboardData.fastingsetup);
-    }
-  }, [dashboardData]);
+    // if (plan__fast) {
+    //   setFastingPlans(plan__fast);
+    // }
+  }, []);
 
   const handleGoForward = () => {
     setIsModelOpen(true);
