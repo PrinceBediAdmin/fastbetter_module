@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import Header from "../components/Header";
+import TrackScreen from '../screens/after/TrackScreen';
 
 // Screens
 import HomeScreen from '../screens/after/HomeScreen';
@@ -21,12 +21,6 @@ const GymScreen = () => (
 const EatScreen = () => (
     <View>
         <Text>EAT</Text>
-    </View>
-);
-
-const TrackScreen = () => (
-    <View>
-        <Text>Track</Text>
     </View>
 );
 

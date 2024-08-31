@@ -1,28 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet, Platform } from "react-native";
+import React, { useState } from "react";
+import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet } from "react-native";
 import Background from "../../components/Background";
 import { useNavigation } from "@react-navigation/native";
 import NextButton from "../../components/NextButton";
-import BottomModel from "../../components/BottomModel";
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-
+import BottomModel from "../../components/BottomModel";
 import bgimage from '../../assets/common/base.png';
 import bgimage2 from '../../assets/common/base2.png';
 import bgimage3 from '../../assets/common/base3.png';
+
+const fastingPlans = [
+  {
+    id: 1,
+    name: "Classic TRF",
+    subname: "Tap to customise your eating window",
+    startTime: "6:30 AM",
+    endTime: "10:30 PM",
+    fasting: 16,
+    eating: 8,
+    isRecommended: true,
+    image: bgimage,
+    bordercolorCode: "borderOrange",
+    bgColorCode: "bgLightOrange",
+  },
+  {
+    id: 2,
+    name: "Basic TRF",
+    subname: "Tap to customise your eating window",
+    startTime: "9:00 AM",
+    endTime: "7:00 PM",
+    fasting: 14,
+    eating: 10,
+    isRecommended: false,
+    image: bgimage2,
+    bordercolorCode: "borderTeal",
+    bgColorCode: "bgLightTeal",
+  },
+  {
+    id: 3,
+    name: "Prolonged TRF",
+    subname: "Tap to customise your eating window",
+    startTime: "9:00 AM",
+    endTime: "3:00 PM",
+    fasting: 18,
+    eating: 6,
+    isRecommended: false,
+    image: bgimage3,
+    bordercolorCode: "borderBlue",
+    bgColorCode: "bgLightBlue",
+  }
+];
 
 export default function Fasting() {
   const navigation = useNavigation();
   const [continueBtn, setContinueBtn] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [fastingPlans, setFastingPlans] = useState([]);
-
-  useEffect(() => {
-    // if (plan__fast) {
-    //   setFastingPlans(plan__fast);
-    // }
-  }, []);
 
   const handleGoForward = () => {
     setIsModelOpen(true);
@@ -41,99 +77,124 @@ export default function Fasting() {
     <Pagination
       dotsLength={fastingPlans.length}
       activeDotIndex={activeSlide}
-      containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}
-      dotStyle={styles.paginationDot}
-      inactiveDotStyle={styles.inactivePaginationDot}
+      containerStyle={styles.paginationContainer}
+      dotStyle={styles.activeDot}
+      inactiveDotStyle={styles.inactiveDot}
       inactiveDotOpacity={0.8}
       inactiveDotScale={0.6}
     />
   );
 
-  const renderItem = ({ item, index }) => (
-    <View style={styles.carouselItemContainer}>
-      <Image
-        source={index === 0 ? bgimage : index === 1 ? bgimage2 : bgimage3}
-        style={styles.carouselImage}
-        resizeMode='contain'
-      />
-      <View style={styles.touchableContainer}>
-        <TouchableOpacity
-          key={index}
-          style={[
-            styles.touchableItem,
-            { borderColor: item.borderColorCode, backgroundColor: item.bgColorCode }
-          ]}
-          onPress={() => handleSelectItem(index)}
-        >
-          {item.isRecommended && (
-            <View style={styles.recommendedTag}>
-              <Text style={styles.recommendedTagText}>Recommended</Text>
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.carouselItemContainer}>
+        <Image source={item?.image} style={styles.planImage} resizeMode='contain' />
+        <View style={styles.planContainer}>
+          <TouchableOpacity
+            onPress={() => handleSelectItem(item.id)}
+            style={[
+              styles.planTouchable,
+              styles[item.bordercolorCode],
+              styles[item.bgColorCode]
+            ]}
+          >
+            {item.isRecommended && (
+              <View style={styles.recommendedContainer}>
+                <Text style={styles.recommendedText}>
+                  Recommended
+                </Text>
+              </View>
+            )}
+            <View style={styles.planNameContainer}>
+              <Text style={styles.planNameText}>
+                {item.name}
+              </Text>
             </View>
-          )}
-          <Text style={styles.planText}>{item.plan}</Text>
-          <View style={styles.fastingContainer}>
-            <View style={styles.arrowContainer}>
-              <Text style={styles.fastingText}>Fasting</Text>
-              <Image source={require('../../assets/common/arrowup.png')} style={styles.arrowImage} />
+            <View style={styles.fastingEatingContainer}>
+              <View style={styles.fastingContainer}>
+                <Text style={styles.fastingText}>Fasting</Text>
+                <Image source={require('../../assets/common/arrowup.png')} style={styles.arrowUp} />
+              </View>
+              <Text style={styles.planDurationText}>{item.fasting}:{item.eating}</Text>
+              <View style={styles.eatingContainer}>
+                <Image source={require('../../assets/common/arrowdown.png')} style={styles.arrowDown} />
+                <Text style={styles.eatingText}>Eating</Text>
+              </View>
             </View>
-            <Text style={styles.fastingWindowText}>{item.fastingWindow}:{item.eatingWindow}</Text>
-            <View style={styles.arrowContainer}>
-              <Image source={require('../../assets/common/arrowdown.png')} style={styles.arrowImageDown} />
-              <Text style={styles.eatingText}>Eating</Text>
+            <View style={styles.timeContainer}>
+              <Text style={styles.timeText}>{item.startTime} - {item.endTime}</Text>
             </View>
-          </View>
-          <View style={styles.timeContainer}>
-            <Text style={styles.timeText}>
-              {item.startTime12hr}
-              <Text> to </Text>
-              {item.endTime12hr}
-            </Text>
-          </View>
-          <Text style={styles.titleText}>{item.title}</Text>
-        </TouchableOpacity>
+            <View style={styles.subNameContainer}>
+              <Text style={styles.subNameText}>
+                {item.subname}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
-    <Background>
+    <Background statusBarTranslucent={false}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.skipButton}
-          onPress={() => navigation.navigate('FastingSchedule')}
-        >
-          <Text style={styles.skipText}>SKIP</Text>
+        <TouchableOpacity style={styles.skipButton} onPress={() => navigation.navigate('FastingSchedule')}>
+          <Text style={styles.skipButtonText}>SKIP</Text>
         </TouchableOpacity>
 
         <View style={styles.carouselContainer}>
           <Carousel
             data={fastingPlans}
             renderItem={renderItem}
+            layout={"default"}
             sliderWidth={400}
             itemWidth={400}
             onSnapToItem={(index) => setActiveSlide(index)}
           />
-          <View style={styles.paginationContainer}>
+          <View style={styles.paginationWrapper}>
             {pagination}
           </View>
         </View>
 
         <View style={styles.featuresContainer}>
-          <Text style={styles.featuresTitle}>Features of the plan</Text>
-          {fastingPlans.length > 0 && fastingPlans[selectedPlan - 1]?.features.map((feature, index) => (
-            <View key={index} style={styles.featureItem}>
-              <Text style={styles.featureTitle}>{feature.title}</Text>
-              <Text style={styles.featureSubtitle}>{feature.subtitle}</Text>
-            </View>
-          ))}
+          <Text style={styles.featuresTitle}>
+            Features of the plan
+          </Text>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureTitle}>
+              It’s flexible
+            </Text>
+            <Text style={styles.featureDescription}>
+              This plan doesn’t require a lot of effort, just have a late breakfast or an early dinner
+            </Text>
+          </View>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureTitle}>
+              Helps boost metabolism
+            </Text>
+            <Text style={styles.featureDescription}>
+              The 16:8 plan may boost your metabolism by up to 14%
+            </Text>
+          </View>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureTitle}>
+              Helps in disease prevention
+            </Text>
+            <Text style={styles.featureDescription}>
+              This plan may be helpful in the prevention of type 2 diabetes or other obesity-related conditions
+            </Text>
+          </View>
+          <View style={styles.featureItem}>
+            <Text style={styles.featureTitle}>
+              Helps improve learning and memory
+            </Text>
+            <Text style={styles.featureDescription}>
+              Intermittent fasting may help in generating new neurons in adult hippocampus
+            </Text>
+          </View>
         </View>
       </ScrollView>
-      <NextButton
-        onPress={handleGoForward}
-        title={'Choose'}
-        style={styles.nextButton}
-        isContinueBtn={continueBtn}
-      />
+      <NextButton onPress={handleGoForward} title={'Choose'} mainClassName={'absolute bottom-10'} isContinueBtn={continueBtn} />
       <BottomModel isVisible={isModelOpen} onClose={handleCloseModel} />
     </Background>
   );
@@ -143,29 +204,174 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     width: "100%",
-    marginTop: 45,
   },
   skipButton: {
     alignItems: 'flex-end',
-    marginTop: 20,
+    marginTop: 34,
     marginHorizontal: 24,
   },
-  skipText: {
+  skipButtonText: {
     textTransform: 'uppercase',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '500',
     color: '#FE7701',
   },
   carouselContainer: {
     marginTop: 10,
     alignItems: 'center',
   },
-  paginationContainer: {
+  carouselItemContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  planImage: {
+    width: "100%",
+    height: 200,
+    marginTop: 60,
+  },
+  planContainer: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: 15,
   },
-  paginationDot: {
+  planTouchable: {
+    flex: 1,
+    width: "100%",
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
+  borderOrange: {
+    borderColor: "#FF9950",
+    borderWidth: 1,
+  },
+  borderTeal: {
+    borderColor: "#23F1C0",
+    borderWidth: 1,
+  },
+  borderBlue: {
+    borderColor: "#23B3F1",
+    borderWidth: 1,
+  },
+  bgLightOrange: {
+    backgroundColor: "#FEF8F4",
+  },
+  bgLightTeal: {
+    backgroundColor: "#EDFFFB",
+  },
+  bgLightBlue: {
+    backgroundColor: "#E2F6FF",
+  },
+  recommendedContainer: {
+    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  recommendedText: {
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: '#FE7701',
+    fontSize: 10,
+    fontWeight: '600',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    position: 'absolute',
+    top: -14,
+  },
+  planNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 12,
+  },
+  planNameText: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  fastingEatingContainer: {
+    flexDirection: 'row',
+    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  fastingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginRight: 0,
+    position: 'relative',
+  },
+  fastingText: {
+    color: '#FE7701',
+    fontSize: 12,
+    fontWeight: '500',
+    marginRight: 16,
+    marginBottom: 32,
+  },
+  arrowUp: {
+    position: 'absolute',
+    top: 10,
+    right: -2,
+  },
+  planDurationText: {
+    textAlign: 'left',
+    color: 'black',
+    fontSize: 32,
+    fontWeight: '500',
+    marginLeft: 0,
+  },
+  eatingContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginLeft: 0,
+    position: 'relative',
+  },
+  arrowDown: {
+    position: 'absolute',
+    top: 12,
+    left: 0,
+  },
+  eatingText: {
+    color: '#FE7701',
+    fontSize: 12,
+    fontWeight: '500',
+    marginLeft: 16,
+    marginTop: 32,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    width: "66%",
+    justifyContent: 'center',
+    alignSelf:"center",
+    marginTop: 4,
+  },
+  timeText: {
+    textAlign: 'left',
+    color: 'black',
+    fontSize: 18,
+    fontWeight: '500',
+  },
+  subNameContainer: {
+    flexDirection: 'row',
+    width: "66%",
+    justifyContent: 'center',
+    marginTop: 8,
+    alignSelf:"center",
+    marginBottom: 12,
+  },
+  subNameText: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 10,
+    fontWeight: '400',
+  },
+  paginationContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+  },
+  activeDot: {
     width: 8,
     height: 8,
     borderRadius: 50,
@@ -174,7 +380,7 @@ const styles = StyleSheet.create({
     borderColor: "#FE7701",
     backgroundColor: '#FE7701',
   },
-  inactivePaginationDot: {
+  inactiveDot: {
     backgroundColor: '#fff',
     borderColor: "#FE7701",
     width: 8,
@@ -182,144 +388,32 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
   },
-  carouselItemContainer: {
-    flex: 1,
-    alignItems: 'center',
-    width: "100%",
-  },
-  carouselImage: {
-    width: "100%",
-    height: 200,
-    marginTop: 60,
-  },
-  touchableContainer: {
+  paginationWrapper: {
     position: 'absolute',
     alignSelf: 'center',
-    width: 330,
-  },
-  touchableItem: {
-    borderWidth: 1,
-    borderRadius: 30,
-    paddingVertical: 23,
-    marginTop: 16,
-    height: 180,
-    position: "relative",
-    alignItems: "center",
-  },
-  recommendedTag: {
-    position: 'absolute',
-    top: -15,
-    alignSelf: 'center',
-    backgroundColor: '#FE7701',
-    borderRadius: 8
-  },
-  recommendedTagText: {
-    color: 'white',
-    padding: 8,
-    borderRadius: 10,
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  planText: {
-    textAlign: 'center',
-    fontSize: 12,
-    fontWeight: '400',
-    color: 'black',
-  },
-  fastingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 1,
-  },
-  arrowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  fastingText: {
-    color: '#FE7701',
-    fontSize: 10,
-    fontWeight: '500',
-    marginRight: 4,
-  },
-  arrowImage: {
-    position: 'absolute',
-    top: 5,
-    right: -5,
-    height: 15,
-    width: 15,
-  },
-  fastingWindowText: {
-    color: 'black',
-    fontSize: 24,
-    fontWeight: '500',
-    marginHorizontal: 4,
-  },
-  arrowImageDown: {
-    position: 'absolute',
-    top: 5,
-    left: -5,
-    height: 15,
-    width: 15,
-  },
-  eatingText: {
-    color: '#FE7701',
-    fontSize: 10,
-    fontWeight: '500',
-    marginLeft: 4,
-  },
-  timeContainer: {
-    width: 222,
-    height: 48,
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    marginTop: 3,
-  },
-  timeText: {
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '600',
-    color: 'black',
-  },
-  titleText: {
-    textAlign: 'center',
-    fontSize: 12,
-    color: 'black',
-    marginTop: 3,
+    bottom: 15,
   },
   featuresContainer: {
     paddingHorizontal: 40,
-    marginTop: 20,
+    marginBottom: 90,
   },
   featuresTitle: {
-    fontSize: 18,
-    lineHeight: 20,
-    textAlign: "left",
-    fontWeight: Platform.OS === 'android' ? '400' : '500',
-    fontFamily: Platform.OS === 'android' ? 'Larken-Bold' : "Larken-Bold",
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'black',
   },
   featureItem: {
-    marginTop: 24,
+    marginTop: 20,
   },
   featureTitle: {
-    fontSize: 12,
-    lineHeight: 14.4,
-    fontWeight: "700",
-    textAlign: "left",
-    marginBottom: 4,
-    color: "#18192B",
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'black',
+    marginBottom: 6,
   },
-  featureSubtitle: {
+  featureDescription: {
     fontSize: 12,
-    lineHeight: 14.4,
-    fontWeight: "400",
-    textAlign: "left",
-    color: "#18192B",
-  },
-  nextButton: {
-    marginBottom: 20,
-    alignSelf: "center",
+    fontWeight: '400',
+    color: 'black',
   },
 });

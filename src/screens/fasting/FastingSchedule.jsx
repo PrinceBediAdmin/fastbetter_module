@@ -10,46 +10,46 @@ export default function FastingSchedule() {
   const navigation = useNavigation();
   const [fastingScheduleData, setFastingScheduleData] = useState({
     "fasting1": {
-        "eatingwindow": "Morning",
-        "timeRange": "7:00 AM - 12:00 PM",
-        "activities": [
-            {
-                "title": "Have your first meal",
-                "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-            },
-            {
-                "title": "Get ready to fast",
-                "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-            }
-        ]
+      "eatingwindow": "Morning",
+      "timeRange": "7:00 AM - 12:00 PM",
+      "activities": [
+        {
+          "title": "Have your first meal",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+        },
+        {
+          "title": "Get ready to fast",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+        }
+      ]
     },
     "fasting2": {
-        "eatingwindow": "Day",
-        "timeRange": "12:00 PM - 5:00 PM",
-        "activities": [
-            {
-                "title": "Have your last meal",
-                "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-            },
-            {
-                "title": "Control your hunger",
-                "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-            }
-        ]
+      "eatingwindow": "Day",
+      "timeRange": "12:00 PM - 5:00 PM",
+      "activities": [
+        {
+          "title": "Have your last meal",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+        },
+        {
+          "title": "Control your hunger",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+        }
+      ]
     },
     "fasting3": {
-        "eatingwindow": "Evening",
-        "timeRange": "5:00 PM - 9:00 PM",
-        "activities": [
-            {
-                "title": "Enjoy burning fat",
-                "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-            }
-        ]
+      "eatingwindow": "Evening",
+      "timeRange": "5:00 PM - 9:00 PM",
+      "activities": [
+        {
+          "title": "Enjoy burning fat",
+          "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+        }
+      ]
     },
     "title": "We recommend this",
     "subtitle": "fasting schedule"
-});
+  });
 
   const handleGoForward = () => {
     navigation.navigate('DashboardNavigation');
@@ -60,7 +60,7 @@ export default function FastingSchedule() {
   }
 
   return (
-    <Background>
+    <Background statusBarBgColor="" statusBarTranslucent={false}>
       <View className="px-4 top-5">
         <ProgressBar progressNumber={100} type={2} />
       </View>
