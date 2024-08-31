@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Fast Better</string>
+    <!-- Facebook    -->
+
+    <string name="facebook_app_id">263055966868589</string>
+    <string name="fb_login_protocol_scheme">fb263055966868589</string>
+    <string name="facebook_client_token">4161eb1b4ed9eb64922e140a3885a504</string>
+</resources>

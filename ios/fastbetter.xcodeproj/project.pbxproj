@@ -1,0 +1,1072 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E356F31AD99517003FC87E /* fastbetterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* fastbetterTests.m */; };
+		03FA549C8B4043CFB4319227 /* LarkenDEMO-BlackItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D81CBC70AA114185BEF6C00B /* LarkenDEMO-BlackItalic.otf */; };
+		04E8EC2CDF88425AB398E829 /* OpenSans_SemiCondensed-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4E7E0A6ABF84C07A0A15651 /* OpenSans_SemiCondensed-LightItalic.ttf */; };
+		09D956063CA14EEA8AE22C13 /* LarkenDEMO-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1480C672075349F5ACC4FD6E /* LarkenDEMO-Thin.otf */; };
+		0B43638506B24BE8B03F8D7E /* OpenSans_SemiCondensed-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37A598097DE041EFB9035CC9 /* OpenSans_SemiCondensed-Medium.ttf */; };
+		0C5813DB7CCD4CB9A3074494 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F28A7DFCB125426787778673 /* OpenSans-Bold.ttf */; };
+		0C5C8553DB52450DBAD117C9 /* OpenSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0522EE2D84A4D2E90B8B689 /* OpenSans-MediumItalic.ttf */; };
+		0C6DE1818438485C9E84989E /* WorkSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5F77FFD55224FF7AA0AAF67 /* WorkSans-BlackItalic.ttf */; };
+		0C80B921A6F3F58F76C31292 /* libPods-fastbetter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-fastbetter.a */; };
+		0D17ACBDB8E9444D974CB204 /* OpenSans_SemiCondensed-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F9DAEE501AE4FA6B7FE9436 /* OpenSans_SemiCondensed-SemiBoldItalic.ttf */; };
+		0D7CF6D99ED64C96A7EFB9A6 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8ABABCC0E8444C09801D9141 /* OpenSans-ExtraBoldItalic.ttf */; };
+		12A30352892D4D0581455F66 /* LarkenDEMO-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8FFCD115617C48869A62A49D /* LarkenDEMO-Medium.otf */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		13B0F2E5EA8340088261AF24 /* Larken-ExtraBold-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D90B4F1ECF7A4842A2ADE7DC /* Larken-ExtraBold-Italic.otf */; };
+		1BE984B5669242AFBE28A7C6 /* LarkenDEMO-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = C6FD4496F61541A78768C7A8 /* LarkenDEMO-BoldItalic.otf */; };
+		20FCC866514F49C694582B73 /* OpenSans_SemiCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B223063BD2424047ABFD6A7E /* OpenSans_SemiCondensed-BoldItalic.ttf */; };
+		221A4AC3C4E94CDEAF565820 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C33E3735738453E82890E67 /* OpenSans-Regular.ttf */; };
+		236073BC992B404AA59ED7FB /* Larken-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9C906495958F4CC498495AB8 /* Larken-Medium.otf */; };
+		24017563938341BB8EB92146 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7783D421467403DBFC599AC /* OpenSans-BoldItalic.ttf */; };
+		242A4495AA0F4539856AEBDF /* OpenSans_Condensed-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 092B2A1BEED34D90B6D63DAB /* OpenSans_Condensed-Italic.ttf */; };
+		2C6537DD88BF49EB957F46B7 /* Larken-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 07FD98BA543F4173AC00A45D /* Larken-Light.otf */; };
+		2C85D530E3F2469F83BDBBAC /* WorkSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 970725B1DCC3459397F50B9F /* WorkSans-SemiBoldItalic.ttf */; };
+		31CC8CBA12BA4945AD488450 /* WorkSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 509A4A75F26C43968479FF44 /* WorkSans-Black.ttf */; };
+		32E4B04C90034601BA83FF1F /* LarkenDEMO-ExtraBoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 66BA8D636ADA4867A9D98ECC /* LarkenDEMO-ExtraBoldItalic.otf */; };
+		3600683A85374E3482299030 /* OpenSans_SemiCondensed-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 28430A37BCDF41ABB3FB52EC /* OpenSans_SemiCondensed-SemiBold.ttf */; };
+		39214399D20342A7B6C22144 /* OpenSans_SemiCondensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A0C6ED0412C41C7B8217885 /* OpenSans_SemiCondensed-Light.ttf */; };
+		43D766BDD9A840758E5747C4 /* LarkenDEMO-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 99940CBA3D884A8282D2641B /* LarkenDEMO-Light.otf */; };
+		4B9959F3590344B0927357C7 /* OpenSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8BAB4A3A59134A53A182231B /* OpenSans-SemiBold.ttf */; };
+		4CD37E48FA584B438ECE2D3A /* LarkenDEMO-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5191797140D747AC8CE674DC /* LarkenDEMO-Regular.otf */; };
+		4F870051476F4F948A33D728 /* LarkenDEMO-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 05742B1AE29145FCBB9C9139 /* LarkenDEMO-Bold.otf */; };
+		4FE70DE5F1FB41BB898524F8 /* WorkSans-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C4941BA0D54B43A69634BBB2 /* WorkSans-Thin.ttf */; };
+		505925DE76904BA1886B6BBE /* Larken-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 161651D1E22C49A29E8A6788 /* Larken-Regular.otf */; };
+		5098D1E5766248CCA9A263E8 /* OpenSans_SemiCondensed-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43182E817E2A444B8A7425A2 /* OpenSans_SemiCondensed-Italic.ttf */; };
+		51239F1774E84A2398A8436E /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F32758465BA43FC908D6CF3 /* OpenSans-Italic.ttf */; };
+		53ADE79653794FD5B553747A /* OpenSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95041CAF58604E74A214E427 /* OpenSans-SemiBoldItalic.ttf */; };
+		5CCE32D6678F4810B497BA1E /* WorkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9358666DAFC34167AF3C2181 /* WorkSans-Regular.ttf */; };
+		5D8F09DD2A3A483B828D1E27 /* WorkSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 837126CF6130408B817382F6 /* WorkSans-ExtraLight.ttf */; };
+		63762CFABF734D3DA317D72F /* LarkenDEMO-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 29EB034BA7BF4D0C973D957E /* LarkenDEMO-ExtraBold.otf */; };
+		64DEA8FBD97145019D141FE1 /* OpenSans_Condensed-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56F81192F88047379993BB9A /* OpenSans_Condensed-ExtraBoldItalic.ttf */; };
+		6CBC559968A7496EB4243481 /* OpenSans_Condensed-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0AA5BC0896024242A36DB0D3 /* OpenSans_Condensed-ExtraBold.ttf */; };
+		6E720C0607454C12BA3088A8 /* basicsanssfbold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1E85150EFBAF4408B7EB1494 /* basicsanssfbold.ttf */; };
+		725175673AFE4D6B9B66A189 /* OpenSans_Condensed-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B90A285F6C554FC98B636E3B /* OpenSans_Condensed-SemiBoldItalic.ttf */; };
+		7361E20F8F0B4A4EB07D5E0E /* WorkSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BD5E0675FEC4F10B0D2010F /* WorkSans-Medium.ttf */; };
+		7699B88040F8A987B510C191 /* libPods-fastbetter-fastbetterTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-fastbetter-fastbetterTests.a */; };
+		7CDE076DFEA14AA1956D990F /* basicsanssfitalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A33E6BF321EC4972B58AF746 /* basicsanssfitalic.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		82007C0183864DE58723F1DF /* Larken-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4A92F6DEDEBE4A47BCC5DAA4 /* Larken-ExtraBold.otf */; };
+		8352ED88A8024DBBBCE22D72 /* OpenSans_SemiCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0599308AB494B88B39FA784 /* OpenSans_SemiCondensed-Regular.ttf */; };
+		873F6DBA9F3D43FCBAF6C38F /* WorkSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4FE23B8A93B473B9BAFDF89 /* WorkSans-LightItalic.ttf */; };
+		88F58C26709744E283D7E6A1 /* OpenSans_Condensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2EF20CAC352F4032986C1B8D /* OpenSans_Condensed-Bold.ttf */; };
+		8976B18303FE452E826A0E85 /* OpenSans_Condensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D94F1930E6E84FB8BAC543F1 /* OpenSans_Condensed-Regular.ttf */; };
+		8C986972C5294115B9399F78 /* basicsanssf.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BDE5B324E2647459F3EF037 /* basicsanssf.ttf */; };
+		8D947782194742F6BA3310F7 /* Larken-Bold-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = BD6D979BF70249899719F131 /* Larken-Bold-Italic.otf */; };
+		8EF1B59894A14940AB83E447 /* OpenSans_SemiCondensed-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D7A638EE4C5644EEAAF3204D /* OpenSans_SemiCondensed-ExtraBold.ttf */; };
+		90DBD83C0ECE43BCACB8A180 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8CC9A0CBD975483FBC157099 /* OpenSans-LightItalic.ttf */; };
+		9418F2AD3A4C4E1FB7133532 /* OpenSans_SemiCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2BBDC22515E4F07AE4DBF14 /* OpenSans_SemiCondensed-Bold.ttf */; };
+		988D80E8E5F740D1A15E5DC5 /* WorkSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCF9A6544B9A4F3E89E1935A /* WorkSans-ExtraBoldItalic.ttf */; };
+		98CEC2F0038A4D4E8610191A /* Larken-Black-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6011D17EE6B14D6DBE160145 /* Larken-Black-Italic.otf */; };
+		9A0E2D0E627D413B9F507689 /* OpenSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63EBBE18F1574FEE8BC197FC /* OpenSans-Medium.ttf */; };
+		9A2BBED8515A4E4BA4D6E81C /* OpenSans_Condensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1360FF6357340B0A1EE226E /* OpenSans_Condensed-Light.ttf */; };
+		9B70BE56423F43BDB58EC009 /* OpenSans_Condensed-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E86448BC4A0445F887DC5258 /* OpenSans_Condensed-LightItalic.ttf */; };
+		9C19719F97184476B981286C /* WorkSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDE5D80FD7A5487BBE54CFBE /* WorkSans-Italic.ttf */; };
+		9C423BDDFBEC472AB6BC677A /* WorkSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6E3055F47D094F37B6309022 /* WorkSans-MediumItalic.ttf */; };
+		A19CF696D65D4FFA8AA4695F /* OpenSans_Condensed-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6921BD9D1E3F43C9BE5F0B47 /* OpenSans_Condensed-Medium.ttf */; };
+		A3BC2A04947742E0948E13C8 /* OpenSans_Condensed-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C0A5944510B4B97A2CC90E4 /* OpenSans_Condensed-SemiBold.ttf */; };
+		A4BE5609DAA9415884A75337 /* Larken-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = DA09396D3DC146D3A554F11F /* Larken-Italic.otf */; };
+		A7C005E94BF84A5A9795517D /* Larken-Thin-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1A787FA726654F31B700434D /* Larken-Thin-Italic.otf */; };
+		A918FEA269AE431D93C441E7 /* OpenSans_Condensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 386A688C44AC42D6B5E55AE3 /* OpenSans_Condensed-BoldItalic.ttf */; };
+		AA9D2ECE09974D74BC6C05A8 /* OpenSans_SemiCondensed-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD0DB0CA32C044C58C5DABAD /* OpenSans_SemiCondensed-ExtraBoldItalic.ttf */; };
+		AF505298758C4D6AAC295DAF /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D842215C228B4BE891849E0D /* OpenSans-Light.ttf */; };
+		B0395710D9E44A6787CCDFE4 /* WorkSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B0E81A6A9804298B83104B4 /* WorkSans-BoldItalic.ttf */; };
+		B3133FEB9563473BB7C0DFE8 /* Larken-Light-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5FCA7E90B7E248D4B93961BC /* Larken-Light-Italic.otf */; };
+		B872A50DDF684171A8F38542 /* sharefonts.net.txt in Resources */ = {isa = PBXBuildFile; fileRef = D54CC3362150447B9D168F38 /* sharefonts.net.txt */; };
+		C29038E1372049DEA662B1FC /* Larken-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2DC335D5FD244D34843516B6 /* Larken-Thin.otf */; };
+		C48F00B5A7D94C8B8BBF4A56 /* WorkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74583241DD1645CFB994F0E5 /* WorkSans-Bold.ttf */; };
+		C5692036D79D48E28AB756E2 /* OpenSans_Condensed-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5C7862CB6D54B6684A7BF6A /* OpenSans_Condensed-MediumItalic.ttf */; };
+		C8663F728DB540669FE37A8E /* Larken-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 49E42815A275498085CDE2B1 /* Larken-Bold.otf */; };
+		C8672FDD1C3B48B8B0F756BC /* WorkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5574B761960B47A2A519CD91 /* WorkSans-ExtraBold.ttf */; };
+		CA9CF3CD4DAE4CDF834BC62B /* Larken-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0675293EDFEC480395CA63D8 /* Larken-Black.otf */; };
+		CB1E99D1F89D448F9637B8B1 /* WorkSans-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 97ADFA45DE9F48F4B4E92BF5 /* WorkSans-ExtraLightItalic.ttf */; };
+		CCBF3ABBF5E045A8A3D46A17 /* LarkenDEMO-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4C9481CE8AD246F8B8FA25E5 /* LarkenDEMO-Black.otf */; };
+		CD310BE6CB954778818F7662 /* WorkSans-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1AC0F25DCAC3455F84375AAF /* WorkSans-ThinItalic.ttf */; };
+		CD48F4A53CFE4EDE9878BB44 /* LarkenDEMO-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 715228FB38554B6784AA7903 /* LarkenDEMO-ThinItalic.otf */; };
+		D38129B3B76640859D7FF55F /* WorkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 50A61D0E602047CF84D557E0 /* WorkSans-SemiBold.ttf */; };
+		D5D3F6FC43A44E64A80CE2E7 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 81CDD94CF5A5442FA182C908 /* OpenSans-ExtraBold.ttf */; };
+		E101584E4CD44D53B88E439F /* WorkSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61CF33D51F434EAF84D08910 /* WorkSans-Light.ttf */; };
+		E7FF99811EC747C484409CF2 /* OpenSans_SemiCondensed-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB74CA4AE3D642839E54EC5E /* OpenSans_SemiCondensed-MediumItalic.ttf */; };
+		E8470BBCB6D443EA95E637B9 /* LarkenDEMO-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = EE78B6DE8FD74B54A0D7082D /* LarkenDEMO-Italic.otf */; };
+		EB667763901444E5A286CF7A /* Larken-Medium-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0C3638F8B66D42249CA44AB5 /* Larken-Medium-Italic.otf */; };
+		F142DD0CCE544F76ADB9A569 /* LarkenDEMO-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CA44893E15E54508923BD913 /* LarkenDEMO-LightItalic.otf */; };
+		F1C599DE4E1B42C7AE5720B1 /* LarkenDEMO-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = FF29E9B57E724CCBB667FCBF /* LarkenDEMO-MediumItalic.otf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = fastbetter;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00E356EE1AD99517003FC87E /* fastbetterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fastbetterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* fastbetterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fastbetterTests.m; sourceTree = "<group>"; };
+		05742B1AE29145FCBB9C9139 /* LarkenDEMO-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Bold.otf"; path = "../src/assets/fonts/LarkenDEMO-Bold.otf"; sourceTree = "<group>"; };
+		0675293EDFEC480395CA63D8 /* Larken-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Black.otf"; path = "../src/assets/fonts/Larken-Black.otf"; sourceTree = "<group>"; };
+		07FD98BA543F4173AC00A45D /* Larken-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Light.otf"; path = "../src/assets/fonts/Larken-Light.otf"; sourceTree = "<group>"; };
+		092B2A1BEED34D90B6D63DAB /* OpenSans_Condensed-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-Italic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-Italic.ttf"; sourceTree = "<group>"; };
+		0AA5BC0896024242A36DB0D3 /* OpenSans_Condensed-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-ExtraBold.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-ExtraBold.ttf"; sourceTree = "<group>"; };
+		0C0A5944510B4B97A2CC90E4 /* OpenSans_Condensed-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-SemiBold.ttf"; sourceTree = "<group>"; };
+		0C3638F8B66D42249CA44AB5 /* Larken-Medium-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Medium-Italic.otf"; path = "../src/assets/fonts/Larken-Medium-Italic.otf"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* fastbetter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fastbetter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = fastbetter/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = fastbetter/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = fastbetter/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = fastbetter/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = fastbetter/main.m; sourceTree = "<group>"; };
+		1480C672075349F5ACC4FD6E /* LarkenDEMO-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Thin.otf"; path = "../src/assets/fonts/LarkenDEMO-Thin.otf"; sourceTree = "<group>"; };
+		161651D1E22C49A29E8A6788 /* Larken-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Regular.otf"; path = "../src/assets/fonts/Larken-Regular.otf"; sourceTree = "<group>"; };
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-fastbetter-fastbetterTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fastbetter-fastbetterTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A0C6ED0412C41C7B8217885 /* OpenSans_SemiCondensed-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-Light.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-Light.ttf"; sourceTree = "<group>"; };
+		1A787FA726654F31B700434D /* Larken-Thin-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Thin-Italic.otf"; path = "../src/assets/fonts/Larken-Thin-Italic.otf"; sourceTree = "<group>"; };
+		1AC0F25DCAC3455F84375AAF /* WorkSans-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ThinItalic.ttf"; path = "../src/assets/fonts/WorkSans-ThinItalic.ttf"; sourceTree = "<group>"; };
+		1BDE5B324E2647459F3EF037 /* basicsanssf.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = basicsanssf.ttf; path = ../src/assets/fonts/basicsanssf.ttf; sourceTree = "<group>"; };
+		1E85150EFBAF4408B7EB1494 /* basicsanssfbold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = basicsanssfbold.ttf; path = ../src/assets/fonts/basicsanssfbold.ttf; sourceTree = "<group>"; };
+		28430A37BCDF41ABB3FB52EC /* OpenSans_SemiCondensed-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-SemiBold.ttf"; sourceTree = "<group>"; };
+		29EB034BA7BF4D0C973D957E /* LarkenDEMO-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-ExtraBold.otf"; path = "../src/assets/fonts/LarkenDEMO-ExtraBold.otf"; sourceTree = "<group>"; };
+		2DC335D5FD244D34843516B6 /* Larken-Thin.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Thin.otf"; path = "../src/assets/fonts/Larken-Thin.otf"; sourceTree = "<group>"; };
+		2EF20CAC352F4032986C1B8D /* OpenSans_Condensed-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-Bold.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-Bold.ttf"; sourceTree = "<group>"; };
+		37A598097DE041EFB9035CC9 /* OpenSans_SemiCondensed-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-Medium.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-Medium.ttf"; sourceTree = "<group>"; };
+		386A688C44AC42D6B5E55AE3 /* OpenSans_Condensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-BoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-BoldItalic.ttf"; sourceTree = "<group>"; };
+		3B4392A12AC88292D35C810B /* Pods-fastbetter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fastbetter.debug.xcconfig"; path = "Target Support Files/Pods-fastbetter/Pods-fastbetter.debug.xcconfig"; sourceTree = "<group>"; };
+		3C33E3735738453E82890E67 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Regular.ttf"; path = "../src/assets/fonts/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		3F9DAEE501AE4FA6B7FE9436 /* OpenSans_SemiCondensed-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		43182E817E2A444B8A7425A2 /* OpenSans_SemiCondensed-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-Italic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-Italic.ttf"; sourceTree = "<group>"; };
+		49E42815A275498085CDE2B1 /* Larken-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Bold.otf"; path = "../src/assets/fonts/Larken-Bold.otf"; sourceTree = "<group>"; };
+		4A92F6DEDEBE4A47BCC5DAA4 /* Larken-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-ExtraBold.otf"; path = "../src/assets/fonts/Larken-ExtraBold.otf"; sourceTree = "<group>"; };
+		4B0E81A6A9804298B83104B4 /* WorkSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BoldItalic.ttf"; path = "../src/assets/fonts/WorkSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		4BD5E0675FEC4F10B0D2010F /* WorkSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Medium.ttf"; path = "../src/assets/fonts/WorkSans-Medium.ttf"; sourceTree = "<group>"; };
+		4C9481CE8AD246F8B8FA25E5 /* LarkenDEMO-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Black.otf"; path = "../src/assets/fonts/LarkenDEMO-Black.otf"; sourceTree = "<group>"; };
+		509A4A75F26C43968479FF44 /* WorkSans-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Black.ttf"; path = "../src/assets/fonts/WorkSans-Black.ttf"; sourceTree = "<group>"; };
+		50A61D0E602047CF84D557E0 /* WorkSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBold.ttf"; path = "../src/assets/fonts/WorkSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		5191797140D747AC8CE674DC /* LarkenDEMO-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Regular.otf"; path = "../src/assets/fonts/LarkenDEMO-Regular.otf"; sourceTree = "<group>"; };
+		5574B761960B47A2A519CD91 /* WorkSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBold.ttf"; path = "../src/assets/fonts/WorkSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		56F81192F88047379993BB9A /* OpenSans_Condensed-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-fastbetter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fastbetter.release.xcconfig"; path = "Target Support Files/Pods-fastbetter/Pods-fastbetter.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-fastbetter-fastbetterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fastbetter-fastbetterTests.debug.xcconfig"; path = "Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-fastbetter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fastbetter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FCA7E90B7E248D4B93961BC /* Larken-Light-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Light-Italic.otf"; path = "../src/assets/fonts/Larken-Light-Italic.otf"; sourceTree = "<group>"; };
+		6011D17EE6B14D6DBE160145 /* Larken-Black-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Black-Italic.otf"; path = "../src/assets/fonts/Larken-Black-Italic.otf"; sourceTree = "<group>"; };
+		61CF33D51F434EAF84D08910 /* WorkSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Light.ttf"; path = "../src/assets/fonts/WorkSans-Light.ttf"; sourceTree = "<group>"; };
+		63EBBE18F1574FEE8BC197FC /* OpenSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Medium.ttf"; path = "../src/assets/fonts/OpenSans-Medium.ttf"; sourceTree = "<group>"; };
+		66BA8D636ADA4867A9D98ECC /* LarkenDEMO-ExtraBoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-ExtraBoldItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-ExtraBoldItalic.otf"; sourceTree = "<group>"; };
+		6921BD9D1E3F43C9BE5F0B47 /* OpenSans_Condensed-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-Medium.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-Medium.ttf"; sourceTree = "<group>"; };
+		6E3055F47D094F37B6309022 /* WorkSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-MediumItalic.ttf"; path = "../src/assets/fonts/WorkSans-MediumItalic.ttf"; sourceTree = "<group>"; };
+		715228FB38554B6784AA7903 /* LarkenDEMO-ThinItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-ThinItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-ThinItalic.otf"; sourceTree = "<group>"; };
+		74583241DD1645CFB994F0E5 /* WorkSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Bold.ttf"; path = "../src/assets/fonts/WorkSans-Bold.ttf"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = fastbetter/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		81CDD94CF5A5442FA182C908 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBold.ttf"; path = "../src/assets/fonts/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		837126CF6130408B817382F6 /* WorkSans-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraLight.ttf"; path = "../src/assets/fonts/WorkSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-fastbetter-fastbetterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fastbetter-fastbetterTests.release.xcconfig"; path = "Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests.release.xcconfig"; sourceTree = "<group>"; };
+		8ABABCC0E8444C09801D9141 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		8BAB4A3A59134A53A182231B /* OpenSans-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBold.ttf"; path = "../src/assets/fonts/OpenSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		8CC9A0CBD975483FBC157099 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-LightItalic.ttf"; path = "../src/assets/fonts/OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		8F32758465BA43FC908D6CF3 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Italic.ttf"; path = "../src/assets/fonts/OpenSans-Italic.ttf"; sourceTree = "<group>"; };
+		8FFCD115617C48869A62A49D /* LarkenDEMO-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Medium.otf"; path = "../src/assets/fonts/LarkenDEMO-Medium.otf"; sourceTree = "<group>"; };
+		9358666DAFC34167AF3C2181 /* WorkSans-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Regular.ttf"; path = "../src/assets/fonts/WorkSans-Regular.ttf"; sourceTree = "<group>"; };
+		95041CAF58604E74A214E427 /* OpenSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		970725B1DCC3459397F50B9F /* WorkSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/WorkSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		97ADFA45DE9F48F4B4E92BF5 /* WorkSans-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraLightItalic.ttf"; path = "../src/assets/fonts/WorkSans-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		99940CBA3D884A8282D2641B /* LarkenDEMO-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Light.otf"; path = "../src/assets/fonts/LarkenDEMO-Light.otf"; sourceTree = "<group>"; };
+		9C906495958F4CC498495AB8 /* Larken-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Medium.otf"; path = "../src/assets/fonts/Larken-Medium.otf"; sourceTree = "<group>"; };
+		A33E6BF321EC4972B58AF746 /* basicsanssfitalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = basicsanssfitalic.ttf; path = ../src/assets/fonts/basicsanssfitalic.ttf; sourceTree = "<group>"; };
+		A7783D421467403DBFC599AC /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-BoldItalic.ttf"; path = "../src/assets/fonts/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		AB74CA4AE3D642839E54EC5E /* OpenSans_SemiCondensed-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-MediumItalic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-MediumItalic.ttf"; sourceTree = "<group>"; };
+		AD0DB0CA32C044C58C5DABAD /* OpenSans_SemiCondensed-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		B0599308AB494B88B39FA784 /* OpenSans_SemiCondensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-Regular.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-Regular.ttf"; sourceTree = "<group>"; };
+		B223063BD2424047ABFD6A7E /* OpenSans_SemiCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-BoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
+		B5F77FFD55224FF7AA0AAF67 /* WorkSans-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-BlackItalic.ttf"; path = "../src/assets/fonts/WorkSans-BlackItalic.ttf"; sourceTree = "<group>"; };
+		B90A285F6C554FC98B636E3B /* OpenSans_Condensed-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-SemiBoldItalic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		BD6D979BF70249899719F131 /* Larken-Bold-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Bold-Italic.otf"; path = "../src/assets/fonts/Larken-Bold-Italic.otf"; sourceTree = "<group>"; };
+		C4941BA0D54B43A69634BBB2 /* WorkSans-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Thin.ttf"; path = "../src/assets/fonts/WorkSans-Thin.ttf"; sourceTree = "<group>"; };
+		C6FD4496F61541A78768C7A8 /* LarkenDEMO-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-BoldItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-BoldItalic.otf"; sourceTree = "<group>"; };
+		CA44893E15E54508923BD913 /* LarkenDEMO-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-LightItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-LightItalic.otf"; sourceTree = "<group>"; };
+		CDE5D80FD7A5487BBE54CFBE /* WorkSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Italic.ttf"; path = "../src/assets/fonts/WorkSans-Italic.ttf"; sourceTree = "<group>"; };
+		D4FE23B8A93B473B9BAFDF89 /* WorkSans-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-LightItalic.ttf"; path = "../src/assets/fonts/WorkSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		D54CC3362150447B9D168F38 /* sharefonts.net.txt */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = sharefonts.net.txt; path = ../src/assets/fonts/sharefonts.net.txt; sourceTree = "<group>"; };
+		D7A638EE4C5644EEAAF3204D /* OpenSans_SemiCondensed-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-ExtraBold.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-ExtraBold.ttf"; sourceTree = "<group>"; };
+		D81CBC70AA114185BEF6C00B /* LarkenDEMO-BlackItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-BlackItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-BlackItalic.otf"; sourceTree = "<group>"; };
+		D842215C228B4BE891849E0D /* OpenSans-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Light.ttf"; path = "../src/assets/fonts/OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		D90B4F1ECF7A4842A2ADE7DC /* Larken-ExtraBold-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-ExtraBold-Italic.otf"; path = "../src/assets/fonts/Larken-ExtraBold-Italic.otf"; sourceTree = "<group>"; };
+		D94F1930E6E84FB8BAC543F1 /* OpenSans_Condensed-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-Regular.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-Regular.ttf"; sourceTree = "<group>"; };
+		DA09396D3DC146D3A554F11F /* Larken-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Larken-Italic.otf"; path = "../src/assets/fonts/Larken-Italic.otf"; sourceTree = "<group>"; };
+		E1360FF6357340B0A1EE226E /* OpenSans_Condensed-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-Light.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-Light.ttf"; sourceTree = "<group>"; };
+		E2BBDC22515E4F07AE4DBF14 /* OpenSans_SemiCondensed-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-Bold.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-Bold.ttf"; sourceTree = "<group>"; };
+		E86448BC4A0445F887DC5258 /* OpenSans_Condensed-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-LightItalic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-LightItalic.ttf"; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EE78B6DE8FD74B54A0D7082D /* LarkenDEMO-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-Italic.otf"; path = "../src/assets/fonts/LarkenDEMO-Italic.otf"; sourceTree = "<group>"; };
+		F0522EE2D84A4D2E90B8B689 /* OpenSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-MediumItalic.ttf"; path = "../src/assets/fonts/OpenSans-MediumItalic.ttf"; sourceTree = "<group>"; };
+		F28A7DFCB125426787778673 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../src/assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		F4E7E0A6ABF84C07A0A15651 /* OpenSans_SemiCondensed-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_SemiCondensed-LightItalic.ttf"; path = "../src/assets/fonts/OpenSans_SemiCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
+		F5C7862CB6D54B6684A7BF6A /* OpenSans_Condensed-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans_Condensed-MediumItalic.ttf"; path = "../src/assets/fonts/OpenSans_Condensed-MediumItalic.ttf"; sourceTree = "<group>"; };
+		FCF9A6544B9A4F3E89E1935A /* WorkSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/WorkSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		FF29E9B57E724CCBB667FCBF /* LarkenDEMO-MediumItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-MediumItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-MediumItalic.otf"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00E356EB1AD99517003FC87E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7699B88040F8A987B510C191 /* libPods-fastbetter-fastbetterTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0C80B921A6F3F58F76C31292 /* libPods-fastbetter.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00E356EF1AD99517003FC87E /* fastbetterTests */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F21AD99517003FC87E /* fastbetterTests.m */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
+			);
+			path = fastbetterTests;
+			sourceTree = "<group>";
+		};
+		00E356F01AD99517003FC87E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		13B07FAE1A68108700A75B9A /* fastbetter */ = {
+			isa = PBXGroup;
+			children = (
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				13B07FB61A68108700A75B9A /* Info.plist */,
+				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				13B07FB71A68108700A75B9A /* main.m */,
+			);
+			name = fastbetter;
+			sourceTree = "<group>";
+		};
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				5DCACB8F33CDC322A6C60F78 /* libPods-fastbetter.a */,
+				19F6CBCC0A4E27FBF8BF4A61 /* libPods-fastbetter-fastbetterTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		78BACBE7C08A4256A4CF75BF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6011D17EE6B14D6DBE160145 /* Larken-Black-Italic.otf */,
+				0675293EDFEC480395CA63D8 /* Larken-Black.otf */,
+				BD6D979BF70249899719F131 /* Larken-Bold-Italic.otf */,
+				49E42815A275498085CDE2B1 /* Larken-Bold.otf */,
+				D90B4F1ECF7A4842A2ADE7DC /* Larken-ExtraBold-Italic.otf */,
+				4A92F6DEDEBE4A47BCC5DAA4 /* Larken-ExtraBold.otf */,
+				DA09396D3DC146D3A554F11F /* Larken-Italic.otf */,
+				5FCA7E90B7E248D4B93961BC /* Larken-Light-Italic.otf */,
+				07FD98BA543F4173AC00A45D /* Larken-Light.otf */,
+				0C3638F8B66D42249CA44AB5 /* Larken-Medium-Italic.otf */,
+				9C906495958F4CC498495AB8 /* Larken-Medium.otf */,
+				161651D1E22C49A29E8A6788 /* Larken-Regular.otf */,
+				1A787FA726654F31B700434D /* Larken-Thin-Italic.otf */,
+				2DC335D5FD244D34843516B6 /* Larken-Thin.otf */,
+				4C9481CE8AD246F8B8FA25E5 /* LarkenDEMO-Black.otf */,
+				D81CBC70AA114185BEF6C00B /* LarkenDEMO-BlackItalic.otf */,
+				05742B1AE29145FCBB9C9139 /* LarkenDEMO-Bold.otf */,
+				C6FD4496F61541A78768C7A8 /* LarkenDEMO-BoldItalic.otf */,
+				29EB034BA7BF4D0C973D957E /* LarkenDEMO-ExtraBold.otf */,
+				66BA8D636ADA4867A9D98ECC /* LarkenDEMO-ExtraBoldItalic.otf */,
+				EE78B6DE8FD74B54A0D7082D /* LarkenDEMO-Italic.otf */,
+				99940CBA3D884A8282D2641B /* LarkenDEMO-Light.otf */,
+				CA44893E15E54508923BD913 /* LarkenDEMO-LightItalic.otf */,
+				8FFCD115617C48869A62A49D /* LarkenDEMO-Medium.otf */,
+				FF29E9B57E724CCBB667FCBF /* LarkenDEMO-MediumItalic.otf */,
+				5191797140D747AC8CE674DC /* LarkenDEMO-Regular.otf */,
+				1480C672075349F5ACC4FD6E /* LarkenDEMO-Thin.otf */,
+				715228FB38554B6784AA7903 /* LarkenDEMO-ThinItalic.otf */,
+				1BDE5B324E2647459F3EF037 /* basicsanssf.ttf */,
+				1E85150EFBAF4408B7EB1494 /* basicsanssfbold.ttf */,
+				A33E6BF321EC4972B58AF746 /* basicsanssfitalic.ttf */,
+				D54CC3362150447B9D168F38 /* sharefonts.net.txt */,
+				F28A7DFCB125426787778673 /* OpenSans-Bold.ttf */,
+				A7783D421467403DBFC599AC /* OpenSans-BoldItalic.ttf */,
+				81CDD94CF5A5442FA182C908 /* OpenSans-ExtraBold.ttf */,
+				8ABABCC0E8444C09801D9141 /* OpenSans-ExtraBoldItalic.ttf */,
+				8F32758465BA43FC908D6CF3 /* OpenSans-Italic.ttf */,
+				D842215C228B4BE891849E0D /* OpenSans-Light.ttf */,
+				8CC9A0CBD975483FBC157099 /* OpenSans-LightItalic.ttf */,
+				63EBBE18F1574FEE8BC197FC /* OpenSans-Medium.ttf */,
+				F0522EE2D84A4D2E90B8B689 /* OpenSans-MediumItalic.ttf */,
+				3C33E3735738453E82890E67 /* OpenSans-Regular.ttf */,
+				8BAB4A3A59134A53A182231B /* OpenSans-SemiBold.ttf */,
+				95041CAF58604E74A214E427 /* OpenSans-SemiBoldItalic.ttf */,
+				2EF20CAC352F4032986C1B8D /* OpenSans_Condensed-Bold.ttf */,
+				386A688C44AC42D6B5E55AE3 /* OpenSans_Condensed-BoldItalic.ttf */,
+				0AA5BC0896024242A36DB0D3 /* OpenSans_Condensed-ExtraBold.ttf */,
+				56F81192F88047379993BB9A /* OpenSans_Condensed-ExtraBoldItalic.ttf */,
+				092B2A1BEED34D90B6D63DAB /* OpenSans_Condensed-Italic.ttf */,
+				E1360FF6357340B0A1EE226E /* OpenSans_Condensed-Light.ttf */,
+				E86448BC4A0445F887DC5258 /* OpenSans_Condensed-LightItalic.ttf */,
+				6921BD9D1E3F43C9BE5F0B47 /* OpenSans_Condensed-Medium.ttf */,
+				F5C7862CB6D54B6684A7BF6A /* OpenSans_Condensed-MediumItalic.ttf */,
+				D94F1930E6E84FB8BAC543F1 /* OpenSans_Condensed-Regular.ttf */,
+				0C0A5944510B4B97A2CC90E4 /* OpenSans_Condensed-SemiBold.ttf */,
+				B90A285F6C554FC98B636E3B /* OpenSans_Condensed-SemiBoldItalic.ttf */,
+				E2BBDC22515E4F07AE4DBF14 /* OpenSans_SemiCondensed-Bold.ttf */,
+				B223063BD2424047ABFD6A7E /* OpenSans_SemiCondensed-BoldItalic.ttf */,
+				D7A638EE4C5644EEAAF3204D /* OpenSans_SemiCondensed-ExtraBold.ttf */,
+				AD0DB0CA32C044C58C5DABAD /* OpenSans_SemiCondensed-ExtraBoldItalic.ttf */,
+				43182E817E2A444B8A7425A2 /* OpenSans_SemiCondensed-Italic.ttf */,
+				1A0C6ED0412C41C7B8217885 /* OpenSans_SemiCondensed-Light.ttf */,
+				F4E7E0A6ABF84C07A0A15651 /* OpenSans_SemiCondensed-LightItalic.ttf */,
+				37A598097DE041EFB9035CC9 /* OpenSans_SemiCondensed-Medium.ttf */,
+				AB74CA4AE3D642839E54EC5E /* OpenSans_SemiCondensed-MediumItalic.ttf */,
+				B0599308AB494B88B39FA784 /* OpenSans_SemiCondensed-Regular.ttf */,
+				28430A37BCDF41ABB3FB52EC /* OpenSans_SemiCondensed-SemiBold.ttf */,
+				3F9DAEE501AE4FA6B7FE9436 /* OpenSans_SemiCondensed-SemiBoldItalic.ttf */,
+				509A4A75F26C43968479FF44 /* WorkSans-Black.ttf */,
+				B5F77FFD55224FF7AA0AAF67 /* WorkSans-BlackItalic.ttf */,
+				74583241DD1645CFB994F0E5 /* WorkSans-Bold.ttf */,
+				4B0E81A6A9804298B83104B4 /* WorkSans-BoldItalic.ttf */,
+				5574B761960B47A2A519CD91 /* WorkSans-ExtraBold.ttf */,
+				FCF9A6544B9A4F3E89E1935A /* WorkSans-ExtraBoldItalic.ttf */,
+				837126CF6130408B817382F6 /* WorkSans-ExtraLight.ttf */,
+				97ADFA45DE9F48F4B4E92BF5 /* WorkSans-ExtraLightItalic.ttf */,
+				CDE5D80FD7A5487BBE54CFBE /* WorkSans-Italic.ttf */,
+				61CF33D51F434EAF84D08910 /* WorkSans-Light.ttf */,
+				D4FE23B8A93B473B9BAFDF89 /* WorkSans-LightItalic.ttf */,
+				4BD5E0675FEC4F10B0D2010F /* WorkSans-Medium.ttf */,
+				6E3055F47D094F37B6309022 /* WorkSans-MediumItalic.ttf */,
+				9358666DAFC34167AF3C2181 /* WorkSans-Regular.ttf */,
+				50A61D0E602047CF84D557E0 /* WorkSans-SemiBold.ttf */,
+				970725B1DCC3459397F50B9F /* WorkSans-SemiBoldItalic.ttf */,
+				C4941BA0D54B43A69634BBB2 /* WorkSans-Thin.ttf */,
+				1AC0F25DCAC3455F84375AAF /* WorkSans-ThinItalic.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		83CBB9F61A601CBA00E9B192 = {
+			isa = PBXGroup;
+			children = (
+				13B07FAE1A68108700A75B9A /* fastbetter */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* fastbetterTests */,
+				83CBBA001A601CBA00E9B192 /* Products */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				78BACBE7C08A4256A4CF75BF /* Resources */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		83CBBA001A601CBA00E9B192 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				13B07F961A680F5B00A75B9A /* fastbetter.app */,
+				00E356EE1AD99517003FC87E /* fastbetterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3B4392A12AC88292D35C810B /* Pods-fastbetter.debug.xcconfig */,
+				5709B34CF0A7D63546082F79 /* Pods-fastbetter.release.xcconfig */,
+				5B7EB9410499542E8C5724F5 /* Pods-fastbetter-fastbetterTests.debug.xcconfig */,
+				89C6BE57DB24E9ADA2F236DE /* Pods-fastbetter-fastbetterTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00E356ED1AD99517003FC87E /* fastbetterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "fastbetterTests" */;
+			buildPhases = (
+				A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */,
+				F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00E356F51AD99517003FC87E /* PBXTargetDependency */,
+			);
+			name = fastbetterTests;
+			productName = fastbetterTests;
+			productReference = 00E356EE1AD99517003FC87E /* fastbetterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13B07F861A680F5B00A75B9A /* fastbetter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "fastbetter" */;
+			buildPhases = (
+				C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */,
+				13B07F871A680F5B00A75B9A /* Sources */,
+				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				13B07F8E1A680F5B00A75B9A /* Resources */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
+				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = fastbetter;
+			productName = fastbetter;
+			productReference = 13B07F961A680F5B00A75B9A /* fastbetter.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1210;
+				TargetAttributes = {
+					00E356ED1AD99517003FC87E = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1120;
+					};
+				};
+			};
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "fastbetter" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83CBB9F61A601CBA00E9B192;
+			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13B07F861A680F5B00A75B9A /* fastbetter */,
+				00E356ED1AD99517003FC87E /* fastbetterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00E356EC1AD99517003FC87E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				98CEC2F0038A4D4E8610191A /* Larken-Black-Italic.otf in Resources */,
+				CA9CF3CD4DAE4CDF834BC62B /* Larken-Black.otf in Resources */,
+				8D947782194742F6BA3310F7 /* Larken-Bold-Italic.otf in Resources */,
+				C8663F728DB540669FE37A8E /* Larken-Bold.otf in Resources */,
+				13B0F2E5EA8340088261AF24 /* Larken-ExtraBold-Italic.otf in Resources */,
+				82007C0183864DE58723F1DF /* Larken-ExtraBold.otf in Resources */,
+				A4BE5609DAA9415884A75337 /* Larken-Italic.otf in Resources */,
+				B3133FEB9563473BB7C0DFE8 /* Larken-Light-Italic.otf in Resources */,
+				2C6537DD88BF49EB957F46B7 /* Larken-Light.otf in Resources */,
+				EB667763901444E5A286CF7A /* Larken-Medium-Italic.otf in Resources */,
+				236073BC992B404AA59ED7FB /* Larken-Medium.otf in Resources */,
+				505925DE76904BA1886B6BBE /* Larken-Regular.otf in Resources */,
+				A7C005E94BF84A5A9795517D /* Larken-Thin-Italic.otf in Resources */,
+				C29038E1372049DEA662B1FC /* Larken-Thin.otf in Resources */,
+				CCBF3ABBF5E045A8A3D46A17 /* LarkenDEMO-Black.otf in Resources */,
+				03FA549C8B4043CFB4319227 /* LarkenDEMO-BlackItalic.otf in Resources */,
+				4F870051476F4F948A33D728 /* LarkenDEMO-Bold.otf in Resources */,
+				1BE984B5669242AFBE28A7C6 /* LarkenDEMO-BoldItalic.otf in Resources */,
+				63762CFABF734D3DA317D72F /* LarkenDEMO-ExtraBold.otf in Resources */,
+				32E4B04C90034601BA83FF1F /* LarkenDEMO-ExtraBoldItalic.otf in Resources */,
+				E8470BBCB6D443EA95E637B9 /* LarkenDEMO-Italic.otf in Resources */,
+				43D766BDD9A840758E5747C4 /* LarkenDEMO-Light.otf in Resources */,
+				F142DD0CCE544F76ADB9A569 /* LarkenDEMO-LightItalic.otf in Resources */,
+				12A30352892D4D0581455F66 /* LarkenDEMO-Medium.otf in Resources */,
+				F1C599DE4E1B42C7AE5720B1 /* LarkenDEMO-MediumItalic.otf in Resources */,
+				4CD37E48FA584B438ECE2D3A /* LarkenDEMO-Regular.otf in Resources */,
+				09D956063CA14EEA8AE22C13 /* LarkenDEMO-Thin.otf in Resources */,
+				CD48F4A53CFE4EDE9878BB44 /* LarkenDEMO-ThinItalic.otf in Resources */,
+				8C986972C5294115B9399F78 /* basicsanssf.ttf in Resources */,
+				6E720C0607454C12BA3088A8 /* basicsanssfbold.ttf in Resources */,
+				7CDE076DFEA14AA1956D990F /* basicsanssfitalic.ttf in Resources */,
+				B872A50DDF684171A8F38542 /* sharefonts.net.txt in Resources */,
+				0C5813DB7CCD4CB9A3074494 /* OpenSans-Bold.ttf in Resources */,
+				24017563938341BB8EB92146 /* OpenSans-BoldItalic.ttf in Resources */,
+				D5D3F6FC43A44E64A80CE2E7 /* OpenSans-ExtraBold.ttf in Resources */,
+				0D7CF6D99ED64C96A7EFB9A6 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
+				51239F1774E84A2398A8436E /* OpenSans-Italic.ttf in Resources */,
+				AF505298758C4D6AAC295DAF /* OpenSans-Light.ttf in Resources */,
+				90DBD83C0ECE43BCACB8A180 /* OpenSans-LightItalic.ttf in Resources */,
+				9A0E2D0E627D413B9F507689 /* OpenSans-Medium.ttf in Resources */,
+				0C5C8553DB52450DBAD117C9 /* OpenSans-MediumItalic.ttf in Resources */,
+				221A4AC3C4E94CDEAF565820 /* OpenSans-Regular.ttf in Resources */,
+				4B9959F3590344B0927357C7 /* OpenSans-SemiBold.ttf in Resources */,
+				53ADE79653794FD5B553747A /* OpenSans-SemiBoldItalic.ttf in Resources */,
+				88F58C26709744E283D7E6A1 /* OpenSans_Condensed-Bold.ttf in Resources */,
+				A918FEA269AE431D93C441E7 /* OpenSans_Condensed-BoldItalic.ttf in Resources */,
+				6CBC559968A7496EB4243481 /* OpenSans_Condensed-ExtraBold.ttf in Resources */,
+				64DEA8FBD97145019D141FE1 /* OpenSans_Condensed-ExtraBoldItalic.ttf in Resources */,
+				242A4495AA0F4539856AEBDF /* OpenSans_Condensed-Italic.ttf in Resources */,
+				9A2BBED8515A4E4BA4D6E81C /* OpenSans_Condensed-Light.ttf in Resources */,
+				9B70BE56423F43BDB58EC009 /* OpenSans_Condensed-LightItalic.ttf in Resources */,
+				A19CF696D65D4FFA8AA4695F /* OpenSans_Condensed-Medium.ttf in Resources */,
+				C5692036D79D48E28AB756E2 /* OpenSans_Condensed-MediumItalic.ttf in Resources */,
+				8976B18303FE452E826A0E85 /* OpenSans_Condensed-Regular.ttf in Resources */,
+				A3BC2A04947742E0948E13C8 /* OpenSans_Condensed-SemiBold.ttf in Resources */,
+				725175673AFE4D6B9B66A189 /* OpenSans_Condensed-SemiBoldItalic.ttf in Resources */,
+				9418F2AD3A4C4E1FB7133532 /* OpenSans_SemiCondensed-Bold.ttf in Resources */,
+				20FCC866514F49C694582B73 /* OpenSans_SemiCondensed-BoldItalic.ttf in Resources */,
+				8EF1B59894A14940AB83E447 /* OpenSans_SemiCondensed-ExtraBold.ttf in Resources */,
+				AA9D2ECE09974D74BC6C05A8 /* OpenSans_SemiCondensed-ExtraBoldItalic.ttf in Resources */,
+				5098D1E5766248CCA9A263E8 /* OpenSans_SemiCondensed-Italic.ttf in Resources */,
+				39214399D20342A7B6C22144 /* OpenSans_SemiCondensed-Light.ttf in Resources */,
+				04E8EC2CDF88425AB398E829 /* OpenSans_SemiCondensed-LightItalic.ttf in Resources */,
+				0B43638506B24BE8B03F8D7E /* OpenSans_SemiCondensed-Medium.ttf in Resources */,
+				E7FF99811EC747C484409CF2 /* OpenSans_SemiCondensed-MediumItalic.ttf in Resources */,
+				8352ED88A8024DBBBCE22D72 /* OpenSans_SemiCondensed-Regular.ttf in Resources */,
+				3600683A85374E3482299030 /* OpenSans_SemiCondensed-SemiBold.ttf in Resources */,
+				0D17ACBDB8E9444D974CB204 /* OpenSans_SemiCondensed-SemiBoldItalic.ttf in Resources */,
+				31CC8CBA12BA4945AD488450 /* WorkSans-Black.ttf in Resources */,
+				0C6DE1818438485C9E84989E /* WorkSans-BlackItalic.ttf in Resources */,
+				C48F00B5A7D94C8B8BBF4A56 /* WorkSans-Bold.ttf in Resources */,
+				B0395710D9E44A6787CCDFE4 /* WorkSans-BoldItalic.ttf in Resources */,
+				C8672FDD1C3B48B8B0F756BC /* WorkSans-ExtraBold.ttf in Resources */,
+				988D80E8E5F740D1A15E5DC5 /* WorkSans-ExtraBoldItalic.ttf in Resources */,
+				5D8F09DD2A3A483B828D1E27 /* WorkSans-ExtraLight.ttf in Resources */,
+				CB1E99D1F89D448F9637B8B1 /* WorkSans-ExtraLightItalic.ttf in Resources */,
+				9C19719F97184476B981286C /* WorkSans-Italic.ttf in Resources */,
+				E101584E4CD44D53B88E439F /* WorkSans-Light.ttf in Resources */,
+				873F6DBA9F3D43FCBAF6C38F /* WorkSans-LightItalic.ttf in Resources */,
+				7361E20F8F0B4A4EB07D5E0E /* WorkSans-Medium.ttf in Resources */,
+				9C423BDDFBEC472AB6BC677A /* WorkSans-MediumItalic.ttf in Resources */,
+				5CCE32D6678F4810B497BA1E /* WorkSans-Regular.ttf in Resources */,
+				D38129B3B76640859D7FF55F /* WorkSans-SemiBold.ttf in Resources */,
+				2C85D530E3F2469F83BDBBAC /* WorkSans-SemiBoldItalic.ttf in Resources */,
+				4FE70DE5F1FB41BB898524F8 /* WorkSans-Thin.ttf in Resources */,
+				CD310BE6CB954778818F7662 /* WorkSans-ThinItalic.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A55EABD7B0C7F3A422A6CC61 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-fastbetter-fastbetterTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C38B50BA6285516D6DCD4F65 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-fastbetter-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C59DA0FBD6956966B86A3779 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E235C05ADACE081382539298 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fastbetter/Pods-fastbetter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6A41C54EA430FDDC6A6ED99 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-fastbetter-fastbetterTests/Pods-fastbetter-fastbetterTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00E356EA1AD99517003FC87E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E356F31AD99517003FC87E /* fastbetterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F871A680F5B00A75B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				13B07FC11A68108700A75B9A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* fastbetter */;
+			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00E356F61AD99517003FC87E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-fastbetter-fastbetterTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = SBZ97P3UW2;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = fastbetterTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ketodietplan-carbmanager-ketoapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fastbetter.app/fastbetter";
+			};
+			name = Debug;
+		};
+		00E356F71AD99517003FC87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-fastbetter-fastbetterTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = SBZ97P3UW2;
+				INFOPLIST_FILE = fastbetterTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ketodietplan-carbmanager-ketoapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fastbetter.app/fastbetter";
+			};
+			name = Release;
+		};
+		13B07F941A680F5B00A75B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-fastbetter.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SBZ97P3UW2;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = fastbetter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fast Better";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ketodietplan-carbmanager-ketoapp";
+				PRODUCT_NAME = fastbetter;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		13B07F951A680F5B00A75B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-fastbetter.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SBZ97P3UW2;
+				INFOPLIST_FILE = fastbetter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fast Better";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "ketodietplan-carbmanager-ketoapp";
+				PRODUCT_NAME = fastbetter;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		83CBBA201A601CBA00E9B192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				USE_HERMES = true;
+			};
+			name = Debug;
+		};
+		83CBBA211A601CBA00E9B192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-DFOLLY_CFG_NO_COROUTINES=1",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				USE_HERMES = true;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "fastbetterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E356F61AD99517003FC87E /* Debug */,
+				00E356F71AD99517003FC87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "fastbetter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13B07F941A680F5B00A75B9A /* Debug */,
+				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "fastbetter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83CBBA201A601CBA00E9B192 /* Debug */,
+				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+}
