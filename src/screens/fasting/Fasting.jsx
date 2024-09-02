@@ -1,10 +1,17 @@
-import React, { useState } from "react";
-import { Text, View, ScrollView, TouchableOpacity, Image, StyleSheet } from "react-native";
-import Background from "../../components/Background";
-import { useNavigation } from "@react-navigation/native";
-import NextButton from "../../components/NextButton";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import BottomModel from "../../components/BottomModel";
+import React, {useState} from 'react';
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from 'react-native';
+import Background from '../../components/Background';
+import {useNavigation} from '@react-navigation/native';
+import NextButton from '../../components/NextButton';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import BottomModel from '../../components/BottomModel';
 import bgimage from '../../assets/common/base.png';
 import bgimage2 from '../../assets/common/base2.png';
 import bgimage3 from '../../assets/common/base3.png';
@@ -12,43 +19,46 @@ import bgimage3 from '../../assets/common/base3.png';
 const fastingPlans = [
   {
     id: 1,
-    name: "Classic TRF",
-    subname: "Tap to customise your eating window",
-    startTime: "6:30 AM",
-    endTime: "10:30 PM",
+    name: 'Classic TRF',
+    subname: 'Tap to customise your eating window',
+    startTime: '6:30 AM',
+    endTime: '10:30 PM',
     fasting: 16,
     eating: 8,
     isRecommended: true,
     image: bgimage,
-    bordercolorCode: "borderOrange",
-    bgColorCode: "bgLightOrange",
+    bordercolorCode: 'borderOrange',
+    bgColorCode: 'bgLightOrange',
+    treatDays: 0,
   },
   {
     id: 2,
-    name: "Basic TRF",
-    subname: "Tap to customise your eating window",
-    startTime: "9:00 AM",
-    endTime: "7:00 PM",
+    name: 'Basic TRF',
+    subname: 'Tap to customise your eating window',
+    startTime: '9:30 AM',
+    endTime: '7:30 PM',
     fasting: 14,
     eating: 10,
     isRecommended: false,
     image: bgimage2,
-    bordercolorCode: "borderTeal",
-    bgColorCode: "bgLightTeal",
+    bordercolorCode: 'borderTeal',
+    bgColorCode: 'bgLightTeal',
+    treatDays: 0,
   },
   {
     id: 3,
-    name: "Prolonged TRF",
-    subname: "Tap to customise your eating window",
-    startTime: "9:00 AM",
-    endTime: "3:00 PM",
+    name: 'Prolonged TRF',
+    subname: 'Tap to customise your eating window',
+    startTime: '9:00 AM',
+    endTime: '3:00 PM',
     fasting: 18,
     eating: 6,
     isRecommended: false,
     image: bgimage3,
-    bordercolorCode: "borderBlue",
-    bgColorCode: "bgLightBlue",
-  }
+    bordercolorCode: 'borderBlue',
+    bgColorCode: 'bgLightBlue',
+    treatDays: 0,
+  },
 ];
 
 export default function Fasting() {
@@ -59,12 +69,23 @@ export default function Fasting() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [fastingData, setFastingData] = useState(fastingPlans || []);
 
   const handleGoForward = () => {
-    setIsModelOpen(true);
+    navigation.navigate('FastingSchedule');
   };
 
-  const handleSelectItem = (itemId) => {
+  const handleUpdateModel = updateData => {
+    const updatedFastingPlans = fastingData?.map(plan =>
+      plan?.id === updateData?.id ? {...plan, ...updateData} : plan,
+    );
+    // console.log(updatedFastingPlans);
+    setFastingData(updatedFastingPlans);
+    setIsModelOpen(false);
+  };
+
+  const handleSelectItem = itemId => {
+    setIsModelOpen(true);
     setSelectedPlan(itemId);
     setContinueBtn(true);
   };
@@ -75,7 +96,7 @@ export default function Fasting() {
 
   const pagination = (
     <Pagination
-      dotsLength={fastingPlans.length}
+      dotsLength={fastingData?.length}
       activeDotIndex={activeSlide}
       containerStyle={styles.paginationContainer}
       dotStyle={styles.activeDot}
@@ -85,49 +106,56 @@ export default function Fasting() {
     />
   );
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
-      <View style={styles.carouselItemContainer}>
-        <Image source={item?.image} style={styles.planImage} resizeMode='contain' />
+      <View style={{width: '100%', height: 300}}>
+        <Image
+          source={item?.image}
+          style={styles.planImage}
+          resizeMode="contain"
+        />
+        {item?.isRecommended && (
+          <View style={styles.recommendedContainer}>
+            <Text style={styles.recommendedText}>Recommended</Text>
+          </View>
+        )}
         <View style={styles.planContainer}>
           <TouchableOpacity
             onPress={() => handleSelectItem(item.id)}
             style={[
               styles.planTouchable,
               styles[item.bordercolorCode],
-              styles[item.bgColorCode]
-            ]}
-          >
-            {item.isRecommended && (
-              <View style={styles.recommendedContainer}>
-                <Text style={styles.recommendedText}>
-                  Recommended
-                </Text>
-              </View>
-            )}
+              styles[item.bgColorCode],
+            ]}>
             <View style={styles.planNameContainer}>
-              <Text style={styles.planNameText}>
-                {item.name}
-              </Text>
+              <Text style={styles.planNameText}>{item.name}</Text>
             </View>
             <View style={styles.fastingEatingContainer}>
               <View style={styles.fastingContainer}>
                 <Text style={styles.fastingText}>Fasting</Text>
-                <Image source={require('../../assets/common/arrowup.png')} style={styles.arrowUp} />
+                <Image
+                  source={require('../../assets/common/arrowup.png')}
+                  style={styles.arrowUp}
+                />
               </View>
-              <Text style={styles.planDurationText}>{item.fasting}:{item.eating}</Text>
+              <Text style={styles.planDurationText}>
+                {item.fasting}:{item.eating}
+              </Text>
               <View style={styles.eatingContainer}>
-                <Image source={require('../../assets/common/arrowdown.png')} style={styles.arrowDown} />
+                <Image
+                  source={require('../../assets/common/arrowdown.png')}
+                  style={styles.arrowDown}
+                />
                 <Text style={styles.eatingText}>Eating</Text>
               </View>
             </View>
             <View style={styles.timeContainer}>
-              <Text style={styles.timeText}>{item.startTime} - {item.endTime}</Text>
+              <Text style={styles.timeText}>
+                {item.startTime} - {item.endTime}
+              </Text>
             </View>
             <View style={styles.subNameContainer}>
-              <Text style={styles.subNameText}>
-                {item.subname}
-              </Text>
+              <Text style={styles.subNameText}>{item.subname}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -137,51 +165,47 @@ export default function Fasting() {
 
   return (
     <Background statusBarTranslucent={false}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <TouchableOpacity style={styles.skipButton} onPress={() => navigation.navigate('FastingSchedule')}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={styles.skipButton}
+          onPress={() => navigation.navigate('FastingSchedule')}>
           <Text style={styles.skipButtonText}>SKIP</Text>
         </TouchableOpacity>
 
         <View style={styles.carouselContainer}>
           <Carousel
-            data={fastingPlans}
+            data={fastingData}
             renderItem={renderItem}
-            layout={"default"}
+            layout={'default'}
             sliderWidth={400}
             itemWidth={400}
-            onSnapToItem={(index) => setActiveSlide(index)}
+            onSnapToItem={index => setActiveSlide(index)}
           />
-          <View style={styles.paginationWrapper}>
-            {pagination}
-          </View>
+          <View style={styles.paginationWrapper}>{pagination}</View>
         </View>
 
         <View style={styles.featuresContainer}>
-          <Text style={styles.featuresTitle}>
-            Features of the plan
-          </Text>
+          <Text style={styles.featuresTitle}>Features of the plan</Text>
           <View style={styles.featureItem}>
-            <Text style={styles.featureTitle}>
-              It’s flexible
-            </Text>
+            <Text style={styles.featureTitle}>It’s flexible</Text>
             <Text style={styles.featureDescription}>
-              This plan doesn’t require a lot of effort, just have a late breakfast or an early dinner
+              This plan doesn’t require a lot of effort, just have a late
+              breakfast or an early dinner
             </Text>
           </View>
           <View style={styles.featureItem}>
-            <Text style={styles.featureTitle}>
-              Helps boost metabolism
-            </Text>
+            <Text style={styles.featureTitle}>Helps boost metabolism</Text>
             <Text style={styles.featureDescription}>
               The 16:8 plan may boost your metabolism by up to 14%
             </Text>
           </View>
           <View style={styles.featureItem}>
-            <Text style={styles.featureTitle}>
-              Helps in disease prevention
-            </Text>
+            <Text style={styles.featureTitle}>Helps in disease prevention</Text>
             <Text style={styles.featureDescription}>
-              This plan may be helpful in the prevention of type 2 diabetes or other obesity-related conditions
+              This plan may be helpful in the prevention of type 2 diabetes or
+              other obesity-related conditions
             </Text>
           </View>
           <View style={styles.featureItem}>
@@ -189,13 +213,24 @@ export default function Fasting() {
               Helps improve learning and memory
             </Text>
             <Text style={styles.featureDescription}>
-              Intermittent fasting may help in generating new neurons in adult hippocampus
+              Intermittent fasting may help in generating new neurons in adult
+              hippocampus
             </Text>
           </View>
         </View>
       </ScrollView>
-      <NextButton onPress={handleGoForward} title={'Choose'} mainClassName={'absolute bottom-10'} isContinueBtn={continueBtn} />
-      <BottomModel isVisible={isModelOpen} onClose={handleCloseModel} />
+      <NextButton
+        onPress={handleGoForward}
+        title={'Choose'}
+        mainClassName={'absolute bottom-10'}
+        isContinueBtn={continueBtn}
+      />
+      <BottomModel
+        isVisible={isModelOpen}
+        onClose={handleCloseModel}
+        data={fastingData[activeSlide]}
+        onUpdate={pre => handleUpdateModel(pre)}
+      />
     </Background>
   );
 }
@@ -203,7 +238,8 @@ export default function Fasting() {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    width: "100%",
+    width: '100%',
+    paddingTop: 10,
   },
   skipButton: {
     alignItems: 'flex-end',
@@ -223,61 +259,64 @@ const styles = StyleSheet.create({
   carouselItemContainer: {
     flex: 1,
     alignItems: 'center',
+    zIndex: 0,
   },
   planImage: {
-    width: "100%",
-    height: 200,
+    width: '100%',
+    height: 270,
     marginTop: 60,
   },
   planContainer: {
     position: 'absolute',
     alignSelf: 'center',
+    paddingTop: 15,
   },
   planTouchable: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     borderRadius: 30,
     paddingVertical: 12,
     paddingHorizontal: 8,
   },
   borderOrange: {
-    borderColor: "#FF9950",
+    borderColor: '#FF9950',
     borderWidth: 1,
   },
   borderTeal: {
-    borderColor: "#23F1C0",
+    borderColor: '#23F1C0',
     borderWidth: 1,
   },
   borderBlue: {
-    borderColor: "#23B3F1",
+    borderColor: '#23B3F1',
     borderWidth: 1,
   },
   bgLightOrange: {
-    backgroundColor: "#FEF8F4",
+    backgroundColor: '#FEF8F4',
   },
   bgLightTeal: {
-    backgroundColor: "#EDFFFB",
+    backgroundColor: '#EDFFFB',
   },
   bgLightBlue: {
-    backgroundColor: "#E2F6FF",
+    backgroundColor: '#E2F6FF',
   },
   recommendedContainer: {
-    width: "100%",
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  recommendedText: {
+    position: 'absolute',
+    zIndex: 1,
+    alignSelf: 'center',
     textAlign: 'center',
     color: 'white',
     backgroundColor: '#FE7701',
     fontSize: 10,
     fontWeight: '600',
-    borderRadius: 20,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    position: 'absolute',
-    top: -14,
+    borderRadius: 8,
+    padding: 8,
+    top: 0,
+  },
+  recommendedText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '700',
+    lineHeight: 14.4,
   },
   planNameContainer: {
     flexDirection: 'row',
@@ -288,12 +327,12 @@ const styles = StyleSheet.create({
   planNameText: {
     textAlign: 'center',
     color: 'black',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
   },
   fastingEatingContainer: {
     flexDirection: 'row',
-    width: "100%",
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
@@ -343,10 +382,13 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     flexDirection: 'row',
-    width: "66%",
+    paddingVertical: 12,
+    paddingHorizontal: 36,
     justifyContent: 'center',
-    alignSelf:"center",
-    marginTop: 4,
+    alignSelf: 'center',
+    marginTop: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
   },
   timeText: {
     textAlign: 'left',
@@ -356,10 +398,10 @@ const styles = StyleSheet.create({
   },
   subNameContainer: {
     flexDirection: 'row',
-    width: "66%",
+    width: '66%',
     justifyContent: 'center',
     marginTop: 8,
-    alignSelf:"center",
+    alignSelf: 'center',
     marginBottom: 12,
   },
   subNameText: {
@@ -377,12 +419,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginHorizontal: 3,
     borderWidth: 1,
-    borderColor: "#FE7701",
+    borderColor: '#FE7701',
     backgroundColor: '#FE7701',
   },
   inactiveDot: {
     backgroundColor: '#fff',
-    borderColor: "#FE7701",
+    borderColor: '#FE7701',
     width: 8,
     height: 8,
     borderRadius: 50,
