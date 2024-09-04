@@ -267,7 +267,7 @@ const TopImageSection = () => {
           }}>
           {!isRunning
             ? 'Tap to start fasting'
-            : !savedTimerValue
+            : savedTimerValue
             ? 'Fasting in progress'
             : 'Eating in progress'}
         </Text>

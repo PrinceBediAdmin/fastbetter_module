@@ -971,15 +971,6 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
-  - react-native-video (6.4.4):
-    - glog
-    - RCT-Folly (= 2022.05.16.00)
-    - React-Core
-    - react-native-video/Video (= 6.4.4)
-  - react-native-video/Video (6.4.4):
-    - glog
-    - RCT-Folly (= 2022.05.16.00)
-    - React-Core
   - react-native-webview (13.11.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1233,7 +1224,6 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1354,8 +1344,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-video:
-    :path: "../node_modules/react-native-video"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -1463,7 +1451,6 @@ SPEC CHECKSUMS:
   react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
-  react-native-video: 6edc5fce7bc4f705b921362ffbeacdf49212e4c2
   react-native-webview: 4517f5f999667f6867173b4857fec56fca8a8023
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: cd26e56d56350e123da0c1e3e4c76cb58a05e1ee
