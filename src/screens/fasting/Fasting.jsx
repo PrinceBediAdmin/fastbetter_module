@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import Background from '../../components/Background';
 import {useNavigation} from '@react-navigation/native';
@@ -239,7 +240,8 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     width: '100%',
-    paddingTop: 10,
+    paddingTop: Platform.OS === 'android' ? 0 : 10,
+    backgroundColor: '#fff',
   },
   skipButton: {
     alignItems: 'flex-end',
@@ -255,6 +257,7 @@ const styles = StyleSheet.create({
   carouselContainer: {
     marginTop: 10,
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   carouselItemContainer: {
     flex: 1,
@@ -442,7 +445,7 @@ const styles = StyleSheet.create({
   featuresTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'black',
+    color: '#000',
   },
   featureItem: {
     marginTop: 20,
@@ -450,12 +453,12 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'black',
+    color: '#000',
     marginBottom: 6,
   },
   featureDescription: {
     fontSize: 12,
     fontWeight: '400',
-    color: 'black',
+    color: '#000',
   },
 });

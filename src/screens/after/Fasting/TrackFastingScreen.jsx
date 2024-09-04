@@ -87,7 +87,7 @@ const TrackFastingScreen = () => {
       <ScrollView
         style={{flex: 1, width: '100%'}}
         showsVerticalScrollIndicator={false}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, width: '100%'}}>
           <ImageBackground
             source={bgimage}
             resizeMode="contain"
@@ -131,9 +131,11 @@ const TrackFastingScreen = () => {
           </View>
           <View
             style={{
+              width: '100%',
               flexDirection: 'row',
-              justifyContent: 'center',
+              alignSelf: 'center',
               alignItems: 'center',
+              justifyContent: 'center',
             }}>
             <View
               style={{
@@ -143,27 +145,28 @@ const TrackFastingScreen = () => {
                 borderRadius: 5,
               }}
             />
-            <Text
-              style={{
-                color: '#000',
-                fontSize: 30,
-                fontFamily: 'Larken',
-                fontWeight: '700',
-                fontStyle: 'italic',
-                lineHeight: 31.8,
-                marginLeft: 16,
-              }}>
-              {'6h 35 m'}
+            <View style={{marginLeft: 10, width: 120}}>
+              <Text
+                style={{
+                  color: '#000',
+                  fontSize: 30,
+                  fontFamily: 'Larken',
+                  fontWeight: '700',
+                  fontStyle: 'italic',
+                }}>
+                {'6h 35 m'}
+              </Text>
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: '600',
-                  lineHeight: 19.2,
+                  // lineHeight: 19.2,
                   color: '#FE7701',
                 }}>
-                {'\nEating'}
+                {' '}
+                {'Eating'}
               </Text>
-            </Text>
+            </View>
             <View
               style={{
                 width: 10,
@@ -173,27 +176,28 @@ const TrackFastingScreen = () => {
                 marginLeft: 25,
               }}
             />
-            <Text
-              style={{
-                color: '#000',
-                fontSize: 30,
-                fontFamily: 'Larken',
-                fontWeight: '700',
-                fontStyle: 'italic',
-                lineHeight: 31.8,
-                marginLeft: 16,
-              }}>
-              {'15h 25m'}
+            <View style={{marginLeft: 10, width: 120}}>
+              <Text
+                style={{
+                  color: '#000',
+                  fontSize: 30,
+                  fontFamily: 'Larken',
+                  fontWeight: '700',
+                  fontStyle: 'italic',
+                  // lineHeight: 31.8,
+                }}>
+                {'15h 25m'}
+              </Text>
               <Text
                 style={{
                   fontSize: 16,
                   fontWeight: '600',
-                  lineHeight: 19.2,
+                  // lineHeight: 19.2,
                   color: '#FF9950',
                 }}>
-                {'\nFasting'}
+                {'Fasting'}
               </Text>
-            </Text>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -450,7 +454,7 @@ const TrackFastingScreen = () => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 70,
+            marginTop: Platform.OS === 'android' ? 20 : 70,
             marginHorizontal: 24,
             alignItems: 'center',
           }}>

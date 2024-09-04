@@ -10,7 +10,8 @@ apply plugin: 'com.google.gms.google-services'
  // Force a specific version of media3-exoplayer
 configurations.all {
     resolutionStrategy {
-        force 'androidx.media3:media3-exoplayer:1.0.0'
+       // force 'androidx.media3:media3-exoplayer:1.0.0'
+        force 'androidx.media3:media3-exoplayer-dash:1.0.0'
     }
 }
 project.ext.react = [
@@ -133,6 +134,11 @@ dependencies {
     implementation("com.facebook.react:flipper-integration")
 //    implementation project(':react-native-background-fetch')
     implementation project(':react-native-background-timer')
+//    implementation('com.example:some-library:1.0.0') {
+//        exclude group: 'androidx.media3', module: 'media3-exoplayer-dash'
+//    }
+
+
     //implementation 'com.transistorsoft:tsbackgroundfetch:3.0.0' // Replace with the correct version
 
     // implementation 'com.facebook.android:facebook-login:17.0.0'
@@ -140,9 +146,9 @@ dependencies {
     // implementation 'com.google.firebase:firebase-analytics'
     // implementation 'com.google.android.gms:play-services-auth:21.2.0'
     // implementation 'com.google.android.gms:play-services-base:18.5.0'
-    // implementation(project(':react-native-video')) {
-    //     exclude group: 'androidx.media3', module: 'exoplayer-dash'
-    // }
+//     implementation(project(':react-native-video')) {
+//         exclude group: 'androidx.media3', module: 'exoplayer-dash'
+//     }
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
