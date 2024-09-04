@@ -168,7 +168,8 @@ export default function Fasting() {
     <Background statusBarTranslucent={false}>
       <ScrollView
         style={styles.scrollView}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 150}}>
         <TouchableOpacity
           style={styles.skipButton}
           onPress={() => navigation.navigate('FastingSchedule')}>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     alignItems: 'flex-end',
-    marginTop: 34,
+    marginTop: Platform.OS === 'android' ? 20 : 34,
     marginHorizontal: 24,
   },
   skipButtonText: {

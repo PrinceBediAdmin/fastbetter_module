@@ -16,7 +16,10 @@ export default function HomeScreen() {
   return (
     <Background statusBarTranslucent={true} statusBarBgColor="#dcbdb300">
       <Header />
-      <ScrollView className="mb-0 w-full" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        className="mb-0 w-full"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 70}}>
         <Fasting fastingValue={fastingValue} />
       </ScrollView>
     </Background>

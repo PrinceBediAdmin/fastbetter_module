@@ -86,7 +86,8 @@ const TrackFastingScreen = () => {
     return (
       <ScrollView
         style={{flex: 1, width: '100%'}}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: 50}}>
         <View style={{flex: 1, width: '100%'}}>
           <ImageBackground
             source={bgimage}
