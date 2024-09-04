@@ -33,7 +33,7 @@ export default function AppNavigation() {
       {isLoading ? (
         <LoadingScreen />
       ) : (
-        <Stack.Navigator initialRouteName={'Fasting'}>
+        <Stack.Navigator initialRouteName={'FastingSchedule'}>
           <Stack.Screen
             name="Fasting"
             options={disabledHeader}

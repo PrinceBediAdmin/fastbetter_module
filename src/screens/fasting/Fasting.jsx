@@ -25,8 +25,8 @@ const fastingPlans = [
     id: 1,
     name: 'Classic TRF',
     subname: 'Tap to customise your eating window',
-    startTime: '6:30 AM',
-    endTime: '10:30 PM',
+    startTime: '10:30 AM',
+    endTime: '6:30 PM',
     fasting: 16,
     eating: 8,
     isRecommended: true,
@@ -73,16 +73,16 @@ export default function Fasting() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [fastingData, setFastingData] = useState(fastingPlans || []);
 
-  // useEffect(async () => {
-  //   const savedTimer = await AsyncStorage.getItem('FastingPlan');
-  //   console.log(JSON.parse(savedTimer));
-  // }, []);
-
   const handleGoForward = async () => {
     await AsyncStorage.setItem(
       'FastingPlan',
       JSON.stringify(fastingData[activeSlide]),
     );
+    navigation.navigate('FastingSchedule');
+  };
+
+  const skipHandle = async () => {
+    await AsyncStorage.setItem('FastingPlan', JSON.stringify(fastingPlans[0]));
     navigation.navigate('FastingSchedule');
   };
 
@@ -182,7 +182,7 @@ export default function Fasting() {
         contentContainerStyle={{paddingBottom: 150}}>
         <TouchableOpacity
           style={styles.skipButton}
-          onPress={() => navigation.navigate('FastingSchedule')}>
+          onPress={() => skipHandle()}>
           <Text style={styles.skipButtonText}>SKIP</Text>
         </TouchableOpacity>
 

@@ -11,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-export const DailyReportView = ({isType}) => {
+export const DailyReportView = ({isType, onSelectData}) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const flatListRef = useRef(null);
@@ -42,6 +42,7 @@ export const DailyReportView = ({isType}) => {
     }
 
     setDates(dateArray);
+    onSelectData(currentDate);
     setSelectedDate(currentDate); // Initialize selected date to current date
   };
 
@@ -97,7 +98,7 @@ export const DailyReportView = ({isType}) => {
 
     return (
       <Pressable
-        onPress={() => setSelectedDate(item)}
+        onPress={() => (setSelectedDate(item), onSelectData(item))}
         style={{
           height: 60,
           width: 44,

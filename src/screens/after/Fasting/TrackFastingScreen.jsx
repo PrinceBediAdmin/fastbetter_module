@@ -26,6 +26,8 @@ import {WeeklyReportView} from './WeeklyReportView';
 import {DailyReportView} from './DailyReportView';
 import {DateReportView} from './DateReportView';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const weekGraphData = [
   {
     dateNum: 'Mon',
@@ -77,9 +79,44 @@ const TrackFastingScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [ScreenType, setScreenType] = useState(0);
+  const [DailySelectData, setDailySelectData] = useState(new Date());
+  const [FastingData, setFastingData] = useState({});
+
+  useEffect(() => {
+    getData();
+  }, [DailySelectData]);
+
+  const getData = async () => {
+    // Convert the time string to a Date object
+    const date = new Date(DailySelectData);
+    const day = date.getUTCDate() + 1;
+    const month = date.getUTCMonth() + 1; // Months are zero-based
+    const year = date.getUTCFullYear();
+
+    // Format the date as "D/M/YYYY"
+    const newTime = `${day}/${month}/${year}`;
+
+    const StorageData = await AsyncStorage.getItem('timerData');
+    const Data = JSON.parse(StorageData);
+
+    const indexFind = Data.findIndex(pre => pre.date === newTime);
+    if (indexFind !== -1) {
+      setFastingData(Data[indexFind]);
+    } else {
+      setFastingData(null);
+    }
+  };
 
   const onBackPress = () => {
     navigation.goBack();
+  };
+
+  const formatTime = seconds => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+
+    return `${hours}h: ${minutes < 10 ? '0' : ''}${minutes}m`;
   };
 
   const DailyView = () => {
@@ -100,7 +137,10 @@ const TrackFastingScreen = () => {
               justifyContent: 'center',
               marginTop: -10,
             }}>
-            <DailyReportView isType={ScreenType} />
+            <DailyReportView
+              isType={ScreenType}
+              onSelectData={pre => setDailySelectData(pre)}
+            />
           </ImageBackground>
           <View style={{alignItems: 'center', padding: 10}}>
             <PieChart
@@ -156,7 +196,10 @@ const TrackFastingScreen = () => {
                   fontWeight: '700',
                   fontStyle: 'italic',
                 }}>
-                {'6h 35 m'}
+                {FastingData?.eatingTime
+                  ? formatTime(FastingData?.eatingTime)
+                  : '----'}
+                {/* {'6h 35 m'} */}
               </Text>
               <Text
                 style={{
@@ -188,7 +231,10 @@ const TrackFastingScreen = () => {
                   fontStyle: 'italic',
                   // lineHeight: 31.8,
                 }}>
-                {'15h 25m'}
+                {FastingData?.fastingTime
+                  ? formatTime(FastingData?.fastingTime)
+                  : '----'}
+                {/* {'15h 25m'} */}
               </Text>
               <Text
                 style={{

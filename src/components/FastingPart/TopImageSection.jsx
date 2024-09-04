@@ -19,9 +19,98 @@ const TopImageSection = () => {
   const [progress, setProgress] = useState(0);
   const [initialCountdown, setInitialCountdown] = useState(0);
   const [savedTimerValue, setSavedTimerValue] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
-  const [startTime, setStartTime] = useState('15:20');
-  const [endTime, setEndTime] = useState('15:22');
+  useEffect(() => {
+    getFastingPlanData();
+  }, []);
+
+  const getFastingPlanData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('FastingPlan');
+      if (!data) {
+        console.error('No FastingPlan data found in AsyncStorage');
+        return;
+      }
+      const storageData = JSON.parse(data);
+      if (!storageData) {
+        console.error('Invalid FastingPlan data');
+        return;
+      }
+      const start24 = convertTimeTo24HourFormat(storageData?.startTime);
+      const end24 = convertTimeTo24HourFormat(storageData?.endTime);
+      if (isTimeMatch(start24, end24)) {
+        setSavedTimerValue(false);
+        setStartTime(start24);
+        setEndTime(end24);
+      } else {
+        setStartTime(end24);
+        setEndTime(start24);
+        setSavedTimerValue(true);
+      }
+    } catch (error) {
+      console.error('Error parsing FastingPlan data:', error);
+    }
+  };
+
+  const convertTimeTo24HourFormat = timeValue => {
+    if (!timeValue) return 'Invalid time';
+
+    const match = timeValue.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
+
+    if (!match) {
+      console.error('Invalid time format:', timeValue);
+      return 'Invalid time';
+    }
+
+    const time = match[1];
+    const modifier = match[2].toUpperCase();
+
+    let [hours, minutes] = time.split(':');
+
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+      console.error('Invalid time format:', timeValue);
+      return 'Invalid time';
+    }
+
+    if (modifier === 'PM' && hours !== 12) {
+      hours += 12;
+    } else if (modifier === 'AM' && hours === 12) {
+      hours = 0;
+    }
+
+    // Ensure hours and minutes are double digits
+    hours = String(hours).padStart(2, '0');
+    minutes = String(minutes).padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+  };
+
+  const isTimeMatch = (startTime = null, endTime = null) => {
+    if (startTime && endTime) {
+      const [startHours, startMinutes] = startTime.split(':').map(Number);
+      const [endHours, endMinutes] = endTime.split(':').map(Number);
+
+      const now = new Date();
+      const start = new Date(now);
+      const end = new Date(now);
+
+      start.setHours(startHours, startMinutes, 0, 0);
+      end.setHours(endHours, endMinutes, 0, 0);
+
+      if (end < start) {
+        end.setDate(end.getDate() + 1);
+      }
+
+      return now >= start && now <= end;
+    } else {
+      return null;
+    }
+  };
 
   const calculateCountdown = () => {
     if (endTime && startTime) {
@@ -73,6 +162,8 @@ const TopImageSection = () => {
         const savedTimer = await AsyncStorage.getItem('timer');
         const savedIsRunning = await AsyncStorage.getItem('isRunning');
         const savedEndTime = await AsyncStorage.getItem('endTime');
+        const fastingTime = await AsyncStorage.getItem('fastingTime');
+        const eatingTime = await AsyncStorage.getItem('eatingTime');
 
         if (savedEndTime) {
           const endTime = new Date(Number(savedEndTime));
@@ -93,6 +184,14 @@ const TopImageSection = () => {
         if (savedIsRunning !== null) {
           setIsRunning(JSON.parse(savedIsRunning));
         }
+
+        // Load fasting and eating times from AsyncStorage
+        if (fastingTime) {
+          console.log('Fasting Time:', fastingTime);
+        }
+        if (eatingTime) {
+          console.log('Eating Time:', eatingTime);
+        }
       } catch (e) {
         console.error('Failed to load timer state', e);
       }
@@ -111,6 +210,7 @@ const TopImageSection = () => {
             if (prevTimer >= initialCountdown) {
               BackgroundTimer.clearInterval(interval);
               setIsRunning(false);
+              // Save fasting or eating time
               return prevTimer;
             }
 
@@ -147,6 +247,9 @@ const TopImageSection = () => {
         await AsyncStorage.setItem('timer', timer.toString());
         await AsyncStorage.setItem('isRunning', JSON.stringify(isRunning));
         await AsyncStorage.setItem('endTime', endTime.getTime().toString());
+        if (timer !== 0) {
+          saveFastingOrEatingTime();
+        }
       } catch (e) {
         console.error('Failed to save timer state', e);
       }
@@ -160,10 +263,9 @@ const TopImageSection = () => {
       const countdown = calculateCountdown();
       if (countdown) {
         setInitialCountdown(countdown);
-        // setTimer(0);
         setIsRunning(true);
       }
-      //setSavedTimerValue(true);
+      // setSavedTimerValue(true);
     } else {
       Alert.alert(
         'Not within the time range',
@@ -184,6 +286,44 @@ const TopImageSection = () => {
     return `${hours}h: ${minutes < 10 ? '0' : ''}${minutes}m: ${
       secs < 10 ? '0' : ''
     }${secs}s`;
+  };
+
+  const saveFastingOrEatingTime = async () => {
+    try {
+      const currentTime = new Date();
+      const dateString = currentTime.toLocaleDateString();
+
+      const TimeData = await AsyncStorage.getItem('timerData');
+      let dataObject = TimeData ? JSON.parse(TimeData) : [];
+
+      const existingData = dataObject.find(item => item.date === dateString);
+
+      if (existingData) {
+        if (savedTimerValue) {
+          existingData.fastingTime = timer;
+        } else {
+          existingData.eatingTime = timer;
+        }
+      } else {
+        if (savedTimerValue) {
+          dataObject.push({
+            date: dateString,
+            fastingTime: timer,
+            eatingTime: existingData ? existingData.eatingTime : null,
+          });
+        } else {
+          dataObject.push({
+            date: dateString,
+            fastingTime: existingData ? existingData.fastingTime : null,
+            eatingTime: timer,
+          });
+        }
+      }
+
+      await AsyncStorage.setItem('timerData', JSON.stringify(dataObject));
+    } catch (e) {
+      console.error('Failed to save fasting or eating time', e);
+    }
   };
 
   return (
@@ -216,7 +356,7 @@ const TopImageSection = () => {
             !isRunning ? '#FA9950' : !savedTimerValue ? '#42F1C1' : '#4CC2F4'
           }
           backgroundColor={
-            !isRunning ? '#FEEDE0' : !savedTimerValue ? '#E5FFF9' : '#4CC2F4'
+            !isRunning ? '#FEEDE0' : !savedTimerValue ? '#E5FFF9' : '#D9F0FA'
           }
           arcSweepAngle={180}
           rotation={270}>
