@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 // import { useSelector } from "react-redux";
 import MenuModel from '../screens/after/Models/MenuModel';
 
@@ -49,7 +56,7 @@ const Header = ({viewClassName}) => {
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    marginTop: 80,
+    marginTop: Platform.OS === 'android' ? 60 : 80,
     marginBottom: 3,
     shadowColor: 'black',
     shadowOpacity: 0.5,

@@ -608,7 +608,7 @@ const TrackWorkoutScreen = () => {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 70,
+            marginTop: Platform.OS === 'android' ? 20 : 70,
             marginHorizontal: 24,
             alignItems: 'center',
           }}>
