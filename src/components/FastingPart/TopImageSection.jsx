@@ -20,8 +20,8 @@ const TopImageSection = () => {
   const [initialCountdown, setInitialCountdown] = useState(0);
   const [savedTimerValue, setSavedTimerValue] = useState(false);
 
-  const startTime = '17:40';
-  const endTime = '20:42';
+  const startTime = '9:58';
+  const endTime = '15:00';
 
   const calculateCountdown = () => {
     const [startHours, startMinutes] = startTime.split(':').map(Number);

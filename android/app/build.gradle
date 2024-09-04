@@ -13,6 +13,10 @@ configurations.all {
         force 'androidx.media3:media3-exoplayer:1.0.0'
     }
 }
+project.ext.react = [
+        enableHermes: true  // or false, depending on your setup
+]
+
 react {
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
@@ -127,6 +131,10 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+//    implementation project(':react-native-background-fetch')
+    implementation project(':react-native-background-timer')
+    //implementation 'com.transistorsoft:tsbackgroundfetch:3.0.0' // Replace with the correct version
+
     // implementation 'com.facebook.android:facebook-login:17.0.0'
     // implementation platform('com.google.firebase:firebase-bom:33.1.2')
     // implementation 'com.google.firebase:firebase-analytics'
