@@ -20,43 +20,51 @@ const TopImageSection = () => {
   const [initialCountdown, setInitialCountdown] = useState(0);
   const [savedTimerValue, setSavedTimerValue] = useState(false);
 
-  const startTime = '9:58';
-  const endTime = '15:00';
+  const [startTime, setStartTime] = useState('15:20');
+  const [endTime, setEndTime] = useState('15:22');
 
   const calculateCountdown = () => {
-    const [startHours, startMinutes] = startTime.split(':').map(Number);
-    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    if (endTime && startTime) {
+      const [startHours, startMinutes] = startTime.split(':').map(Number);
+      const [endHours, endMinutes] = endTime.split(':').map(Number);
 
-    const now = new Date();
-    const start = new Date(now);
-    const end = new Date(now);
+      const now = new Date();
+      const start = new Date(now);
+      const end = new Date(now);
 
-    start.setHours(startHours, startMinutes, 0, 0);
-    end.setHours(endHours, endMinutes, 0, 0);
+      start.setHours(startHours, startMinutes, 0, 0);
+      end.setHours(endHours, endMinutes, 0, 0);
 
-    if (end < start) {
-      end.setDate(end.getDate() + 1);
+      if (end < start) {
+        end.setDate(end.getDate() + 1);
+      }
+
+      return (end - start) / 1000; // in seconds
+    } else {
+      return null;
     }
-
-    return (end - start) / 1000; // in seconds
   };
 
   const isWithinTimeRange = () => {
-    const [startHours, startMinutes] = startTime.split(':').map(Number);
-    const [endHours, endMinutes] = endTime.split(':').map(Number);
+    if (startTime && endTime) {
+      const [startHours, startMinutes] = startTime.split(':').map(Number);
+      const [endHours, endMinutes] = endTime.split(':').map(Number);
 
-    const now = new Date();
-    const start = new Date(now);
-    const end = new Date(now);
+      const now = new Date();
+      const start = new Date(now);
+      const end = new Date(now);
 
-    start.setHours(startHours, startMinutes, 0, 0);
-    end.setHours(endHours, endMinutes, 0, 0);
+      start.setHours(startHours, startMinutes, 0, 0);
+      end.setHours(endHours, endMinutes, 0, 0);
 
-    if (end < start) {
-      end.setDate(end.getDate() + 1);
+      if (end < start) {
+        end.setDate(end.getDate() + 1);
+      }
+
+      return now >= start && now <= end;
+    } else {
+      return null;
     }
-
-    return now >= start && now <= end;
   };
 
   useEffect(() => {
@@ -100,17 +108,15 @@ const TopImageSection = () => {
       if (isWithinTimeRange()) {
         interval = BackgroundTimer.setInterval(() => {
           setTimer(prevTimer => {
-            if (prevTimer <= 0) {
+            if (prevTimer >= initialCountdown) {
               BackgroundTimer.clearInterval(interval);
               setIsRunning(false);
-              return 0;
+              return prevTimer;
             }
 
-            const newTime = prevTimer - 1;
+            const newTime = prevTimer + 1;
 
-            setProgress(
-              100 - ((initialCountdown - newTime) / initialCountdown) * 100,
-            );
+            setProgress((newTime / initialCountdown) * 100);
             return newTime;
           });
         }, 1000);
@@ -152,9 +158,11 @@ const TopImageSection = () => {
   const handlePlay = () => {
     if (isWithinTimeRange()) {
       const countdown = calculateCountdown();
-      setInitialCountdown(countdown);
-      setTimer(countdown);
-      setIsRunning(true);
+      if (countdown) {
+        setInitialCountdown(countdown);
+        // setTimer(0);
+        setIsRunning(true);
+      }
       //setSavedTimerValue(true);
     } else {
       Alert.alert(
@@ -272,7 +280,7 @@ const TopImageSection = () => {
             : 'Eating in progress'}
         </Text>
       </View>
-      {timer !== 0 && <Text style={styles.timer}>{formatTime(timer)}</Text>}
+      {isRunning && <Text style={styles.timer}>{formatTime(timer)}</Text>}
     </View>
   );
 };

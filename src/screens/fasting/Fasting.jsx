@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -16,6 +17,8 @@ import BottomModel from '../../components/BottomModel';
 import bgimage from '../../assets/common/base.png';
 import bgimage2 from '../../assets/common/base2.png';
 import bgimage3 from '../../assets/common/base3.png';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fastingPlans = [
   {
@@ -67,12 +70,19 @@ export default function Fasting() {
   const [continueBtn, setContinueBtn] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [fastingData, setFastingData] = useState(fastingPlans || []);
 
-  const handleGoForward = () => {
+  // useEffect(async () => {
+  //   const savedTimer = await AsyncStorage.getItem('FastingPlan');
+  //   console.log(JSON.parse(savedTimer));
+  // }, []);
+
+  const handleGoForward = async () => {
+    await AsyncStorage.setItem(
+      'FastingPlan',
+      JSON.stringify(fastingData[activeSlide]),
+    );
     navigation.navigate('FastingSchedule');
   };
 

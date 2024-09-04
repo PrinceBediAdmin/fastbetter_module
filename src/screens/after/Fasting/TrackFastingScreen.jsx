@@ -105,13 +105,14 @@ const TrackFastingScreen = () => {
           <View style={{alignItems: 'center', padding: 10}}>
             <PieChart
               data={[
-                {value: 50, color: '#FFB171'},
-                {value: 80, color: '#FFDABF'},
+                {value: 30, color: '#FFB171', text: '30%'},
+                {value: 70, color: '#FFDABF', text: '70%'},
               ]}
               donut
               width={192}
               height={192}
               innerRadius={50}
+              //showText
               backgroundColor="transparent"
             />
           </View>
