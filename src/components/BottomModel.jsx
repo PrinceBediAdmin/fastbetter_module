@@ -75,7 +75,12 @@ export default BottomModel = ({isVisible, onClose, data, onUpdate}) => {
   const incrementTime = () => {
     setStartTime(prevTime => {
       const newStartTime = new Date(prevTime.getTime() + 60 * 60000); // Add 60 minutes
-      setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
+      // setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
+      return newStartTime;
+    });
+    setEndTime(prevTime => {
+      const newStartTime = new Date(prevTime.getTime() + 60 * 60000); // Add 60 minutes
+      // setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
       return newStartTime;
     });
   };
@@ -83,7 +88,12 @@ export default BottomModel = ({isVisible, onClose, data, onUpdate}) => {
   const decrementTime = () => {
     setStartTime(prevTime => {
       const newStartTime = new Date(prevTime.getTime() - 60 * 60000); // Subtract 60 minutes
-      setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
+      //setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
+      return newStartTime;
+    });
+    setEndTime(prevTime => {
+      const newStartTime = new Date(prevTime.getTime() - 60 * 60000); // Subtract 60 minutes
+      //setEndTime(new Date(newStartTime.getTime() + 8 * 60 * 60000)); // Ensure 8-hour gap
       return newStartTime;
     });
   };
