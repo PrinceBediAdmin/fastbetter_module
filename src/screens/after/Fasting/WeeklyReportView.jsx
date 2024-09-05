@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
@@ -38,7 +39,7 @@ const getCurrentWeekOfMonth = () => {
   return weekNumber - 1;
 };
 
-export const WeeklyReportView = ({isType}) => {
+export const WeeklyReportView = ({isType, onSelectData}) => {
   const flatListRef = useRef(null);
   const currentDate = new Date();
   const currentMonthWeeks = getWeeksInMonth(
@@ -66,6 +67,7 @@ export const WeeklyReportView = ({isType}) => {
   };
 
   useEffect(() => {
+    onSelectData(currentWeekIndex);
     // Scroll to the current week
     if (flatListRef.current) {
       flatListRef.current.scrollToIndex({
@@ -92,13 +94,13 @@ export const WeeklyReportView = ({isType}) => {
           borderWidth: 0.2,
           borderColor: isSelectedWeek ? 'transparent' : '#CFC5C5',
         }}
-        onPress={() => setSelectedWeek(index)}>
+        onPress={() => (setSelectedWeek(index), onSelectData(index))}>
         <Text
           style={{
             fontSize: 14,
             fontWeight: isSelectedWeek ? '700' : '400',
             lineHeight: 16.8,
-            color: isSelectedWeek ? '#fff' : '',
+            color: isSelectedWeek ? '#fff' : '#000',
           }}>
           {item}
         </Text>
@@ -147,5 +149,6 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     alignItems: 'center', // Center items vertically
+    paddingHorizontal: 20,
   },
 });

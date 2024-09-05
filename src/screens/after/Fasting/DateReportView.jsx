@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
@@ -54,7 +55,7 @@ const getCurrentYearKey = () => {
   return yearObject ? yearObject.key : null;
 };
 
-export const DateReportView = ({}) => {
+export const DateReportView = ({onSelectMonth, onSelectYear}) => {
   const currentMonthKey = getCurrentMonthKey();
   const currentYearKey = getCurrentYearKey();
   const [Monthvalue, setMonthValue] = useState(currentMonthKey.toString());
@@ -87,6 +88,7 @@ export const DateReportView = ({}) => {
         onBlur={() => setIsMonthFocus(false)}
         onChange={item => {
           setMonthValue(item?.key);
+          onSelectMonth(item?.key);
           setIsMonthFocus(false);
         }}
         renderRightIcon={() => (
@@ -132,6 +134,7 @@ export const DateReportView = ({}) => {
         onBlur={() => setIsYearFocus(false)}
         onChange={item => {
           setYearValue(item?.key);
+          onSelectYear(item?.key);
           setIsYearFocus(false);
         }}
         renderRightIcon={() => (

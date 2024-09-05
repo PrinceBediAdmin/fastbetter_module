@@ -12,6 +12,7 @@ import {
 import BackgroundTimer from 'react-native-background-timer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import StatsComponent from './StatsComponent';
 
 const TopImageSection = () => {
   const [timer, setTimer] = useState(0);
@@ -21,6 +22,7 @@ const TopImageSection = () => {
   const [savedTimerValue, setSavedTimerValue] = useState(false);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [LocalStorag, setLocalStorag] = useState(null);
 
   useEffect(() => {
     getFastingPlanData();
@@ -38,6 +40,8 @@ const TopImageSection = () => {
         console.error('Invalid FastingPlan data');
         return;
       }
+
+      setLocalStorag(storageData);
       const start24 = convertTimeTo24HourFormat(storageData?.startTime);
       const end24 = convertTimeTo24HourFormat(storageData?.endTime);
       if (isTimeMatch(start24, end24)) {
@@ -309,12 +313,12 @@ const TopImageSection = () => {
           dataObject.push({
             date: dateString,
             fastingTime: timer,
-            eatingTime: existingData ? existingData.eatingTime : null,
+            eatingTime: existingData ? existingData.eatingTime : 0,
           });
         } else {
           dataObject.push({
             date: dateString,
-            fastingTime: existingData ? existingData.fastingTime : null,
+            fastingTime: existingData ? existingData.fastingTime : 0,
             eatingTime: timer,
           });
         }
@@ -421,6 +425,12 @@ const TopImageSection = () => {
         </Text>
       </View>
       {isRunning && <Text style={styles.timer}>{formatTime(timer)}</Text>}
+      <View style={{paddingHorizontal: 24, alignItems: 'center'}}>
+        <StatsComponent
+          Fasting={LocalStorag?.fasting ? LocalStorag?.fasting + 'h' : null}
+          Eating={LocalStorag?.eating ? LocalStorag?.eating + 'h' : null}
+        />
+      </View>
     </View>
   );
 };

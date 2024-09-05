@@ -33,7 +33,7 @@ const weekGraphData = [
     dateNum: 'Mon',
     dayOfWeek: '01',
     id: 0,
-    value: 1.5,
+    value: 1,
   },
   {
     dateNum: 'Tue',
@@ -67,44 +67,202 @@ const weekGraphData = [
   },
 ];
 
-const weekHistryList = [
-  {id: 1, date: 'Sun, 15th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
-  {id: 2, date: 'Mon, 16th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
-  {id: 3, date: 'Tue, 17th', Fasting: '-- --', EatingTtime: '-- --'},
-  {id: 4, date: 'Wed, 18th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
-  {id: 5, date: 'Thu, 19th', Fasting: '-- --', EatingTtime: '-- --'},
+// const weekHistryList = [
+//   {id: 1, date: 'Sun, 15th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
+//   {id: 2, date: 'Mon, 16th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
+//   {id: 3, date: 'Tue, 17th', Fasting: '-- --', EatingTtime: '-- --'},
+//   {id: 4, date: 'Wed, 18th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
+//   {id: 5, date: 'Thu, 19th', Fasting: '-- --', EatingTtime: '-- --'},
+// ];
+
+const Monthdata = [
+  {key: '1', value: 'January'},
+  {key: '2', value: 'February'},
+  {key: '3', value: 'March'},
+  {key: '4', value: 'April'},
+  {key: '5', value: 'May'},
+  {key: '6', value: 'June'},
+  {key: '7', value: 'July'},
+  {key: '8', value: 'August'},
+  {key: '9', value: 'September'},
+  {key: '10', value: 'October'},
+  {key: '11', value: 'November'},
+  {key: '12', value: 'December'},
 ];
+
+const YearData = [
+  {key: '1', value: '2024'},
+  {key: '2', value: '2025'},
+  {key: '3', value: '2026'},
+  {key: '4', value: '2027'},
+  {key: '5', value: '2028'},
+  {key: '6', value: '2029'},
+  {key: '7', value: '2030'},
+  {key: '8', value: '2031'},
+];
+
+const getCurrentMonthKey = () => {
+  const currentMonthIndex = new Date().getMonth(); // getMonth() returns 0 for January, 1 for February, etc.
+  const currentMonth = Monthdata[currentMonthIndex];
+  return currentMonth ? currentMonth.key : null;
+};
+
+const getCurrentYearKey = () => {
+  const currentYear = new Date().getFullYear(); // Get the current year (e.g., 2024)
+  const yearObject = YearData.find(
+    year => year.value === currentYear.toString(),
+  );
+  return yearObject ? yearObject.key : null;
+};
 
 const TrackFastingScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [ScreenType, setScreenType] = useState(0);
-  const [DailySelectData, setDailySelectData] = useState(new Date());
+  const currentDateTime = new Date().toISOString();
+  const [DailySelectData, setDailySelectData] = useState(currentDateTime);
+  const [WeekSelectData, setWeekSelectData] = useState(0);
   const [FastingData, setFastingData] = useState({});
+
+  const currentMonthKey = getCurrentMonthKey();
+  const currentYearKey = getCurrentYearKey();
+
+  const [Monthvalue, setMonthValue] = useState(currentMonthKey.toString());
+  const [YearValue, setYearValue] = useState(currentYearKey.toString());
+
+  const [weekHistryList, setWeekHistryList] = useState([]);
+
+  const [graphData, setGraphData] = useState([
+    {value: 0, color: '#FFB171', text: '0%'},
+    {value: 0, color: '#FFDABF', text: '0%'},
+  ]);
 
   useEffect(() => {
     getData();
-  }, [DailySelectData]);
+  }, [DailySelectData, Monthvalue, YearValue]);
 
-  const getData = async () => {
-    // Convert the time string to a Date object
-    const date = new Date(DailySelectData);
-    const day = date.getUTCDate() + 1;
-    const month = date.getUTCMonth() + 1; // Months are zero-based
-    const year = date.getUTCFullYear();
+  useEffect(() => {
+    getWeekData();
+  }, [WeekSelectData, Monthvalue, YearValue]);
 
-    // Format the date as "D/M/YYYY"
-    const newTime = `${day}/${month}/${year}`;
-
+  const getWeekData = async () => {
     const StorageData = await AsyncStorage.getItem('timerData');
     const Data = JSON.parse(StorageData);
 
-    const indexFind = Data.findIndex(pre => pre.date === newTime);
-    if (indexFind !== -1) {
-      setFastingData(Data[indexFind]);
+    let dataList = Data || [];
+
+    const MonthName = Monthvalue;
+    const YearName = YearData[YearValue - 1]?.value;
+    // const MonthWeeks = 1;
+    // Function to get the week of the month
+    const getWeekOfMonth = date => {
+      const day = date.getDate();
+      const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+      const dayOfWeek = startOfMonth.getDay();
+      return Math.ceil((day + dayOfWeek) / 7);
+    };
+
+    // Filter the dataList by the given month and year
+    const filteredDataByMonthYear = dataList.filter(item => {
+      const [day, month, year] = item.date.split('/').map(Number);
+      return year === parseInt(YearName) && month === parseInt(MonthName);
+    });
+
+    // Group the filtered data by week of the month
+    const weekData = filteredDataByMonthYear.reduce((acc, item) => {
+      const [day, month, year] = item.date.split('/').map(Number);
+      const dateObj = new Date(year, month - 1, day);
+      const weekOfMonth = getWeekOfMonth(dateObj);
+
+      // Group data by the week of the month
+      if (!acc[weekOfMonth]) {
+        acc[weekOfMonth] = [];
+      }
+      acc[weekOfMonth].push(item);
+      return acc;
+    }, {});
+
+    // Output the data for the specific week
+    const weekSpecificData = weekData[WeekSelectData + 1] || [];
+    setWeekHistryList(weekSpecificData);
+    // getGraphData(MonthName, YearName, weekSpecificData + 1);
+    // getGraphData('9', '2024', 1);
+  };
+
+  const getData = async () => {
+    const date = new Date(DailySelectData);
+    const day = date.getUTCDate() + 1;
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear();
+
+    const newTime = `${day}/${Monthvalue}/${YearData[YearValue - 1]?.value}`;
+
+    const StorageData = await AsyncStorage.getItem('timerData');
+    const Data = JSON.parse(StorageData);
+    if (Data) {
+      const indexFind = Data.findIndex(pre => pre.date === newTime);
+
+      if (indexFind !== -1) {
+        setFastingData(Data[indexFind]);
+
+        const eating = getTimePer(Data[indexFind]?.eatingTime);
+        const fasting = getTimePer(Data[indexFind]?.fastingTime);
+
+        const GrapData = [
+          {
+            value: eating || 0,
+            color: '#FFB171',
+          },
+          {
+            value: eating ? 100 - eating : 0.1,
+            color: '#FFDABF',
+          },
+        ];
+
+        setGraphData(GrapData);
+      } else {
+        setFastingData(null);
+        setGraphData([
+          {
+            value: 0,
+            color: '#FFB171',
+          },
+          {
+            value: 0.1,
+            color: '#FFDABF',
+          },
+        ]);
+      }
     } else {
       setFastingData(null);
+      setGraphData([
+        {
+          value: 0,
+          color: '#FFB171',
+        },
+        {
+          value: 0.1,
+          color: '#FFDABF',
+        },
+      ]);
     }
+  };
+
+  const getTimePer = timeValue => {
+    const formatValue = formatTime(timeValue);
+    const [hours, minutes] = formatValue
+      .split(':')
+      .map(item => parseInt(item.replace(/[^\d]/g, ''), 10));
+
+    // Convert the time to total minutes
+    const totalMinutes = hours * 60 + minutes;
+
+    // Total minutes in 24 hours
+    const totalMinutesInDay = 24 * 60; // 1440 minutes
+
+    // Calculate the percentage
+    const percentage = (totalMinutes / totalMinutesInDay) * 100;
+    return parseFloat(percentage.toFixed(2));
   };
 
   const onBackPress = () => {
@@ -117,6 +275,15 @@ const TrackFastingScreen = () => {
     const secs = Math.floor(seconds % 60);
 
     return `${hours}h: ${minutes < 10 ? '0' : ''}${minutes}m`;
+  };
+
+  const formatDate = dateValue => {
+    const [day, month, year] = dateValue.split('/').map(Number);
+    const date = new Date(year, month - 1, day);
+    const dayOfWeek = date.toLocaleString('en-US', {weekday: 'short'});
+    const newValue = `${dayOfWeek}, ${day}${'th'}`;
+
+    return newValue;
   };
 
   const DailyView = () => {
@@ -144,10 +311,7 @@ const TrackFastingScreen = () => {
           </ImageBackground>
           <View style={{alignItems: 'center', padding: 10}}>
             <PieChart
-              data={[
-                {value: 30, color: '#FFB171', text: '30%'},
-                {value: 70, color: '#FFDABF', text: '70%'},
-              ]}
+              data={graphData}
               donut
               width={192}
               height={192}
@@ -305,7 +469,7 @@ const TrackFastingScreen = () => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            // justifyContent: 'space-between',
             justifyContent: 'center',
           }}>
           <Text
@@ -316,7 +480,7 @@ const TrackFastingScreen = () => {
               color: '#18192B',
               flex: 1,
             }}>
-            {item.date}
+            {formatDate(item?.date)}
           </Text>
           <View>
             <Text
@@ -327,7 +491,7 @@ const TrackFastingScreen = () => {
                 color: '#000',
                 textAlign: 'right',
               }}>
-              {item.Fasting}
+              {formatTime(item?.fastingTime)}
             </Text>
             <View
               style={{
@@ -367,7 +531,7 @@ const TrackFastingScreen = () => {
                 color: '#000',
                 textAlign: 'right',
               }}>
-              {item.EatingTtime}
+              {formatTime(item?.eatingTime)}
             </Text>
             <View
               style={{
@@ -428,7 +592,10 @@ const TrackFastingScreen = () => {
               justifyContent: 'center',
               marginTop: -30,
             }}>
-            <WeeklyReportView isType={ScreenType} />
+            <WeeklyReportView
+              isType={ScreenType}
+              onSelectData={pre => setWeekSelectData(pre)}
+            />
           </ImageBackground>
 
           <FlatList
@@ -524,7 +691,10 @@ const TrackFastingScreen = () => {
             {'Track fasting'}
           </Text>
         </View>
-        <DateReportView />
+        <DateReportView
+          onSelectMonth={pre => setMonthValue(pre)}
+          onSelectYear={pre => setYearValue(pre)}
+        />
         <View
           style={{
             height: 41,
