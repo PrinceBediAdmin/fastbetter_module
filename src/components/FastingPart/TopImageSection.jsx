@@ -13,6 +13,18 @@ import BackgroundTimer from 'react-native-background-timer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import StatsComponent from './StatsComponent';
+import FastingStreakComponent from './FastingStreakComponent';
+import {fastingValue} from '../../function/data';
+
+const fastingOption = [
+  {name: 'Sun', key: 0, value: 100},
+  {name: 'Mon', key: 1, value: 20},
+  {name: 'Tue', key: 2, value: 20},
+  {name: 'Wed', key: 3, value: 20},
+  {name: 'Thu', key: 4, value: 20},
+  {name: 'Fri', key: 5, value: 20},
+  {name: 'Sat', key: 6, value: 20},
+];
 
 const TopImageSection = () => {
   const [timer, setTimer] = useState(0);
@@ -23,10 +35,21 @@ const TopImageSection = () => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [LocalStorag, setLocalStorag] = useState(null);
+  const [FastingStreakData, setFastingStreakData] = useState(fastingValue);
 
   useEffect(() => {
     getFastingPlanData();
   }, []);
+
+  useEffect(() => {
+    GetFastingData();
+  }, []);
+
+  const GetFastingData = async () => {
+    const TimeData = await AsyncStorage.getItem('timerData');
+    let dataObject = TimeData ? JSON.parse(TimeData) : [];
+    console.log(dataObject);
+  };
 
   const getFastingPlanData = async () => {
     try {
@@ -41,17 +64,28 @@ const TopImageSection = () => {
         return;
       }
 
+      const currentDay = new Date().toLocaleDateString('en-US', {
+        weekday: 'short',
+      });
       setLocalStorag(storageData);
-      const start24 = convertTimeTo24HourFormat(storageData?.startTime);
-      const end24 = convertTimeTo24HourFormat(storageData?.endTime);
-      if (isTimeMatch(start24, end24)) {
+      // Compare current day with treDay
+      const isMatch = currentDay === fastingOption[storageData?.treatDays].name;
+      if (isMatch) {
         setSavedTimerValue(false);
-        setStartTime(start24);
-        setEndTime(end24);
+        setStartTime('11:59');
+        setEndTime('23:59');
       } else {
-        setStartTime(end24);
-        setEndTime(start24);
-        setSavedTimerValue(true);
+        const start24 = convertTimeTo24HourFormat(storageData?.startTime);
+        const end24 = convertTimeTo24HourFormat(storageData?.endTime);
+        if (isTimeMatch(start24, end24)) {
+          setSavedTimerValue(false);
+          setStartTime(start24);
+          setEndTime(end24);
+        } else {
+          setStartTime(end24);
+          setEndTime(start24);
+          setSavedTimerValue(true);
+        }
       }
     } catch (error) {
       console.error('Error parsing FastingPlan data:', error);
@@ -430,6 +464,7 @@ const TopImageSection = () => {
           Fasting={LocalStorag?.fasting ? LocalStorag?.fasting + 'h' : null}
           Eating={LocalStorag?.eating ? LocalStorag?.eating + 'h' : null}
         />
+        <FastingStreakComponent fastingValue={FastingStreakData} />
       </View>
     </View>
   );

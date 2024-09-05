@@ -119,8 +119,8 @@ const TrackFastingScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [ScreenType, setScreenType] = useState(0);
-  const currentDateTime = new Date().toISOString();
-  const [DailySelectData, setDailySelectData] = useState(currentDateTime);
+
+  const [DailySelectData, setDailySelectData] = useState(null);
   const [WeekSelectData, setWeekSelectData] = useState(0);
   const [FastingData, setFastingData] = useState({});
 
@@ -129,14 +129,11 @@ const TrackFastingScreen = () => {
 
   const [Monthvalue, setMonthValue] = useState(currentMonthKey.toString());
   const [YearValue, setYearValue] = useState(currentYearKey.toString());
-
   const [weekHistryList, setWeekHistryList] = useState([]);
-
   const [graphData, setGraphData] = useState([
     {value: 0, color: '#FFB171', text: '0%'},
     {value: 0, color: '#FFDABF', text: '0%'},
   ]);
-
   const [weekGraphData, setWeekGraphData] = useState([]);
 
   useEffect(() => {
@@ -189,34 +186,30 @@ const TrackFastingScreen = () => {
     setWeekHistryList(weekSpecificData);
     // getGraphData(MonthName, YearName, weekSpecificData + 1);
     const result = getGraphData(weekSpecificData, WeekSelectData + 1);
+
     setWeekGraphData(result);
   };
 
   const getGraphData = (dataList, weektype = 1) => {
-    // Function to get the start of the week (Monday) for a given date
     function getStartOfWeek(date) {
       const day = date.getDay();
       const diff = day === 0 ? 6 : day - 1; // Sunday se Monday tak ka difference
       return new Date(date.setDate(date.getDate() - diff));
     }
 
-    // Filter karna start karein
     const newData = dataList.filter(entry => {
       const [day, month, year] = entry.date.split('/').map(Number);
       const date = new Date(year, month - 1, day);
 
-      // Pehle week ka starting Monday pata lagayein
-      const startDate = new Date(year, month - 1, 1); // Mahine ke pehle din ka date
+      const startDate = new Date(year, month - 1, 1);
       const startOfWeek = getStartOfWeek(startDate);
 
-      // Humko nth week ka Monday milna hai
       const desiredWeekStart = new Date(
         startOfWeek.setDate(startOfWeek.getDate() + weektype * 7),
       );
       const desiredWeekEnd = new Date(desiredWeekStart);
-      desiredWeekEnd.setDate(desiredWeekStart.getDate() + 6); // Us week ka Sunday
+      desiredWeekEnd.setDate(desiredWeekStart.getDate() + 6);
 
-      // Check karein ki entry ka date iss week me fall karta hai ya nahi
       return date >= desiredWeekStart && date <= desiredWeekEnd;
     });
 
@@ -246,7 +239,6 @@ const TrackFastingScreen = () => {
     });
 
     const filteredWeekData = getFilterData(updatedDataList, weektype);
-
     return filteredWeekData;
   };
 
@@ -281,7 +273,7 @@ const TrackFastingScreen = () => {
       const dayOfWeek = getDayOfWeek(date);
       data.push({
         dateNum: dayOfWeek,
-        dayOfWeek: i.toString().padStart(2, '0'),
+        dayOfWeek: i.toString().padStart(1),
         id: i - 1,
         value: 0,
       });
@@ -290,15 +282,16 @@ const TrackFastingScreen = () => {
   };
 
   const getData = async () => {
+    const currentDateTime = new Date().toISOString();
     const StorageData = await AsyncStorage.getItem('timerData');
     const Data = JSON.parse(StorageData);
-    const date = new Date(DailySelectData);
-    const day = date.getUTCDate() + 1;
+    const date = DailySelectData
+      ? new Date(DailySelectData)
+      : new Date(currentDateTime);
+    const day = DailySelectData ? date.getUTCDate() + 1 : date.getUTCDate();
     const month = date.getUTCMonth() + 1;
     const year = date.getUTCFullYear();
-
     const newTime = `${day}/${Monthvalue}/${YearData[YearValue - 1]?.value}`;
-
     if (Data) {
       const indexFind = Data.findIndex(pre => pre?.date === newTime);
 
@@ -321,6 +314,7 @@ const TrackFastingScreen = () => {
 
         setGraphData(GrapData);
       } else {
+        setFastingData(Data[0]);
         setFastingData(null);
         setGraphData([
           {
@@ -516,7 +510,18 @@ const TrackFastingScreen = () => {
     );
   };
 
+  const convertTimeToMinutes = time => {
+    const [hoursPart, minutesPart] = time.split(':').map(part => part.trim());
+    const hours = parseInt(hoursPart.replace('h', ''), 10) || 0;
+    const minutes = parseInt(minutesPart.replace('m', ''), 10) || 0;
+    return hours * 60 + minutes;
+  };
+
   const WeekGraphRenderItem = ({item, index}) => {
+    const totalMinutes = convertTimeToMinutes(formatTime(item?.value));
+    const totalMinutesInDay = 24 * 60;
+    const percentage = (totalMinutes / totalMinutesInDay) * 100;
+
     return (
       <View>
         <LinearGradient
@@ -527,7 +532,7 @@ const TrackFastingScreen = () => {
           <View
             style={{
               width: '90%',
-              height: item?.value ? (item?.value / 100) * 100 + '%' : '0%',
+              height: item?.value ? parseInt(percentage) + '%' : '0%',
               backgroundColor: '#FF9950',
               position: 'absolute',
               alignSelf: 'center',
@@ -859,11 +864,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFEDE0',
     justifyContent: 'center',
     borderRadius: 8,
-    elevation: 3, // Android box shadow
-    shadowColor: 'gray', // iOS box shadow
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    // elevation: 3, // Android box shadow
+    // shadowColor: 'gray', // iOS box shadow
+    // shadowOffset: {width: 0, height: 1},
+    // shadowOpacity: 0.1,
+    // shadowRadius: 2,
   },
   dropdown: {
     width: 120,

@@ -11,7 +11,7 @@ const Fasting = ({fastingValue}) => {
       <TopImageSection />
       <View style={{paddingHorizontal: 24, alignItems: 'center'}}>
         {/* <StatsComponent /> */}
-        <FastingStreakComponent fastingValue={fastingValue} />
+        {/* <FastingStreakComponent fastingValue={fastingValue} /> */}
         <Text
           style={{
             marginTop: 10,

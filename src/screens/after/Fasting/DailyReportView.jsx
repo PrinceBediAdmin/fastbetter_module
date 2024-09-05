@@ -43,7 +43,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
     }
 
     setDates(dateArray);
-    onSelectData(currentDate);
+    //onSelectData(currentDate);
     setSelectedDate(currentDate); // Initialize selected date to current date
   };
 
