@@ -28,44 +28,44 @@ import {DateReportView} from './DateReportView';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const weekGraphData = [
-  {
-    dateNum: 'Mon',
-    dayOfWeek: '01',
-    id: 0,
-    value: 1,
-  },
-  {
-    dateNum: 'Tue',
-    dayOfWeek: '02',
-    id: 1,
-    value: 0.5,
-  },
-  {
-    dateNum: 'Wed',
-    dayOfWeek: '03',
-    id: 2,
-    value: 0,
-  },
-  {
-    dateNum: 'Thu',
-    dayOfWeek: '04',
-    id: 3,
-    value: 0.5,
-  },
-  {
-    dateNum: 'Fri',
-    dayOfWeek: '05',
-    id: 4,
-    value: 0,
-  },
-  {
-    dateNum: 'Sat',
-    dayOfWeek: '06',
-    id: 5,
-    value: 0,
-  },
-];
+// const weekGraphData = [
+//   {
+//     dateNum: 'Mon',
+//     dayOfWeek: '01',
+//     id: 0,
+//     value: 1,
+//   },
+//   {
+//     dateNum: 'Tue',
+//     dayOfWeek: '02',
+//     id: 1,
+//     value: 0.5,
+//   },
+//   {
+//     dateNum: 'Wed',
+//     dayOfWeek: '03',
+//     id: 2,
+//     value: 0,
+//   },
+//   {
+//     dateNum: 'Thu',
+//     dayOfWeek: '04',
+//     id: 3,
+//     value: 0.5,
+//   },
+//   {
+//     dateNum: 'Fri',
+//     dayOfWeek: '05',
+//     id: 4,
+//     value: 0,
+//   },
+//   {
+//     dateNum: 'Sat',
+//     dayOfWeek: '06',
+//     id: 5,
+//     value: 0,
+//   },
+// ];
 
 // const weekHistryList = [
 //   {id: 1, date: 'Sun, 15th', Fasting: '15h 25m', EatingTtime: '6h 35m'},
@@ -137,6 +137,8 @@ const TrackFastingScreen = () => {
     {value: 0, color: '#FFDABF', text: '0%'},
   ]);
 
+  const [weekGraphData, setWeekGraphData] = useState([]);
+
   useEffect(() => {
     getData();
   }, [DailySelectData, Monthvalue, YearValue]);
@@ -186,10 +188,110 @@ const TrackFastingScreen = () => {
     const weekSpecificData = weekData[WeekSelectData + 1] || [];
     setWeekHistryList(weekSpecificData);
     // getGraphData(MonthName, YearName, weekSpecificData + 1);
-    // getGraphData('9', '2024', 1);
+    const result = getGraphData(weekSpecificData, WeekSelectData + 1);
+    setWeekGraphData(result);
+  };
+
+  const getGraphData = (dataList, weektype = 1) => {
+    // Function to get the start of the week (Monday) for a given date
+    function getStartOfWeek(date) {
+      const day = date.getDay();
+      const diff = day === 0 ? 6 : day - 1; // Sunday se Monday tak ka difference
+      return new Date(date.setDate(date.getDate() - diff));
+    }
+
+    // Filter karna start karein
+    const newData = dataList.filter(entry => {
+      const [day, month, year] = entry.date.split('/').map(Number);
+      const date = new Date(year, month - 1, day);
+
+      // Pehle week ka starting Monday pata lagayein
+      const startDate = new Date(year, month - 1, 1); // Mahine ke pehle din ka date
+      const startOfWeek = getStartOfWeek(startDate);
+
+      // Humko nth week ka Monday milna hai
+      const desiredWeekStart = new Date(
+        startOfWeek.setDate(startOfWeek.getDate() + weektype * 7),
+      );
+      const desiredWeekEnd = new Date(desiredWeekStart);
+      desiredWeekEnd.setDate(desiredWeekStart.getDate() + 6); // Us week ka Sunday
+
+      // Check karein ki entry ka date iss week me fall karta hai ya nahi
+      return date >= desiredWeekStart && date <= desiredWeekEnd;
+    });
+
+    const MonthName = Monthvalue;
+    const YearName = YearData[YearValue - 1]?.value;
+
+    const MonthData = MonthList(MonthName, YearName);
+
+    const updatedDataList = MonthData.map(item => {
+      // Find the matching date in ApiData based on the dayOfWeek
+      const matchedApiData = newData.find(apiItem => {
+        // Extract day from ApiData date (assuming DD/MM/YYYY format)
+        const apiDay = apiItem.date.split('/')[0];
+        return apiDay === item.dayOfWeek; // Compare with dayOfWeek in dataList
+      });
+
+      // If match is found, update the value with fastingTime from ApiData
+      if (matchedApiData) {
+        return {
+          ...item,
+          value: matchedApiData.fastingTime,
+        };
+      }
+
+      // Return the original item if no match is found
+      return item;
+    });
+
+    const filteredWeekData = getFilterData(updatedDataList, weektype);
+
+    return filteredWeekData;
+  };
+
+  const getFilterData = (dataList, weekNumber) => {
+    const daysPerWeek = 7;
+
+    // Calculate the start and end index for the given week
+    const startIndex = (weekNumber - 1) * daysPerWeek;
+    const endIndex = startIndex + daysPerWeek;
+
+    // Slice the dataList to get the data for the specified week
+    return dataList.slice(startIndex, endIndex);
+  };
+
+  const MonthList = (monthNumber = '9', yearName = '2024') => {
+    // Function to get the number of days in a month
+    function getDaysInMonth(month, year) {
+      return new Date(year, month, 0).getDate();
+    }
+
+    // Function to get the day of the week for a date
+    function getDayOfWeek(date) {
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      return daysOfWeek[date.getDay()];
+    }
+
+    // Create the array
+    const data = [];
+    const numDays = getDaysInMonth(parseInt(monthNumber), parseInt(yearName));
+    for (let i = 1; i <= numDays; i++) {
+      const date = new Date(parseInt(yearName), parseInt(monthNumber) - 1, i);
+      const dayOfWeek = getDayOfWeek(date);
+      data.push({
+        dateNum: dayOfWeek,
+        dayOfWeek: i.toString().padStart(2, '0'),
+        id: i - 1,
+        value: 0,
+      });
+    }
+    return data;
   };
 
   const getData = async () => {
+    const StorageData = await AsyncStorage.getItem('timerData');
+    const Data = JSON.parse(StorageData);
     const date = new Date(DailySelectData);
     const day = date.getUTCDate() + 1;
     const month = date.getUTCMonth() + 1;
@@ -197,10 +299,8 @@ const TrackFastingScreen = () => {
 
     const newTime = `${day}/${Monthvalue}/${YearData[YearValue - 1]?.value}`;
 
-    const StorageData = await AsyncStorage.getItem('timerData');
-    const Data = JSON.parse(StorageData);
     if (Data) {
-      const indexFind = Data.findIndex(pre => pre.date === newTime);
+      const indexFind = Data.findIndex(pre => pre?.date === newTime);
 
       if (indexFind !== -1) {
         setFastingData(Data[indexFind]);
@@ -355,7 +455,7 @@ const TrackFastingScreen = () => {
               <Text
                 style={{
                   color: '#000',
-                  fontSize: 30,
+                  fontSize: 25,
                   fontFamily: 'Larken',
                   fontWeight: '700',
                   fontStyle: 'italic',
@@ -389,7 +489,7 @@ const TrackFastingScreen = () => {
               <Text
                 style={{
                   color: '#000',
-                  fontSize: 30,
+                  fontSize: 25,
                   fontFamily: 'Larken',
                   fontWeight: '700',
                   fontStyle: 'italic',
@@ -424,16 +524,14 @@ const TrackFastingScreen = () => {
           end={{x: 1, y: 0}}
           colors={['#FFF2E9', '#FFFCFB']}
           style={{width: 40, height: 176, borderRadius: 8, padding: 4, gap: 3}}>
-          {item.value != 0 && item.value !== 2 && (
-            <View
-              style={{backgroundColor: '#FFE2CD', flex: 1, borderRadius: 8}}
-            />
-          )}
-
           <View
             style={{
+              width: '90%',
+              height: item?.value ? (item?.value / 100) * 100 + '%' : '0%',
               backgroundColor: '#FF9950',
-              flex: item.value,
+              position: 'absolute',
+              alignSelf: 'center',
+              bottom: 0,
               borderRadius: 8,
             }}
           />

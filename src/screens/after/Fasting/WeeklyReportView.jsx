@@ -15,7 +15,7 @@ import {
 
 const getWeeksInMonth = (year, month) => {
   const weeks = [];
-  const firstDayOfMonth = new Date(year, month, 0).getDay();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let start = 1;
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
     color: '#1F3132',
   },
   flatListContent: {
-    alignItems: 'center', // Center items vertically
-    paddingHorizontal: 20,
+    alignItems: 'center', // Center items verticallyz
   },
 });

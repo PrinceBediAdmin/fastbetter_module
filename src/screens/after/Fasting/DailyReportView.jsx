@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
@@ -96,9 +97,14 @@ export const DailyReportView = ({isType, onSelectData}) => {
     const dayName = item.toLocaleDateString('en-US', {weekday: 'short'});
     const dateText = item.getDate();
 
+    const Itemhandle = itemValue => {
+      setSelectedDate(itemValue);
+      onSelectData(itemValue);
+    };
+
     return (
       <Pressable
-        onPress={() => (setSelectedDate(item), onSelectData(item))}
+        onPress={() => Itemhandle(item)}
         style={{
           height: 60,
           width: 44,
