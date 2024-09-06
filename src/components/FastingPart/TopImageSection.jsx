@@ -134,6 +134,7 @@ const TopImageSection = () => {
           if (isEarlierThanCurrentTime(start24)) {
             setStartTime(end24);
             setEndTime(start24);
+            console.log('---1');
           } else {
             setStartTime('0:01');
             setEndTime(start24);
@@ -355,14 +356,14 @@ const TopImageSection = () => {
       }
     };
 
-    if (isEarlierThanCurrentTime(endTime)) {
+    if (!isEarlierThanCurrentTime(endTime)) {
       setTimer(0);
+      setProgress(0);
       setInitialCountdown(0);
       handleStop();
     }
-
     saveTimerState();
-  }, [timer, isRunning]);
+  }, [timer, isRunning, endTime]);
 
   const handlePlay = () => {
     if (isWithinTimeRange()) {
