@@ -1,14 +1,15 @@
-import React, {useEffect} from 'react';
-import {ScrollView} from 'react-native';
+import React, { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
 import Background from '../../components/Background';
-import {fastingValue} from '../../function/data';
+import { fastingValue } from '../../function/data';
 import Header from '../../components/Header';
 
 import Fasting from '../../components/Fasting';
+import LinkDevice from '../../components/LinkDevice';
 import TopImageSection from '../../components/FastingPart/TopImageSection';
 
 export default function HomeScreen() {
-  const getDashboardData = async () => {};
+  const getDashboardData = async () => { };
 
   useEffect(() => {
     getDashboardData();
@@ -20,9 +21,12 @@ export default function HomeScreen() {
       <ScrollView
         className="mb-0 w-full"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 70}}>
+        contentContainerStyle={{ paddingBottom: 70 }}>
         {/* <Fasting fastingValue={fastingValue} /> */}
         <TopImageSection />
+        <View className="px-6 mb-24">
+          <LinkDevice />
+        </View>
       </ScrollView>
     </Background>
   );
