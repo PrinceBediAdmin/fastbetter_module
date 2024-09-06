@@ -40,7 +40,7 @@ const TopImageSection = () => {
 
   useEffect(() => {
     getFastingPlanData();
-  }, []);
+  }, [timer]);
 
   useEffect(() => {
     GetFastingData();
@@ -117,7 +117,6 @@ const TopImageSection = () => {
         weekday: 'short',
       });
       setLocalStorag(storageData);
-      // Compare current day with treDay
       const isMatch = currentDay === fastingOption[storageData?.treatDays].name;
       if (isMatch) {
         setSavedTimerValue(false);
@@ -126,6 +125,7 @@ const TopImageSection = () => {
       } else {
         const start24 = convertTimeTo24HourFormat(storageData?.startTime);
         const end24 = convertTimeTo24HourFormat(storageData?.endTime);
+
         if (isTimeMatch(start24, end24)) {
           setSavedTimerValue(false);
           setStartTime(start24);
@@ -133,8 +133,7 @@ const TopImageSection = () => {
         } else {
           if (isEarlierThanCurrentTime(start24)) {
             setStartTime(end24);
-            setEndTime(start24);
-            console.log('---1');
+            setEndTime('23:59');
           } else {
             setStartTime('0:01');
             setEndTime(start24);
@@ -308,16 +307,34 @@ const TopImageSection = () => {
       if (isWithinTimeRange()) {
         interval = BackgroundTimer.setInterval(() => {
           setTimer(prevTimer => {
-            if (prevTimer >= initialCountdown) {
+            const currentTime = new Date();
+
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const second = currentTime.getSeconds();
+
+            const formattedHours = hours.toString().padStart(2);
+            const formattedMinutes = minutes.toString().padStart(2);
+            const formattedSecond = second.toString().padStart(2, '0');
+
+            const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSecond}`;
+
+            const newValue = endTime + ':00';
+            if (formattedTime >= newValue) {
               BackgroundTimer.clearInterval(interval);
               setIsRunning(false);
-              // Save fasting or eating time
-              return prevTimer;
+              setTimer(0); // Reset timer to 0
+              setProgress(0); // Reset progress to 0
+              saveFastingOrEatingTime(); // Save the fasting or eating time if needed
+              return 0;
             }
-
+            ///console.log(LocalStorag);
+            const limtValue = savedTimerValue
+              ? LocalStorag?.fasting || 14
+              : LocalStorag?.eating || 8;
             const newTime = prevTimer + 1;
-
-            setProgress((newTime / initialCountdown) * 100);
+            const totalSecondsIn8Hours = limtValue * 60 * 60;
+            setProgress((newTime / totalSecondsIn8Hours) * 100);
             return newTime;
           });
         }, 1000);
@@ -337,7 +354,7 @@ const TopImageSection = () => {
         BackgroundTimer.clearInterval(interval);
       }
     };
-  }, [isRunning, initialCountdown]);
+  }, [isRunning, initialCountdown, endTime]);
 
   useEffect(() => {
     const saveTimerState = async () => {
@@ -355,24 +372,16 @@ const TopImageSection = () => {
         console.error('Failed to save timer state', e);
       }
     };
-    if (isRunning === 'true') {
-      const result = isCurrentTimeGreaterThan(endTime);
-      if (result) {
-        setTimer(0);
-        setProgress(0);
-        setInitialCountdown(0);
-        handleStop();
-      }
-    }
+
     saveTimerState();
-  }, [timer, isRunning, endTime]);
+  }, [timer, isRunning]);
 
   function isCurrentTimeGreaterThan(endTime) {
     const now = new Date();
     const [endHour, endMinute] = endTime.split(':').map(Number);
     const endTimeDate = new Date();
     endTimeDate.setHours(endHour, endMinute, 0, 0);
-    return now > endTimeDate && now.getTime() - endTimeDate.getTime() > 1000;
+    return now < endTimeDate && now.getTime() - endTimeDate.getTime() > 2000;
   }
 
   const handlePlay = () => {
