@@ -93,6 +93,7 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
           borderRadius: 12,
           borderWidth: 0.2,
           borderColor: isSelectedWeek ? 'transparent' : '#CFC5C5',
+          ...(isSelectedWeek && styles.itemSelectShadow),
         }}
         onPress={() => (setSelectedWeek(index), onSelectData(index))}>
         <Text
@@ -117,7 +118,7 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
         keyExtractor={item => item.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        style={{marginVertical: 20}}
+        style={{marginVertical: 20, height: 50}}
         contentContainerStyle={styles.flatListContent}
         getItemLayout={(data, index) => ({
           length: Dimensions.get('window').width,
@@ -149,5 +150,13 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     alignItems: 'center', // Center items verticallyz
+    paddingHorizontal: 10,
+  },
+  itemSelectShadow: {
+    elevation: 3, // Android box shadow
+    shadowColor: 'gray', // iOS box shadow
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
   },
 });

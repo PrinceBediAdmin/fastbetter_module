@@ -158,6 +158,7 @@ const TrackFastingScreen = () => {
       console.error('Invalid FastingPlan data');
       return;
     }
+
     setLocalStorag(storageData);
   };
 
@@ -328,6 +329,7 @@ const TrackFastingScreen = () => {
     const currentDateTime = new Date().toISOString();
     const StorageData = await AsyncStorage.getItem('timerData');
     const Data = JSON.parse(StorageData);
+    console.log(Data);
     const date = DailySelectData
       ? new Date(DailySelectData)
       : new Date(currentDateTime);
@@ -727,12 +729,24 @@ const TrackFastingScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 100}}>
         <View style={{flex: 1}}>
-          <ImageBackground
+          <View>
+            <Image
+              style={{width: '100%', height: 187, marginTop: -60, zIndex: 0}}
+              source={bgimage}
+            />
+            <View style={{position: 'absolute', zIndex: 1}}>
+              <WeeklyReportView
+                isType={ScreenType}
+                onSelectData={pre => setWeekSelectData(pre)}
+              />
+            </View>
+          </View>
+          {/* <ImageBackground
             source={bgimage}
             resizeMode="contain"
             style={{
               height: 187,
-              paddingVertical: 20,
+              paddingVertical: 0,
               marginBottom: 20,
               alignItems: 'center',
               justifyContent: 'center',
@@ -742,7 +756,7 @@ const TrackFastingScreen = () => {
               isType={ScreenType}
               onSelectData={pre => setWeekSelectData(pre)}
             />
-          </ImageBackground>
+          </ImageBackground> */}
 
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -915,11 +929,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFEDE0',
     justifyContent: 'center',
     borderRadius: 8,
-    // elevation: 3, // Android box shadow
-    // shadowColor: 'gray', // iOS box shadow
-    // shadowOffset: {width: 0, height: 1},
-    // shadowOpacity: 0.1,
-    // shadowRadius: 2,
   },
   dropdown: {
     width: 120,

@@ -8,6 +8,7 @@ import {
   Alert,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -285,8 +286,6 @@ const TopImageSection = () => {
         if (savedIsRunning !== null) {
           setIsRunning(JSON.parse(savedIsRunning));
         }
-
-        // Load fasting and eating times from AsyncStorage
         if (fastingTime) {
           console.log('Fasting Time:', fastingTime);
         }
@@ -356,6 +355,12 @@ const TopImageSection = () => {
       }
     };
 
+    if (isEarlierThanCurrentTime(endTime)) {
+      setTimer(0);
+      setInitialCountdown(0);
+      handleStop();
+    }
+
     saveTimerState();
   }, [timer, isRunning]);
 
@@ -375,8 +380,9 @@ const TopImageSection = () => {
     }
   };
 
-  const handleStop = () => {
+  const handleStop = async () => {
     setIsRunning(false);
+    await AsyncStorage.setItem('isRunning', JSON.stringify(false));
   };
 
   const formatTime = seconds => {
@@ -531,6 +537,26 @@ const TopImageSection = () => {
           fastingValue={FastingStreakData}
           data={LocalStorag}
         />
+        <Text
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            lineHeight: 14,
+            textAlign: 'center',
+            color: 'black',
+            paddingHorizontal: 1,
+            fontWeight: '400',
+          }}>
+          <Text
+            style={{
+              color: '#FE7701',
+              ...(Platform.OS === 'ios' && {fontWeight: '700'}),
+              fontWeight: '700',
+            }}>
+            {'Start fasting '}
+          </Text>
+          {'to achieve your goal weight'}
+        </Text>
       </View>
     </View>
   );

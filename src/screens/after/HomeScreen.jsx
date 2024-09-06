@@ -5,6 +5,7 @@ import {fastingValue} from '../../function/data';
 import Header from '../../components/Header';
 
 import Fasting from '../../components/Fasting';
+import TopImageSection from '../../components/FastingPart/TopImageSection';
 
 export default function HomeScreen() {
   const getDashboardData = async () => {};
@@ -20,7 +21,8 @@ export default function HomeScreen() {
         className="mb-0 w-full"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 70}}>
-        <Fasting fastingValue={fastingValue} />
+        {/* <Fasting fastingValue={fastingValue} /> */}
+        <TopImageSection />
       </ScrollView>
     </Background>
   );
