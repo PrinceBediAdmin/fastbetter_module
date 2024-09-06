@@ -37,6 +37,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>WCSessionDelegate</key>
+    <string>$(PRODUCT_MODULE_NAME).WCSessionDelegate</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data for tracking your activity.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need to update your health data for better activity tracking.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 	<string>fetch</string>

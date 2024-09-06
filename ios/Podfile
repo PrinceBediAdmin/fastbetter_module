@@ -28,6 +28,8 @@ end
 target 'fastbetter' do
   config = use_native_modules!
 
+  pod 'RNWatch', :path => '../node_modules/react-native-watch-connectivity'
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.

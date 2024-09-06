@@ -355,15 +355,25 @@ const TopImageSection = () => {
         console.error('Failed to save timer state', e);
       }
     };
-
-    if (!isEarlierThanCurrentTime(endTime)) {
-      setTimer(0);
-      setProgress(0);
-      setInitialCountdown(0);
-      handleStop();
+    if (isRunning === 'true') {
+      const result = isCurrentTimeGreaterThan(endTime);
+      if (result) {
+        setTimer(0);
+        setProgress(0);
+        setInitialCountdown(0);
+        handleStop();
+      }
     }
     saveTimerState();
   }, [timer, isRunning, endTime]);
+
+  function isCurrentTimeGreaterThan(endTime) {
+    const now = new Date();
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+    const endTimeDate = new Date();
+    endTimeDate.setHours(endHour, endMinute, 0, 0);
+    return now > endTimeDate && now.getTime() - endTimeDate.getTime() > 1000;
+  }
 
   const handlePlay = () => {
     if (isWithinTimeRange()) {
