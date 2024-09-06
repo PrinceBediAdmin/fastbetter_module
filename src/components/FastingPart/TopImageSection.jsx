@@ -43,7 +43,7 @@ const TopImageSection = () => {
 
   useEffect(() => {
     GetFastingData();
-  }, []);
+  }, [timer]);
 
   const GetFastingData = async () => {
     const TimeData = await AsyncStorage.getItem('timerData');
@@ -92,7 +92,7 @@ const TopImageSection = () => {
       const dayName = getDayName(item.date);
       const matchingDay = fastingValue.find(day => day.name === dayName);
       if (matchingDay) {
-        matchingDay.value = item.fastingTime;
+        matchingDay.value = item?.fastingTime === 0 ? null : item?.fastingTime;
       }
     });
 

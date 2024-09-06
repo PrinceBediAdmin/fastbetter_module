@@ -224,7 +224,7 @@ const TrackFastingScreen = () => {
       const dayName = getDayName(item.date);
       const matchingDay = fastingValue.find(day => day.name === dayName);
       if (matchingDay) {
-        matchingDay.value = item.fastingTime;
+        matchingDay.value = item?.fastingTime === 0 ? null : item?.fastingTime;
       }
     });
     setFastingStreakData(fastingValue);
