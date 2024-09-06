@@ -27,6 +27,7 @@ import {DailyReportView} from './DailyReportView';
 import {DateReportView} from './DateReportView';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FastingStreakComponent from '../../../components/FastingPart/FastingStreakComponent';
 
 // const weekGraphData = [
 //   {
@@ -135,10 +136,30 @@ const TrackFastingScreen = () => {
     {value: 0, color: '#FFDABF', text: '0%'},
   ]);
   const [weekGraphData, setWeekGraphData] = useState([]);
+  const [LocalStorag, setLocalStorag] = useState(null);
+  const [FastingStreakData, setFastingStreakData] = useState(fastingValue);
 
   useEffect(() => {
     getData();
   }, [DailySelectData, Monthvalue, YearValue]);
+
+  useEffect(() => {
+    getFastingPlan();
+  }, []);
+
+  const getFastingPlan = async () => {
+    const data = await AsyncStorage.getItem('FastingPlan');
+    if (!data) {
+      console.error('No FastingPlan data found in AsyncStorage');
+      return;
+    }
+    const storageData = JSON.parse(data);
+    if (!storageData) {
+      console.error('Invalid FastingPlan data');
+      return;
+    }
+    setLocalStorag(storageData);
+  };
 
   useEffect(() => {
     getWeekData();
@@ -152,8 +173,7 @@ const TrackFastingScreen = () => {
 
     const MonthName = Monthvalue;
     const YearName = YearData[YearValue - 1]?.value;
-    // const MonthWeeks = 1;
-    // Function to get the week of the month
+
     const getWeekOfMonth = date => {
       const day = date.getDate();
       const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -161,13 +181,11 @@ const TrackFastingScreen = () => {
       return Math.ceil((day + dayOfWeek) / 7);
     };
 
-    // Filter the dataList by the given month and year
     const filteredDataByMonthYear = dataList.filter(item => {
       const [day, month, year] = item.date.split('/').map(Number);
       return year === parseInt(YearName) && month === parseInt(MonthName);
     });
 
-    // Group the filtered data by week of the month
     const weekData = filteredDataByMonthYear.reduce((acc, item) => {
       const [day, month, year] = item.date.split('/').map(Number);
       const dateObj = new Date(year, month - 1, day);
@@ -181,12 +199,37 @@ const TrackFastingScreen = () => {
       return acc;
     }, {});
 
-    // Output the data for the specific week
     const weekSpecificData = weekData[WeekSelectData + 1] || [];
     setWeekHistryList(weekSpecificData);
-    // getGraphData(MonthName, YearName, weekSpecificData + 1);
-    const result = getGraphData(weekSpecificData, WeekSelectData + 1);
 
+    const fastingValue = [
+      {name: 'Sun', key: 1, value: null},
+      {name: 'Mon', key: 2, value: null},
+      {name: 'Tue', key: 3, value: null},
+      {name: 'Wed', key: 4, value: null},
+      {name: 'Thu', key: 5, value: null},
+      {name: 'Fri', key: 6, value: null},
+      {name: 'Sat', key: 7, value: null},
+    ];
+
+    function getDayName(dateString) {
+      const dateParts = dateString.split('/').reverse().join('-'); // Convert "dd/mm/yyyy" to "yyyy-mm-dd"
+      const date = new Date(dateParts);
+
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      return daysOfWeek[date.getDay()];
+    }
+
+    weekSpecificData.forEach(item => {
+      const dayName = getDayName(item.date);
+      const matchingDay = fastingValue.find(day => day.name === dayName);
+      if (matchingDay) {
+        matchingDay.value = item.fastingTime;
+      }
+    });
+    setFastingStreakData(fastingValue);
+
+    const result = getGraphData(weekSpecificData, WeekSelectData + 1);
     setWeekGraphData(result);
   };
 
@@ -722,7 +765,15 @@ const TrackFastingScreen = () => {
             keyExtractor={item => item.id}
           />
 
-          <View
+          <View style={{paddingHorizontal: 24, alignItems: 'center'}}>
+            <FastingStreakComponent
+              fastingValue={FastingStreakData}
+              data={LocalStorag}
+              title={'Fasting streak'}
+            />
+          </View>
+
+          {/* <View
             className="flex mt-7 h-[127px] shadow-lg shadow-black-100 bg-white rounded-3xl"
             style={{marginHorizontal: 30}}>
             <Text className="text-[#FE7701] text-[12px] font-[700] text-left mt-5 left-[24px]">
@@ -750,8 +801,8 @@ const TrackFastingScreen = () => {
                 </View>
               ))}
             </View>
-          </View>
-          <Text className="mt-4 text-[12px] leading-[14px] text-center text-black px-1 font-[400]">
+          </View> */}
+          {/* <Text className="mt-4 text-[12px] leading-[14px] text-center text-black px-1 font-[400]">
             {'You’re '}
             <Text
               className={`text-[#FE7701] ${
@@ -760,7 +811,7 @@ const TrackFastingScreen = () => {
               {'40% more likely '}
             </Text>
             {'to achieve your goal'}
-          </Text>
+          </Text> */}
         </View>
       </ScrollView>
     );

@@ -48,7 +48,55 @@ const TopImageSection = () => {
   const GetFastingData = async () => {
     const TimeData = await AsyncStorage.getItem('timerData');
     let dataObject = TimeData ? JSON.parse(TimeData) : [];
-    console.log(dataObject);
+
+    function getWeekRange() {
+      const currentDate = new Date();
+      const firstDayOfWeek = new Date(
+        currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1),
+      ); // Monday
+      const lastDayOfWeek = new Date(
+        currentDate.setDate(currentDate.getDate() + 6),
+      ); // Sunday
+
+      firstDayOfWeek.setHours(0, 0, 0, 0); // Set to start of the day
+      lastDayOfWeek.setHours(23, 59, 59, 999); // Set to end of the day
+
+      return {firstDayOfWeek, lastDayOfWeek};
+    }
+    const {firstDayOfWeek, lastDayOfWeek} = getWeekRange();
+
+    const filteredData = dataObject.filter(item => {
+      const itemDate = new Date(item.date.split('/').reverse().join('-'));
+      return itemDate >= firstDayOfWeek && itemDate <= lastDayOfWeek;
+    });
+
+    const fastingValue = [
+      {name: 'Sun', key: 1, value: null},
+      {name: 'Mon', key: 2, value: null},
+      {name: 'Tue', key: 3, value: null},
+      {name: 'Wed', key: 4, value: null},
+      {name: 'Thu', key: 5, value: null},
+      {name: 'Fri', key: 6, value: null},
+      {name: 'Sat', key: 7, value: null},
+    ];
+
+    function getDayName(dateString) {
+      const dateParts = dateString.split('/').reverse().join('-'); // Convert "dd/mm/yyyy" to "yyyy-mm-dd"
+      const date = new Date(dateParts);
+
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      return daysOfWeek[date.getDay()];
+    }
+
+    filteredData.forEach(item => {
+      const dayName = getDayName(item.date);
+      const matchingDay = fastingValue.find(day => day.name === dayName);
+      if (matchingDay) {
+        matchingDay.value = item.fastingTime;
+      }
+    });
+
+    setFastingStreakData(fastingValue);
   };
 
   const getFastingPlanData = async () => {
@@ -72,7 +120,7 @@ const TopImageSection = () => {
       const isMatch = currentDay === fastingOption[storageData?.treatDays].name;
       if (isMatch) {
         setSavedTimerValue(false);
-        setStartTime('11:59');
+        setStartTime('0:01');
         setEndTime('23:59');
       } else {
         const start24 = convertTimeTo24HourFormat(storageData?.startTime);
@@ -400,7 +448,7 @@ const TopImageSection = () => {
           rotation={270}>
           {() => (
             <TouchableOpacity
-              onPress={!isRunning ? handlePlay : handleStop}
+              onPress={() => (!isRunning ? handlePlay() : handleStop())}
               style={{
                 alignSelf: 'center',
                 justifyContent: 'center',
@@ -464,7 +512,10 @@ const TopImageSection = () => {
           Fasting={LocalStorag?.fasting ? LocalStorag?.fasting + 'h' : null}
           Eating={LocalStorag?.eating ? LocalStorag?.eating + 'h' : null}
         />
-        <FastingStreakComponent fastingValue={FastingStreakData} />
+        <FastingStreakComponent
+          fastingValue={FastingStreakData}
+          data={LocalStorag}
+        />
       </View>
     </View>
   );
