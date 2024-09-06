@@ -130,8 +130,13 @@ const TopImageSection = () => {
           setStartTime(start24);
           setEndTime(end24);
         } else {
-          setStartTime(end24);
-          setEndTime(start24);
+          if (isEarlierThanCurrentTime(start24)) {
+            setStartTime(end24);
+            setEndTime(start24);
+          } else {
+            setStartTime('0:01');
+            setEndTime(start24);
+          }
           setSavedTimerValue(true);
         }
       }
@@ -139,6 +144,16 @@ const TopImageSection = () => {
       console.error('Error parsing FastingPlan data:', error);
     }
   };
+
+  function isEarlierThanCurrentTime(time) {
+    const currentTime = new Date();
+    const [hours, minutes] = time.split(':').map(Number);
+
+    const inputTime = new Date();
+    inputTime.setHours(hours, minutes, 0, 0);
+
+    return inputTime < currentTime;
+  }
 
   const convertTimeTo24HourFormat = timeValue => {
     if (!timeValue) return 'Invalid time';
