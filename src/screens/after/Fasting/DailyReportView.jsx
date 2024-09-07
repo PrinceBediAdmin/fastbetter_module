@@ -118,8 +118,8 @@ export const DailyReportView = ({isType, onSelectData}) => {
           justifyContent: 'center',
           backgroundColor: isSelected(item) ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
-          borderWidth: 0.2,
-          opacity: item <= CurrentDate ? 1 : 0.4,
+          borderWidth: item <= CurrentDate ? 0.2 : 0,
+          opacity: item <= CurrentDate ? 1 : 0.3,
           borderColor: isSelected(item) ? 'transparent' : '#CFC5C5',
         }}>
         <Text

@@ -99,8 +99,8 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
           justifyContent: 'center',
           backgroundColor: isSelectedWeek ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
-          borderWidth: 0.2,
-          opacity: index > currentWeekIndex ? 0.5 : 1,
+          borderWidth: index > currentWeekIndex ? 0 : 0.2,
+          opacity: index > currentWeekIndex ? 0.3 : 1,
           borderColor: isSelectedWeek ? 'transparent' : '#CFC5C5',
           ...(isSelectedWeek && styles.itemSelectShadow),
         }}
