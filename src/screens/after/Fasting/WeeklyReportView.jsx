@@ -81,6 +81,14 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
     // eslint-disable-next-line no-unused-vars
     const isCurrentWeek = index === currentWeekIndex;
     const isSelectedWeek = index === selectedWeek;
+
+    const itemHandle = indexValue => {
+      if (index < currentWeekIndex) {
+        setSelectedWeek(index);
+        onSelectData(index);
+      }
+    };
+
     return (
       <Pressable
         style={{
@@ -92,10 +100,11 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
           backgroundColor: isSelectedWeek ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
           borderWidth: 0.2,
+          opacity: index > currentWeekIndex ? 0.5 : 1,
           borderColor: isSelectedWeek ? 'transparent' : '#CFC5C5',
           ...(isSelectedWeek && styles.itemSelectShadow),
         }}
-        onPress={() => (setSelectedWeek(index), onSelectData(index))}>
+        onPress={() => itemHandle(index)}>
         <Text
           style={{
             fontSize: 14,
@@ -111,6 +120,7 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
 
   return (
     <View style={{width: '100%', marginBottom: 30}}>
+      {console.log(currentMonthWeeks)}
       <FlatList
         ref={flatListRef}
         data={currentMonthWeeks}

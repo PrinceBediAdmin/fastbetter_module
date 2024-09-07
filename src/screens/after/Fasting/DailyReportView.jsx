@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
@@ -97,9 +98,13 @@ export const DailyReportView = ({isType, onSelectData}) => {
     const dayName = item.toLocaleDateString('en-US', {weekday: 'short'});
     const dateText = item.getDate();
 
+    const CurrentDate = new Date();
+
     const Itemhandle = itemValue => {
-      setSelectedDate(itemValue);
-      onSelectData(itemValue);
+      if (item <= CurrentDate) {
+        setSelectedDate(itemValue);
+        onSelectData(itemValue);
+      }
     };
 
     return (
@@ -114,6 +119,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
           backgroundColor: isSelected(item) ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
           borderWidth: 0.2,
+          opacity: item <= CurrentDate ? 1 : 0.4,
           borderColor: isSelected(item) ? 'transparent' : '#CFC5C5',
         }}>
         <Text
