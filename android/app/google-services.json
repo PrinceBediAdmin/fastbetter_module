@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "994159451716",
-    "project_id": "fastbetter-e6a93",
-    "storage_bucket": "fastbetter-e6a93.appspot.com"
+    "project_number": "72560162735",
+    "project_id": "fastbetter-79a53",
+    "storage_bucket": "fastbetter-79a53.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:994159451716:android:060a9e70a7174c9022a611",
+        "mobilesdk_app_id": "1:72560162735:android:ddf1334f0ed70b0e44615a",
         "android_client_info": {
           "package_name": "com.fastbetter"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "994159451716-4fi04486r8maj5teb07seioqol3l1pg0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fastbetter",
-            "certificate_hash": "f4617004e9c6590779ff18c262de82b8d72522d8"
-          }
-        },
-        {
-          "client_id": "994159451716-q1qnuqkicen2artusg0hn2vsbiuaqjkd.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC9E47UhxqDRrUaV1qZQXOmtyWdHTh1FaM"
+          "current_key": "AIzaSyAhMmCLj28e1rVYvlMFSCZJKqYa_jFFQYs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "994159451716-q1qnuqkicen2artusg0hn2vsbiuaqjkd.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
