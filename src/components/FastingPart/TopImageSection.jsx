@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -38,13 +38,14 @@ const TopImageSection = () => {
   const [LocalStorag, setLocalStorag] = useState(null);
   const [FastingStreakData, setFastingStreakData] = useState(fastingValue);
 
-  let interval;
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     getFastingPlanData();
     return () => {
-      if (interval) {
-        BackgroundTimer.clearInterval(interval);
+      if (intervalRef.current) {
+        BackgroundTimer.clearInterval(intervalRef.current);
+        setIsRunning(false);
       }
     };
   }, []);
@@ -193,10 +194,10 @@ const TopImageSection = () => {
     }
   };
 
-  const calculateCountdown = () => {
-    if (endTime && startTime) {
-      const [startHours, startMinutes] = startTime.split(':').map(Number);
-      const [endHours, endMinutes] = endTime.split(':').map(Number);
+  const calculateCountdown = (TimerStart = null, TimerEnd = null) => {
+    if (TimerEnd && TimerStart) {
+      const [startHours, startMinutes] = TimerStart.split(':').map(Number);
+      const [endHours, endMinutes] = TimerEnd.split(':').map(Number);
 
       const now = new Date();
       const start = new Date(now);
@@ -281,12 +282,6 @@ const TopImageSection = () => {
         if (savedIsRunning !== null) {
           setIsRunning(JSON.parse(savedIsRunning));
         }
-        if (fastingTime) {
-          console.log('Fasting Time:', fastingTime);
-        }
-        if (eatingTime) {
-          console.log('Eating Time:', eatingTime);
-        }
       } catch (e) {
         console.error('Failed to load timer state', e);
       }
@@ -296,55 +291,55 @@ const TopImageSection = () => {
   }, []);
 
   useEffect(() => {
-    const RunningHanlde = async () => {
-      if (isRunning) {
-        if (isWithinTimeRange()) {
-          interval = BackgroundTimer.setInterval(() => {
-            setTimer(prevTimer => {
-              const currentTime = new Date();
+    if (isRunning) {
+      if (isWithinTimeRange()) {
+        intervalRef.current = BackgroundTimer.setInterval(() => {
+          setTimer(prevTimer => {
+            const currentTime = new Date();
 
-              const hours = currentTime.getHours();
-              const minutes = currentTime.getMinutes();
-              const second = currentTime.getSeconds();
+            const hours = currentTime.getHours();
+            const minutes = currentTime.getMinutes();
+            const second = currentTime.getSeconds();
 
-              const formattedHours = hours.toString().padStart(2);
-              const formattedMinutes = minutes.toString().padStart(2);
-              const formattedSecond = second.toString().padStart(2, '0');
+            const formattedHours = hours.toString().padStart(2);
+            const formattedMinutes = minutes.toString().padStart(2);
+            const formattedSecond = second.toString().padStart(2, '0');
 
-              const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSecond}`;
+            const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSecond}`;
 
-              const newValue = endTime + ':00';
-              if (formattedTime >= newValue) {
-                BackgroundTimer.clearInterval(interval);
-                TimeOutHandle();
-                return 0;
-              }
-              ///console.log(LocalStorag);
-              const limtValue = savedTimerValue
-                ? LocalStorag?.fasting || 14
-                : LocalStorag?.eating || 8;
+            const newValue = endTime + ':00';
+            if (formattedTime >= newValue) {
+              BackgroundTimer.clearInterval(interval);
+              TimeOutHandle();
+              return 0;
+            }
+            ///console.log(LocalStorag);
+            const limtValue = savedTimerValue
+              ? LocalStorag?.fasting || 14
+              : LocalStorag?.eating || 8;
 
-              let newTime = prevTimer + 1;
+            let newTime = prevTimer + 1;
 
-              const totalSecondsIn8Hours = limtValue * 60 * 60;
-              setProgress((newTime / totalSecondsIn8Hours) * 100);
-              return newTime;
-            });
-          }, 1000);
-        } else {
-          Alert.alert(
-            'Not within the time range1',
-            'The current time is not within the defined range.',
-          );
-          setIsRunning(false);
-        }
-      } else if (interval) {
-        BackgroundTimer.clearInterval(interval);
+            const totalSecondsIn8Hours = limtValue * 60 * 60;
+            setProgress((newTime / totalSecondsIn8Hours) * 100);
+            return newTime;
+          });
+        }, 1000);
+      } else {
+        Alert.alert(
+          'Not within the time range1',
+          'The current time is not within the defined range.',
+        );
+        setIsRunning(false);
       }
-    };
-
-    RunningHanlde();
-  }, [isRunning, initialCountdown]);
+    } else {
+      if (intervalRef.current) {
+        BackgroundTimer.clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setIsRunning(false);
+    }
+  }, [isRunning, initialCountdown, endTime]);
 
   const TimeOutHandle = async () => {
     setIsRunning(false);
@@ -355,8 +350,7 @@ const TopImageSection = () => {
   };
 
   useEffect(() => {
-    // console.log(handlePlayCheck());
-    if (isRunning && handlePlayCheck()) {
+    if (handlePlayCheck()) {
       TimeOutHandle();
     }
     const saveTimerState = async () => {
@@ -406,8 +400,14 @@ const TopImageSection = () => {
       weekday: 'short',
     });
     const isMatch = currentDay === fastingOption[LocalStorag?.treatDays].name;
+
+    let TimerStart = null;
+    let TimerEnd = null;
+
     if (isMatch) {
       setSavedTimerValue(false);
+      TimerStart = '0:01';
+      TimerEnd = '23:59';
       setStartTime('0:01');
       setEndTime('23:59');
     } else {
@@ -418,13 +418,17 @@ const TopImageSection = () => {
         setSavedTimerValue(false);
         setStartTime(start24);
         setEndTime(end24);
+        TimerStart = start24;
+        TimerEnd = end24;
       } else {
         if (isEarlierThanCurrentTime(start24)) {
-          TimeStart = end24;
-          TimeEnd = '23:59';
+          TimerStart = end24;
+          TimerEnd = '23:59';
           setStartTime(end24);
           setEndTime('23:59');
         } else {
+          TimerStart = '0:01';
+          TimerEnd = start24;
           setStartTime('0:01');
           setEndTime(start24);
         }
@@ -432,25 +436,11 @@ const TopImageSection = () => {
       }
     }
 
-    const countdown = await calculateCountdown();
+    const countdown = calculateCountdown(TimerStart, TimerEnd);
     if (countdown) {
       setInitialCountdown(countdown);
       setIsRunning(true);
     }
-
-    // if (isWithinTimeRange(TimeStart, TimeEnd)) {
-    //   const countdown = calculateCountdown();
-    //   if (countdown) {
-    //     setInitialCountdown(countdown);
-    //     setIsRunning(true);
-    //   }
-    //   // setSavedTimerValue(true);
-    // } else {
-    //   Alert.alert(
-    //     'Not within the time range',
-    //     'The current time is not within the defined range.',
-    //   );
-    // }
   };
 
   const handleStop = async () => {

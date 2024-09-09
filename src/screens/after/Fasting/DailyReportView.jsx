@@ -24,7 +24,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
   }, []);
 
   useEffect(() => {
-    if (dates.length > 0 && flatListRef.current) {
+    if (dates?.length > 0 && flatListRef?.current) {
       scrollToCurrentDate();
     }
   }, [dates, isType]);
@@ -153,7 +153,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       style={{marginVertical: 20}}
-      contentContainerStyle={styles.flatListContent}
+      contentContainerStyle={{alignItems: 'center'}}
       getItemLayout={getItemLayout}
       onScrollToIndexFailed={handleScrollToIndexFailed}
     />

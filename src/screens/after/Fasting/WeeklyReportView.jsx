@@ -83,7 +83,7 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
     const isSelectedWeek = index === selectedWeek;
 
     const itemHandle = indexValue => {
-      if (index < currentWeekIndex) {
+      if (index <= currentWeekIndex) {
         setSelectedWeek(index);
         onSelectData(index);
       }
