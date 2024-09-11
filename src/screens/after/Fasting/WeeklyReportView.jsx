@@ -70,10 +70,20 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
     onSelectData(currentWeekIndex);
     // Scroll to the current week
     if (flatListRef.current) {
-      flatListRef.current.scrollToIndex({
-        index: currentWeekIndex,
-        animated: true,
-      });
+      // flatListRef.current.scrollToIndex({
+      //   index: currentWeekIndex + 1,
+      //   animated: true,
+      //   viewPosition: 0.5,
+      // });
+
+      setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index:
+            currentWeekIndex === 0 ? currentWeekIndex : currentWeekIndex - 1,
+          animated: true,
+          viewPosition: 0.5,
+        });
+      }, 500);
     }
   }, [currentWeekIndex, isType]);
 

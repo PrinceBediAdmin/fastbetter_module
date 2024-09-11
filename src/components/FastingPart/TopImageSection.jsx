@@ -17,6 +17,33 @@ import StatsComponent from './StatsComponent';
 import FastingStreakComponent from './FastingStreakComponent';
 import {fastingValue} from '../../function/data';
 
+import BackgroundActions from 'react-native-background-actions';
+
+const options = {
+  taskName: 'Timer',
+  taskTitle: 'Running Timer',
+  taskDesc: 'Your timer is running in the background',
+  taskIcon: {
+    name: 'ic_launcher',
+    type: 'mipmap',
+  },
+  color: '#FE7701',
+  linkingURI: 'yourapp://timer', // You can provide a deep link
+  parameters: {delay: 1000},
+  // Ensure the service runs as a foreground service
+  notificationId: 1,
+  notification: {
+    enabled: true, // Required to run in the foreground
+    taskTitle: 'Timer Active',
+    taskDesc: 'The timer is currently running',
+    taskIcon: {
+      name: 'ic_launcher',
+      type: 'mipmap',
+    },
+    color: '#FE7701', // Customize the notification color
+  },
+};
+
 const fastingOption = [
   {name: 'Sun', key: 0, value: 100},
   {name: 'Mon', key: 1, value: 20},
@@ -37,17 +64,33 @@ const TopImageSection = () => {
   const [endTime, setEndTime] = useState('');
   const [LocalStorag, setLocalStorag] = useState(null);
   const [FastingStreakData, setFastingStreakData] = useState(fastingValue);
-
   const intervalRef = useRef(null);
+
+  // useEffect(() => {
+  //   const handleAppStateChange = nextAppState => {
+  //     if (nextAppState === 'active') {
+  //       console.log('App is in the foreground', nextAppState);
+  //     } else if (nextAppState === 'background') {
+  //       setBackgroundTimeValue(new Date().getTime());
+  //     }
+  //     setAppState(nextAppState);
+  //   };
+
+  //   AppState.addEventListener('change', handleAppStateChange);
+
+  //   return () => {
+  //     AppState.removeEventListener('change', handleAppStateChange);
+  //   };
+  // }, []);
 
   useEffect(() => {
     getFastingPlanData();
-    return () => {
-      if (intervalRef.current) {
-        BackgroundTimer.clearInterval(intervalRef.current);
-        setIsRunning(false);
-      }
-    };
+    // return () => {
+    //   if (intervalRef.current) {
+    //     BackgroundTimer.clearInterval(intervalRef.current);
+    //     setIsRunning(false);
+    //   }
+    // };
   }, []);
 
   useEffect(() => {
@@ -290,58 +333,90 @@ const TopImageSection = () => {
     fetchTimerState();
   }, []);
 
+  const sleep = time =>
+    new Promise(resolve => setTimeout(() => resolve(), time));
+
+  const startBackgroundTask = async () => {
+    try {
+      await BackgroundActions.start(veryIntensiveTask, options);
+      // setIsRunning(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const veryIntensiveTask = async () => {
+    await new Promise(async resolve => {
+      intervalRef.current = BackgroundTimer.setInterval(() => {
+        setTimer(prevTimer => {
+          const currentTime = new Date();
+
+          const hours = currentTime.getHours();
+          const minutes = currentTime.getMinutes();
+          const seconds = currentTime.getSeconds();
+
+          const formattedHours = hours.toString().padStart(2, '0');
+          const formattedMinutes = minutes.toString().padStart(2, '0');
+          const formattedSeconds = seconds.toString().padStart(2, '0');
+
+          const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+          const newValue = `${endTime}:00`;
+
+          if (formattedTime >= newValue) {
+            TimeOutHandle();
+            resolve(); // Stop the background task when time is up
+            return 0;
+          }
+
+          const limtValue = savedTimerValue
+            ? LocalStorag?.fasting || 14
+            : LocalStorag?.eating || 8;
+          let newTime = prevTimer + 1;
+          const totalSecondsInPeriod = limtValue * 60 * 60;
+          console.log(newTime);
+          setProgress((newTime / totalSecondsInPeriod) * 100);
+          return newTime;
+        });
+      }, 1000);
+
+      await sleep(1000); // Ensure the loop runs continuously every 1 second
+    });
+  };
+
+  // Stop background task
+  const stopBackgroundTask = async () => {
+    if (intervalRef.current) {
+      BackgroundTimer.clearInterval(intervalRef.current); // Clear interval
+      intervalRef.current = null;
+    }
+    await BackgroundActions.stop(); // Stop background service
+  };
+
   useEffect(() => {
     if (isRunning) {
       if (isWithinTimeRange()) {
-        intervalRef.current = BackgroundTimer.setInterval(() => {
-          setTimer(prevTimer => {
-            const currentTime = new Date();
-
-            const hours = currentTime.getHours();
-            const minutes = currentTime.getMinutes();
-            const second = currentTime.getSeconds();
-
-            const formattedHours = hours.toString().padStart(2);
-            const formattedMinutes = minutes.toString().padStart(2);
-            const formattedSecond = second.toString().padStart(2, '0');
-
-            const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSecond}`;
-
-            const newValue = endTime + ':00';
-            if (formattedTime >= newValue) {
-              BackgroundTimer.clearInterval(interval);
-              TimeOutHandle();
-              return 0;
-            }
-            ///console.log(LocalStorag);
-            const limtValue = savedTimerValue
-              ? LocalStorag?.fasting || 14
-              : LocalStorag?.eating || 8;
-
-            let newTime = prevTimer + 1;
-
-            const totalSecondsIn8Hours = limtValue * 60 * 60;
-            setProgress((newTime / totalSecondsIn8Hours) * 100);
-            return newTime;
-          });
-        }, 1000);
+        startBackgroundTask(); // Start the timer as a foreground service
       } else {
         Alert.alert(
-          'Not within the time range1',
+          'Not within the time range',
           'The current time is not within the defined range.',
         );
         setIsRunning(false);
       }
     } else {
-      if (intervalRef.current) {
-        BackgroundTimer.clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-      setIsRunning(false);
+      stopBackgroundTask();
     }
+
+    return () => {
+      BackgroundTimer.clearInterval(intervalRef?.current);
+      // stopBackgroundTask();
+    };
   }, [isRunning, initialCountdown, endTime]);
 
   const TimeOutHandle = async () => {
+    if (intervalRef?.current) {
+      BackgroundTimer.clearInterval(intervalRef?.current);
+    }
+    stopBackgroundTask();
     setIsRunning(false);
     setTimer(0); // Reset timer to 0
     setProgress(0); // Reset progress to 0

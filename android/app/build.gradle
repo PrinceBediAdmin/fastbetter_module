@@ -132,12 +132,15 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
-//    implementation project(':react-native-background-fetch')
     implementation project(':react-native-background-timer')
     implementation project(':react-native-google-fit')
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation project(':react-native-push-notification')
-    implementation 'com.google.android.gms:play-services-fitness:20.0.0'
+    implementation 'com.google.android.gms:play-services-fitness:21.2.0'
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation project(':react-native-background-actions')
+
+
 //    implementation('com.example:some-library:1.0.0') {
 //        exclude group: 'androidx.media3', module: 'media3-exoplayer-dash'
 //    }

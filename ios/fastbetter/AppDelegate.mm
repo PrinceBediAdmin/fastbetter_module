@@ -3,6 +3,10 @@
 #import <React/RCTBridge.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
+#import <BackgroundTasks/BackgroundTasks.h>
+#import <React/RCTBridgeModule.h>
+
+
 
 @implementation AppDelegate
 
@@ -19,6 +23,11 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  // Register background task
+  [[BGTaskScheduler sharedScheduler] registerForTaskWithIdentifier:@"com.yourapp.backgroundtask" usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
+      [self handleAppRefreshTask:(BGAppRefreshTask *)task];
+  }];
 
   return YES;
 }
@@ -49,6 +58,30 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   return [RCTLinkingManager application:app openURL:url options:options];
+}
+
+// Handle background refresh task
+- (void)handleAppRefreshTask:(BGAppRefreshTask *)task
+{
+    // Perform the background task
+    // Example: You can schedule a background fetch here
+    [self scheduleAppRefresh];
+    
+    // Ensure that you call the endBackgroundTask: when the task is finished
+    [task setTaskCompletedWithSuccess:YES];
+}
+
+- (void)scheduleAppRefresh
+{
+    // Schedule a new background task to keep it running
+    BGAppRefreshTaskRequest *request = [[BGAppRefreshTaskRequest alloc] initWithIdentifier:@"com.yourapp.backgroundtask"];
+    request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:15 * 60]; // 15 minutes from now
+
+    NSError *error = nil;
+    BOOL success = [[BGTaskScheduler sharedScheduler] submitTaskRequest:request error:&error];
+    if (!success) {
+        NSLog(@"Could not schedule app refresh: %@", error);
+    }
 }
 
 @end

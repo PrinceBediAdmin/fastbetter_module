@@ -12,7 +12,20 @@
           "package_name": "com.fastbetter"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "72560162735-qaatqs0bglfd26c1k2c2jrj98tjrrktq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fastbetter",
+            "certificate_hash": "90176c7c74f273a78f8fcad9fd3d81266f2deca7"
+          }
+        },
+        {
+          "client_id": "72560162735-hcjjahnvrd9qmkknf8q21gqbqe8qde2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAhMmCLj28e1rVYvlMFSCZJKqYa_jFFQYs"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114233835362162885539",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

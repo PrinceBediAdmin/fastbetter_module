@@ -45,8 +45,18 @@
 	<string>We need to update your health data for better activity tracking.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-	<string>fetch</string>
-	<string>background-fetch</string>
+	    <string>fetch</string>
+		<string>background-fetch</string>
+		<string>processing</string>
+		<string>location</string>
+		<string>external-accessory</string>
+		<string>voip</string>
+		<string>remote-notification</string>
+        <string>backgroundMode</string>
+	</array>
+	 <key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>

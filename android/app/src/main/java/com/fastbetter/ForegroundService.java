@@ -3,16 +3,19 @@ package com.fastbetter;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
 
 public class ForegroundService extends Service {
 
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
+    private static final int NOTIFICATION_ID = 1;
 
     @Override
     public void onCreate() {
@@ -22,17 +25,13 @@ public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("ForegroundService", "Service Started");
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Foreground Service")
+                .setContentText("Running in the foreground")
+                .setSmallIcon(R.drawable.baseline_notifications_24) // Replace with your app's icon
+                .build();
 
-        Notification notification = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notification = new Notification.Builder(this, CHANNEL_ID)
-                    .setContentTitle("Foreground Service")
-                    .setContentText("Running in the foreground")
-                    .build();
-        }
-
-        startForeground(1, notification);
+        startForeground(NOTIFICATION_ID, notification);
         return START_NOT_STICKY;
     }
 
@@ -48,9 +47,10 @@ public class ForegroundService extends Service {
                     "Foreground Service Channel",
                     NotificationManager.IMPORTANCE_DEFAULT
             );
-
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
+            if (manager != null) {
+                manager.createNotificationChannel(serviceChannel);
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
     if (dates?.length > 0 && flatListRef?.current) {
       scrollToCurrentDate();
     }
-  }, [dates, isType]);
+  }, [dates]);
 
   const generateDateArray = () => {
     const dateArray = [];
@@ -50,21 +50,21 @@ export const DailyReportView = ({isType, onSelectData}) => {
 
   const scrollToCurrentDate = () => {
     const today = new Date();
-    const index = dates.findIndex(
+    const CurrentIndex = dates.findIndex(
       date =>
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear(),
     );
 
-    if (index !== -1) {
+    if (CurrentIndex !== -1) {
       setTimeout(() => {
         flatListRef.current?.scrollToIndex({
-          index,
+          index: CurrentIndex - 1,
           animated: true,
           viewPosition: 0.5,
         });
-      }, 100); // Add a slight delay to ensure the list has been rendered
+      }, 500); // Add a slight delay to ensure the list has been rendered
     }
   };
 
