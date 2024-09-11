@@ -36,7 +36,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>We need your location to provide better service.</string>
 	<key>WCSessionDelegate</key>
     <string>$(PRODUCT_MODULE_NAME).WCSessionDelegate</string>
 	<key>NSHealthShareUsageDescription</key>

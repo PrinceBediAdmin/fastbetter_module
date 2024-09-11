@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   Platform,
+  AppState,
 } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -66,36 +67,52 @@ const TopImageSection = () => {
   const [FastingStreakData, setFastingStreakData] = useState(fastingValue);
   const intervalRef = useRef(null);
 
-  // useEffect(() => {
-  //   const handleAppStateChange = nextAppState => {
-  //     if (nextAppState === 'active') {
-  //       console.log('App is in the foreground', nextAppState);
-  //     } else if (nextAppState === 'background') {
-  //       setBackgroundTimeValue(new Date().getTime());
-  //     }
-  //     setAppState(nextAppState);
-  //   };
+  useEffect(() => {
+    const handleAppStateChange = nextAppState => {
+      if (nextAppState === 'active') {
+        console.log('App is in the foreground', nextAppState);
+        timerActive();
+      } else if (nextAppState === 'background') {
+        console.log('App is in the background', nextAppState);
+      } else {
+        console.log('App is in the inActive', nextAppState);
+      }
+    };
 
-  //   AppState.addEventListener('change', handleAppStateChange);
+    AppState.addEventListener('change', handleAppStateChange);
 
-  //   return () => {
-  //     AppState.removeEventListener('change', handleAppStateChange);
-  //   };
-  // }, []);
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []);
 
   useEffect(() => {
     getFastingPlanData();
-    // return () => {
-    //   if (intervalRef.current) {
-    //     BackgroundTimer.clearInterval(intervalRef.current);
-    //     setIsRunning(false);
-    //   }
-    // };
   }, []);
 
   useEffect(() => {
     GetFastingData();
   }, [timer]);
+
+  const timerActive = async () => {
+    const playTime = await AsyncStorage.getItem('Playtime');
+    const savedIsRunning = await AsyncStorage.getItem('isRunning');
+
+    if (JSON.parse(savedIsRunning)) {
+      if (playTime) {
+        const diffInSeconds = getTimeDifferenceInSeconds(playTime);
+        setTimer(diffInSeconds);
+      }
+    }
+  };
+
+  const getTimeDifferenceInSeconds = playTime => {
+    const playDate = new Date(playTime);
+    const now = new Date();
+    const differenceInMilliseconds = now - playDate;
+    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+    return differenceInSeconds;
+  };
 
   const GetFastingData = async () => {
     const TimeData = await AsyncStorage.getItem('timerData');
@@ -310,13 +327,13 @@ const TopImageSection = () => {
           const endTime = new Date(Number(savedEndTime));
           const now = new Date();
           const remainingTime = Math.max((endTime - now) / 1000, 0);
-          setTimer(remainingTime);
-          setInitialCountdown(remainingTime);
+          setTimer(Math.floor(remainingTime));
+          setInitialCountdown(Math.floor(remainingTime));
           // setSavedTimerValue(true);
         } else if (savedTimer !== null) {
           const timerValue = Number(savedTimer);
-          setTimer(timerValue);
-          setInitialCountdown(timerValue);
+          setTimer(Math.floor(timerValue));
+          setInitialCountdown(Math.floor(timerValue));
           // setSavedTimerValue(true);
         } else {
           // setSavedTimerValue(false);
@@ -329,7 +346,6 @@ const TopImageSection = () => {
         console.error('Failed to load timer state', e);
       }
     };
-
     fetchTimerState();
   }, []);
 
@@ -372,7 +388,7 @@ const TopImageSection = () => {
             : LocalStorag?.eating || 8;
           let newTime = prevTimer + 1;
           const totalSecondsInPeriod = limtValue * 60 * 60;
-          console.log(newTime);
+          // console.log(newTime);
           setProgress((newTime / totalSecondsInPeriod) * 100);
           return newTime;
         });
@@ -408,7 +424,7 @@ const TopImageSection = () => {
 
     return () => {
       BackgroundTimer.clearInterval(intervalRef?.current);
-      // stopBackgroundTask();
+      stopBackgroundTask();
     };
   }, [isRunning, initialCountdown, endTime]);
 
@@ -515,11 +531,13 @@ const TopImageSection = () => {
     if (countdown) {
       setInitialCountdown(countdown);
       setIsRunning(true);
+      await AsyncStorage.setItem('Playtime', new Date().toString());
     }
   };
 
   const handleStop = async () => {
     setIsRunning(false);
+    stopBackgroundTask();
     await AsyncStorage.setItem('isRunning', JSON.stringify(false));
   };
 

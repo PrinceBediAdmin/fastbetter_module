@@ -86,6 +86,8 @@
 		C5692036D79D48E28AB756E2 /* OpenSans_Condensed-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5C7862CB6D54B6684A7BF6A /* OpenSans_Condensed-MediumItalic.ttf */; };
 		C5C2F8212C916E9B00DC157C /* libreact-native-background-actions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C2F81F2C916E9B00DC157C /* libreact-native-background-actions.a */; };
 		C5C2F8222C916E9B00DC157C /* libreact-native-background-timer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C2F8202C916E9B00DC157C /* libreact-native-background-timer.a */; };
+		C5C2F8252C91A16400DC157C /* libreact-native-background-actions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C2F8232C91A16400DC157C /* libreact-native-background-actions.a */; };
+		C5C2F8262C91A16400DC157C /* libreact-native-background-timer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C2F8242C91A16400DC157C /* libreact-native-background-timer.a */; };
 		C8663F728DB540669FE37A8E /* Larken-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 49E42815A275498085CDE2B1 /* Larken-Bold.otf */; };
 		C8672FDD1C3B48B8B0F756BC /* WorkSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5574B761960B47A2A519CD91 /* WorkSans-ExtraBold.ttf */; };
 		CA9CF3CD4DAE4CDF834BC62B /* Larken-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0675293EDFEC480395CA63D8 /* Larken-Black.otf */; };
@@ -197,6 +199,8 @@
 		C4941BA0D54B43A69634BBB2 /* WorkSans-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Thin.ttf"; path = "../src/assets/fonts/WorkSans-Thin.ttf"; sourceTree = "<group>"; };
 		C5C2F81F2C916E9B00DC157C /* libreact-native-background-actions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-background-actions.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5C2F8202C916E9B00DC157C /* libreact-native-background-timer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-background-timer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5C2F8232C91A16400DC157C /* libreact-native-background-actions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-background-actions.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5C2F8242C91A16400DC157C /* libreact-native-background-timer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-background-timer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6FD4496F61541A78768C7A8 /* LarkenDEMO-BoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-BoldItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-BoldItalic.otf"; sourceTree = "<group>"; };
 		CA44893E15E54508923BD913 /* LarkenDEMO-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LarkenDEMO-LightItalic.otf"; path = "../src/assets/fonts/LarkenDEMO-LightItalic.otf"; sourceTree = "<group>"; };
 		CDE5D80FD7A5487BBE54CFBE /* WorkSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "WorkSans-Italic.ttf"; path = "../src/assets/fonts/WorkSans-Italic.ttf"; sourceTree = "<group>"; };
@@ -237,6 +241,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5C2F8252C91A16400DC157C /* libreact-native-background-actions.a in Frameworks */,
+				C5C2F8262C91A16400DC157C /* libreact-native-background-timer.a in Frameworks */,
 				E22DC4FB0733398182513E80 /* libPods-fastbetter.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +283,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5C2F8232C91A16400DC157C /* libreact-native-background-actions.a */,
+				C5C2F8242C91A16400DC157C /* libreact-native-background-timer.a */,
 				C5C2F81F2C916E9B00DC157C /* libreact-native-background-actions.a */,
 				C5C2F8202C916E9B00DC157C /* libreact-native-background-timer.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
@@ -942,6 +950,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -1014,6 +1023,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_LSBackgroundOnly = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
