@@ -101,8 +101,22 @@ const TopImageSection = () => {
     if (JSON.parse(savedIsRunning)) {
       if (playTime) {
         const diffInSeconds = getTimeDifferenceInSeconds(playTime);
+        // const newTime = timer - diffInSeconds;
+        // if (newTime > 0) {
+        //   setTimer(pre => pre + diffInSeconds);
+        // }
+        // setIsRunning(true);
         setTimer(diffInSeconds);
+        if (LocalStorag?.fasting) {
+          const limtValue = savedTimerValue
+            ? LocalStorag?.fasting || 14
+            : LocalStorag?.eating || 8;
+          const totalSecondsInPeriod = limtValue * 60 * 60;
+          setProgress((diffInSeconds / totalSecondsInPeriod) * 100);
+        }
       }
+    } else {
+      await AsyncStorage.setItem('Playtime', null);
     }
   };
 
@@ -397,8 +411,6 @@ const TopImageSection = () => {
       await sleep(1000); // Ensure the loop runs continuously every 1 second
     });
   };
-
-  // Stop background task
   const stopBackgroundTask = async () => {
     if (intervalRef.current) {
       BackgroundTimer.clearInterval(intervalRef.current); // Clear interval
@@ -412,14 +424,16 @@ const TopImageSection = () => {
       if (isWithinTimeRange()) {
         startBackgroundTask(); // Start the timer as a foreground service
       } else {
-        Alert.alert(
-          'Not within the time range',
-          'The current time is not within the defined range.',
-        );
-        setIsRunning(false);
+        // Alert.alert(
+        //   'Not within the time range',
+        //   'The current time is not within the defined range.',
+        // );
+        //setIsRunning(false);
+        handlePlay();
       }
     } else {
       stopBackgroundTask();
+      // handlePlay();
     }
 
     return () => {
@@ -427,6 +441,14 @@ const TopImageSection = () => {
       stopBackgroundTask();
     };
   }, [isRunning, initialCountdown, endTime]);
+
+  const RuningHandle = async () => {
+    const savedIsRunning = await AsyncStorage.getItem('isRunning');
+    const object = JSON.parse(savedIsRunning);
+    if (object) {
+      handlePlay();
+    }
+  };
 
   const TimeOutHandle = async () => {
     if (intervalRef?.current) {
@@ -437,7 +459,6 @@ const TopImageSection = () => {
     setTimer(0); // Reset timer to 0
     setProgress(0); // Reset progress to 0
     saveFastingOrEatingTime(); // Save the fasting or eating time if needed
-    await AsyncStorage.setItem('timer', '0');
   };
 
   useEffect(() => {
@@ -559,30 +580,41 @@ const TopImageSection = () => {
       const TimeData = await AsyncStorage.getItem('timerData');
       let dataObject = TimeData ? JSON.parse(TimeData) : [];
 
-      const existingData = dataObject.find(item => item.date === dateString);
+      // Find the existing data for the current date
+      const existingDataIndex = dataObject.findIndex(
+        item => item.date === dateString,
+      );
 
-      if (existingData) {
+      if (existingDataIndex !== -1) {
+        // If data for the current date already exists
         if (savedTimerValue) {
-          existingData.fastingTime = timer;
+          // Update fastingTime
+          dataObject[existingDataIndex].fastingTime = timer;
+          dataObject[existingDataIndex].eatingTime =
+            dataObject[existingDataIndex].eatingTime;
         } else {
-          existingData.eatingTime = timer;
+          // Update eatingTime
+          dataObject[existingDataIndex].eatingTime = timer;
+          dataObject[existingDataIndex].fastingTime =
+            dataObject[existingDataIndex].fastingTime;
         }
       } else {
-        if (savedTimerValue) {
-          dataObject.push({
-            date: dateString,
-            fastingTime: timer,
-            eatingTime: existingData ? existingData.eatingTime : 0,
-          });
-        } else {
-          dataObject.push({
-            date: dateString,
-            fastingTime: existingData ? existingData.fastingTime : 0,
-            eatingTime: timer,
-          });
-        }
-      }
+        // If data for the current date doesn't exist, create new entry
+        const newEntry = savedTimerValue
+          ? {
+              date: dateString,
+              eatingTime: dataObject[0]?.eatingTime || 0,
+              fastingTime: timer,
+            }
+          : {
+              date: dateString,
+              eatingTime: timer,
+              fastingTime: dataObject[0]?.fastingTime || 0,
+            };
 
+        dataObject.push(newEntry);
+      }
+      // Save updated data back to AsyncStorage
       await AsyncStorage.setItem('timerData', JSON.stringify(dataObject));
     } catch (e) {
       console.error('Failed to save fasting or eating time', e);
@@ -615,6 +647,7 @@ const TopImageSection = () => {
           size={200}
           width={15}
           fill={progress}
+          lineCap={'round'}
           tintColor={
             !isRunning ? '#FA9950' : !savedTimerValue ? '#42F1C1' : '#4CC2F4'
           }

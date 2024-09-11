@@ -70,6 +70,7 @@ export default function FastingSchedule() {
     await AsyncStorage.removeItem('isRunning');
     await AsyncStorage.removeItem('endTime');
     await AsyncStorage.removeItem('timerData');
+    await AsyncStorage.setItem('loginType', JSON.stringify(true));
   };
 
   if (!fastingScheduleData) {

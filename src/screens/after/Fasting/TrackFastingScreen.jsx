@@ -639,7 +639,7 @@ const TrackFastingScreen = () => {
                 color: '#000',
                 textAlign: 'right',
               }}>
-              {formatTime(item?.fastingTime)}
+              {item?.fastingTime ? formatTime(item?.fastingTime) : '-- : --'}
             </Text>
             <View
               style={{
@@ -679,7 +679,7 @@ const TrackFastingScreen = () => {
                 color: '#000',
                 textAlign: 'right',
               }}>
-              {formatTime(item?.eatingTime)}
+              {item?.eatingTime ? formatTime(item?.eatingTime) : '--:--'}
             </Text>
             <View
               style={{
