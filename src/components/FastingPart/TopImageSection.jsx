@@ -97,10 +97,12 @@ const TopImageSection = () => {
   const timerActive = async () => {
     const playTime = await AsyncStorage.getItem('Playtime');
     const savedIsRunning = await AsyncStorage.getItem('isRunning');
+    console.log(playTime);
 
     if (JSON.parse(savedIsRunning)) {
       if (playTime) {
         const diffInSeconds = getTimeDifferenceInSeconds(playTime);
+        console.log(playTime, '--', diffInSeconds);
         // const newTime = timer - diffInSeconds;
         // if (newTime > 0) {
         //   setTimer(pre => pre + diffInSeconds);
@@ -552,7 +554,11 @@ const TopImageSection = () => {
     if (countdown) {
       setInitialCountdown(countdown);
       setIsRunning(true);
-      await AsyncStorage.setItem('Playtime', new Date().toString());
+      const savedTimer = await AsyncStorage.getItem('timer');
+      const timerValue = Number(savedTimer);
+      if (timerValue <= 0) {
+        await AsyncStorage.setItem('Playtime', new Date().toString());
+      }
     }
   };
 

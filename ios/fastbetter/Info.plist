@@ -43,6 +43,11 @@
 	<string>EdUywoA7KQSqeLcJqKJn8F</string> <!-- Replace with your AppsFlyer Dev Key -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to provide better service.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to provide relevant notifications.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to provide relevant notifications.</string>
+
 	<key>WCSessionDelegate</key>
     <string>$(PRODUCT_MODULE_NAME).WCSessionDelegate</string>
 	<key>NSHealthShareUsageDescription</key>

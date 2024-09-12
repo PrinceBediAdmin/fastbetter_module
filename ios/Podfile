@@ -41,6 +41,7 @@ target 'fastbetter' do
   # Add the react-native-background-actions pod here
   pod 'react-native-background-actions', :path => '../node_modules/react-native-background-actions'
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+  permissions_path = '../node_modules/react-native-permissions/ios'
   target 'fastbetterTests' do
     inherit! :complete
     # Pods for testing
