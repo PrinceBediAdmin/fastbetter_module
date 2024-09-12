@@ -329,7 +329,6 @@ const TrackFastingScreen = () => {
     const currentDateTime = new Date().toISOString();
     const StorageData = await AsyncStorage.getItem('timerData');
     const Data = JSON.parse(StorageData);
-    console.log(Data);
     const date = DailySelectData
       ? new Date(DailySelectData)
       : new Date(currentDateTime);
@@ -565,7 +564,8 @@ const TrackFastingScreen = () => {
   const WeekGraphRenderItem = ({item, index}) => {
     const totalMinutes = convertTimeToMinutes(formatTime(item?.value));
     const totalMinutesInDay = 24 * 60;
-    const percentage = (totalMinutes / totalMinutesInDay) * 100;
+    // const percentage = (totalMinutes / totalMinutesInDay) * 100 + 1;
+    const percentage = (item?.value / totalMinutesInDay) * 100;
 
     return (
       <View>

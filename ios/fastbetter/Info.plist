@@ -31,10 +31,16 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://attest.apple.com</string>
+	<key>AppsFlyerAppID</key>
+	<string>6473776196</string> <!-- Replace with your iOS App ID -->
+	<key>AppsFlyerDevKey</key>
+	<string>EdUywoA7KQSqeLcJqKJn8F</string> <!-- Replace with your AppsFlyer Dev Key -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to provide better service.</string>
 	<key>WCSessionDelegate</key>

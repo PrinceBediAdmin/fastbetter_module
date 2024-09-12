@@ -56,6 +56,14 @@
         android:theme="@style/AppTheme">
 
         <service android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask" android:foregroundServiceType="shortService"/>
+        <meta-data android:name="appsflyer-dev-key" android:value="EdUywoA7KQSqeLcJqKJn8F"/>
+        <meta-data android:name="appsflyer-package-name" android:value="${applicationId}"/>
+        <meta-data
+            android:name="AppsFlyerDevKey"
+            android:value="EdUywoA7KQSqeLcJqKJn8F" />
+        <meta-data
+            android:name="com.appsflyer.appId"
+            android:value="6473776196" />
 
         <meta-data
             android:name="com.google.android.gms.auth.API_KEY"

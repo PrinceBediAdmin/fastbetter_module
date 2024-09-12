@@ -3,8 +3,6 @@ package com.fastbetter
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
-import android.net.Uri
-import android.os.PowerManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
@@ -17,7 +15,8 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.reactnative.googlefit.GoogleFitPackage
-import android.provider.Settings
+
+import com.appsflyer.AppsFlyerLib;
 
 class MainApplication : Application(), ReactApplication {
 
@@ -55,5 +54,9 @@ class MainApplication : Application(), ReactApplication {
     }
     // Initialize React Native Flipper
     ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
+    AppsFlyerLib.getInstance().init("EdUywoA7KQSqeLcJqKJn8F", null, this)
+    AppsFlyerLib.getInstance().waitForCustomerUserId(true)
+    AppsFlyerLib.getInstance().performOnDeepLinking(Intent(), this)
+    AppsFlyerLib.getInstance().start(this)
   }
 }
