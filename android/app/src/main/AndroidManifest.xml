@@ -58,6 +58,17 @@
         <service android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask" android:foregroundServiceType="shortService"/>
         <meta-data android:name="appsflyer-dev-key" android:value="EdUywoA7KQSqeLcJqKJn8F"/>
         <meta-data android:name="appsflyer-package-name" android:value="${applicationId}"/>
+         <meta-data
+            android:name="MOENGAGE_APP_ID"
+            android:value="WNKJQLJY3M1MN7KOM9S17SWP" />
+
+         <service android:name="com.moengage.firebase.MoEFireBaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+             
         <meta-data
             android:name="AppsFlyerDevKey"
             android:value="EdUywoA7KQSqeLcJqKJn8F" />

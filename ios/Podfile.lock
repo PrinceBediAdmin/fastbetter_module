@@ -100,6 +100,55 @@ PODS:
     - lottie-ios (= 4.4.1)
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - MoEngage-iOS-SDK (9.18.1):
+    - MoEngage-iOS-SDK/Core (= 9.18.1)
+  - MoEngage-iOS-SDK/Core (9.18.1):
+    - MoEngageAnalytics (= 4.18.1)
+    - MoEngageCore (= 9.18.1)
+    - MoEngageMessaging (= 4.18.1)
+    - MoEngageObjCUtils (= 3.18.1)
+    - MoEngageSDK (= 9.18.1)
+    - MoEngageSecurity (= 1.10.1)
+  - MoEngage-iOS-SDK/InApps (9.18.1):
+    - MoEngage-iOS-SDK/Core
+    - MoEngageInApps (= 6.01.1)
+    - MoEngageTriggerEvaluator (= 1.02.1)
+  - MoEngage-iOS-SDK/RichNotification (9.18.1):
+    - MoEngage-iOS-SDK/Core
+    - MoEngageRichNotification (= 7.17.1)
+  - MoEngageAnalytics (4.18.1):
+    - MoEngageCore
+    - MoEngageObjCUtils
+  - MoEngageCore (9.18.1):
+    - MoEngageSecurity
+  - MoEngageInApps (6.01.1):
+    - MoEngageAnalytics
+    - MoEngageCore
+    - MoEngageMessaging
+    - MoEngageObjCUtils
+    - MoEngageTriggerEvaluator
+  - MoEngageMessaging (4.18.1):
+    - MoEngageAnalytics
+    - MoEngageCore
+    - MoEngageObjCUtils
+  - MoEngageObjCUtils (3.18.1):
+    - MoEngageCore
+  - MoEngagePluginBase (5.0.0):
+    - MoEngage-iOS-SDK (= 9.18.1)
+    - MoEngage-iOS-SDK/InApps
+  - MoEngageRichNotification (7.17.1):
+    - MoEngageAnalytics
+    - MoEngageCore
+    - MoEngageMessaging
+    - MoEngageObjCUtils
+  - MoEngageSDK (9.18.1):
+    - MoEngageAnalytics
+    - MoEngageCore
+    - MoEngageMessaging
+    - MoEngageObjCUtils
+  - MoEngageSecurity (1.10.1)
+  - MoEngageTriggerEvaluator (1.02.1):
+    - MoEngageCore
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2022.05.16.00):
     - boost
@@ -1164,6 +1213,13 @@ PODS:
     - React-jsi (= 0.73.6)
     - React-logger (= 0.73.6)
     - React-perflogger (= 0.73.6)
+  - ReactNativeMoEngage (11.0.0):
+    - glog
+    - MoEngage-iOS-SDK/RichNotification
+    - MoEngagePluginBase (= 5.0.0)
+    - RCT-Folly (= 2022.05.16.00)
+    - React
+    - React-Core
   - RNAppleHealthKit (1.7.0):
     - React
   - RNBackgroundFetch (4.2.5):
@@ -1280,6 +1336,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeMoEngage (from `../node_modules/react-native-moengage`)
   - RNAppleHealthKit (from `../node_modules/react-native-health`)
   - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
@@ -1313,6 +1370,17 @@ SPEC REPOS:
     - GTMSessionFetcher
     - libevent
     - lottie-ios
+    - MoEngage-iOS-SDK
+    - MoEngageAnalytics
+    - MoEngageCore
+    - MoEngageInApps
+    - MoEngageMessaging
+    - MoEngageObjCUtils
+    - MoEngagePluginBase
+    - MoEngageRichNotification
+    - MoEngageSDK
+    - MoEngageSecurity
+    - MoEngageTriggerEvaluator
     - OpenSSL-Universal
     - SocketRocket
     - SwiftyJSON
@@ -1435,6 +1503,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeMoEngage:
+    :path: "../node_modules/react-native-moengage"
   RNAppleHealthKit:
     :path: "../node_modules/react-native-health"
   RNBackgroundFetch:
@@ -1487,6 +1557,17 @@ SPEC CHECKSUMS:
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 2d9efc8a5ffabe688b55a1a1ac1fb94b9d971995
+  MoEngage-iOS-SDK: 4acddb45e23dc6b21712228b3507d1e0e16af6fb
+  MoEngageAnalytics: f0606511bf23f9b33dcf25bbc666f152c9c017a6
+  MoEngageCore: 5f5466497ee7c24dcf0a924aafc8585610866295
+  MoEngageInApps: f4112cf03cddb702f1287cf4b3195a4d5ef0f3a5
+  MoEngageMessaging: a96c34322bbf24e650ef4724a5c7cecdceee82a8
+  MoEngageObjCUtils: 4928cbcb57897419069b1486e267b757370aed0d
+  MoEngagePluginBase: 27058d4147ad3e7a1c25a29850c8a3edb3e1cd66
+  MoEngageRichNotification: b200abf01658b6898c99830a5b22440fffac99b2
+  MoEngageSDK: 2996df25a3889894c91da9bf9ab68e2d16f8d49d
+  MoEngageSecurity: 2adeeb8d269f36719e040bfa65a6568a336815ec
+  MoEngageTriggerEvaluator: 0c2d35ea48191b3729a13bef71d26370711cc37b
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
@@ -1538,6 +1619,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 9636eee762c699ca7c85751a359101797e4c8b3b
   React-utils: d16c1d2251c088ad817996621947d0ac8167b46c
   ReactCommon: 2aa35648354bd4c4665b9a5084a7d37097b89c10
+  ReactNativeMoEngage: 92f38eabccb18eee48c61f977531dff0b3ebff2c
   RNAppleHealthKit: 60a6beefdd89a75811e9a8873a5e24f351dee681
   RNBackgroundFetch: 2f800a04434620db15ede2e8f21886608a2d1743
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c

@@ -115,9 +115,9 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
   const googleConnect = () => {
     const options = {
       scopes: [
-        // Scopes.FITNESS_BODY_READ,
-        // Scopes.FITNESS_BODY_WRITE,
         //Scopes.FITNESS_ACTIVITY_READ,
+        //Scopes.FITNESS_BODY_READ,
+        // Scopes.FITNESS_BODY_WRITE,
         // Scopes.FITNESS_LOCATION_READ,
         // Scopes.FITNESS_SLEEP_READ,
       ],
@@ -126,7 +126,6 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
     GoogleFit.checkIsAuthorized().then(() => {
       console.log(JSON.stringify(GoogleFit));
       if (!GoogleFit.isAuthorized) {
-        console.log('------');
         GoogleFit.authorize(options)
           .then(authResult => {
             if (authResult.success) {
@@ -168,7 +167,7 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       };
 
       // Save height data
-      await GoogleFit.saveBodySamples({
+      await GoogleFit.saveHeight({
         ...heightSample,
         type: 'HEIGHT', // Specify the type of body sample
       });
@@ -219,12 +218,12 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       today.setDate(today.getDate() - 7),
     ).toISOString(); // 1 week ago
     const endDate = new Date().toISOString(); // today
-    GoogleFit.getHeightSamples({
+    GoogleFit.getSleepSamples({
       startDate,
       endDate,
     })
       .then(res => {
-        console.log('Height Data:', res);
+        console.log(' Data:', res);
         // Process the data as needed
       })
       .catch(err => {

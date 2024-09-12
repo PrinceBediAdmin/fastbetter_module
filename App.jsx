@@ -20,9 +20,7 @@ export const appsFlyerKey = {
 const App = () => {
   useEffect(() => {
     if (Platform.OS === 'android') {
-      Permission.checkCameraPermissions(pre => {
-        Permission.checkNotificationPermission();
-      });
+      Permission.checkNotificationPermission();
     } else {
       PushNotificationIOS.requestPermissions();
     }

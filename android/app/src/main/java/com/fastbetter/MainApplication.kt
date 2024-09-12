@@ -52,6 +52,7 @@ class MainApplication : Application(), ReactApplication {
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       load()
     }
+    
     // Initialize React Native Flipper
     ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
     AppsFlyerLib.getInstance().init("EdUywoA7KQSqeLcJqKJn8F", null, this)
