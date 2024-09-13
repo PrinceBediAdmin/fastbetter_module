@@ -21,6 +21,54 @@ import AppleHealthKit from 'react-native-health';
 import GoogleFit, {Scopes} from 'react-native-google-fit';
 import {PermissionsAndroid} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  HealthConnect,
+  requestPermission,
+  initialize,
+  readRecords,
+} from 'react-native-health-connect';
+
+const getHealthData = async () => {
+  try {
+    await initializeHealthConnect();
+    const permissions = await requestPermission([
+      {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+      {accessType: 'read', recordType: 'Steps'},
+      {accessType: 'read', recordType: 'HeartRate'},
+      {accessType: 'read', recordType: 'Distance'},
+      {accessType: 'read', recordType: 'SleepSession'},
+    ]);
+    console.log('Requested permissions:', permissions);
+    fetchStepsData();
+  } catch (error) {
+    console.error('Authorization failed', error);
+  }
+};
+
+// Initialize HealthConnect if required
+const initializeHealthConnect = async () => {
+  try {
+    const type = await initialize();
+    console.log('HealthConnect initialized', type);
+  } catch (error) {
+    console.error('Initialization failed', error);
+  }
+};
+
+const fetchStepsData = async () => {
+  try {
+    const result = await readRecords('Steps', {
+      timeRangeFilter: {
+        operator: 'between',
+        startTime: '2024-07-19T03:43:54.898Z',
+        endTime: new Date().toISOString(),
+      },
+    });
+    console.log('Health data:', result);
+  } catch (error) {
+    console.error('Failed to fetch steps data', error);
+  }
+};
 
 const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
   const Data = [
@@ -70,7 +118,8 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
 
   // Function to revoke Google Fit access
   const revokeGoogleFitAccess = async () => {
-    await GoogleFit.disconnect(); // Retrieve the OAuth token
+    getHealthData();
+    // await GoogleFit.disconnect(); // Retrieve the OAuth token
 
     // console.log(token);
     // if (token) {
@@ -218,7 +267,7 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       today.setDate(today.getDate() - 7),
     ).toISOString(); // 1 week ago
     const endDate = new Date().toISOString(); // today
-    GoogleFit.getSleepSamples({
+    GoogleFit.getDailySteps({
       startDate,
       endDate,
     })

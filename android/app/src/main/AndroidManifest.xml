@@ -27,7 +27,13 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND"/>
-<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE"/>
+    <uses-permission android:name="android.permission.health.WRITE_HEART_RATE"/>
+    <uses-permission android:name="android.permission.health.READ_STEPS"/>
+    <uses-permission android:name="android.permission.health.WRITE_STEPS"/>
+
+
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
 <!--        android:maxSdkVersion="32" />-->
 <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
 
@@ -36,6 +42,12 @@
 
     <queries>
         <package android:name="com.google.android.apps.fitness" />
+    </queries>
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+        <intent>
+            <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+        </intent>
     </queries>
     <!-- <uses-sdk tools:overrideLibrary="com.google.firebase.auth" />
 
@@ -54,6 +66,12 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
+
+
+
+        <meta-data
+            android:name="com.google.android.gms.fitness.SCOPE_ACTIVITY_READ"
+            android:value="true" />
 
         <service android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask" android:foregroundServiceType="shortService"/>
         <meta-data android:name="appsflyer-dev-key" android:value="EdUywoA7KQSqeLcJqKJn8F"/>
@@ -171,8 +189,21 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="fastbetter" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
             
         </activity>
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".MainActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
 
 
     </application>
