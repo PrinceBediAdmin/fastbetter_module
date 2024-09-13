@@ -26,6 +26,7 @@ import {
   requestPermission,
   initialize,
   readRecords,
+  openHealthConnectSettings,
 } from 'react-native-health-connect';
 
 const getHealthData = async () => {
@@ -57,15 +58,16 @@ const initializeHealthConnect = async () => {
 
 const fetchStepsData = async () => {
   try {
-    const result = await readRecords('Steps', {
+    const result = await readRecords('Height', {
       timeRangeFilter: {
         operator: 'between',
         startTime: '2024-07-19T03:43:54.898Z',
         endTime: new Date().toISOString(),
       },
     });
-    console.log('Health data:', result);
+    console.log('Health data:', JSON.stringify(result));
   } catch (error) {
+    await openHealthConnectSettings();
     console.error('Failed to fetch steps data', error);
   }
 };
