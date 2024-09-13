@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
@@ -14,7 +15,7 @@ import {
 
 const getWeeksInMonth = (year, month) => {
   const weeks = [];
-  const firstDayOfMonth = new Date(year, month, 0).getDay();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let start = 1;
@@ -38,7 +39,7 @@ const getCurrentWeekOfMonth = () => {
   return weekNumber - 1;
 };
 
-export const WeeklyReportView = ({isType}) => {
+export const WeeklyReportView = ({isType, onSelectData}) => {
   const flatListRef = useRef(null);
   const currentDate = new Date();
   const currentMonthWeeks = getWeeksInMonth(
@@ -66,12 +67,23 @@ export const WeeklyReportView = ({isType}) => {
   };
 
   useEffect(() => {
+    onSelectData(currentWeekIndex);
     // Scroll to the current week
     if (flatListRef.current) {
-      flatListRef.current.scrollToIndex({
-        index: currentWeekIndex,
-        animated: true,
-      });
+      // flatListRef.current.scrollToIndex({
+      //   index: currentWeekIndex + 1,
+      //   animated: true,
+      //   viewPosition: 0.5,
+      // });
+
+      setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index:
+            currentWeekIndex === 0 ? currentWeekIndex : currentWeekIndex - 1,
+          animated: true,
+          viewPosition: 0.5,
+        });
+      }, 500);
     }
   }, [currentWeekIndex, isType]);
 
@@ -79,6 +91,14 @@ export const WeeklyReportView = ({isType}) => {
     // eslint-disable-next-line no-unused-vars
     const isCurrentWeek = index === currentWeekIndex;
     const isSelectedWeek = index === selectedWeek;
+
+    const itemHandle = indexValue => {
+      if (index <= currentWeekIndex) {
+        setSelectedWeek(index);
+        onSelectData(index);
+      }
+    };
+
     return (
       <Pressable
         style={{
@@ -89,16 +109,18 @@ export const WeeklyReportView = ({isType}) => {
           justifyContent: 'center',
           backgroundColor: isSelectedWeek ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
-          borderWidth: 0.2,
+          borderWidth: index > currentWeekIndex ? 0 : 0.2,
+          opacity: index > currentWeekIndex ? 0.3 : 1,
           borderColor: isSelectedWeek ? 'transparent' : '#CFC5C5',
+          ...(isSelectedWeek && styles.itemSelectShadow),
         }}
-        onPress={() => setSelectedWeek(index)}>
+        onPress={() => itemHandle(index)}>
         <Text
           style={{
             fontSize: 14,
             fontWeight: isSelectedWeek ? '700' : '400',
             lineHeight: 16.8,
-            color: isSelectedWeek ? '#fff' : '',
+            color: isSelectedWeek ? '#fff' : '#000',
           }}>
           {item}
         </Text>
@@ -108,6 +130,7 @@ export const WeeklyReportView = ({isType}) => {
 
   return (
     <View style={{width: '100%', marginBottom: 30}}>
+      {console.log(currentMonthWeeks)}
       <FlatList
         ref={flatListRef}
         data={currentMonthWeeks}
@@ -115,7 +138,7 @@ export const WeeklyReportView = ({isType}) => {
         keyExtractor={item => item.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        style={{marginVertical: 20}}
+        style={{marginVertical: 20, height: 50}}
         contentContainerStyle={styles.flatListContent}
         getItemLayout={(data, index) => ({
           length: Dimensions.get('window').width,
@@ -146,6 +169,14 @@ const styles = StyleSheet.create({
     color: '#1F3132',
   },
   flatListContent: {
-    alignItems: 'center', // Center items vertically
+    alignItems: 'center', // Center items verticallyz
+    paddingHorizontal: 10,
+  },
+  itemSelectShadow: {
+    elevation: 3, // Android box shadow
+    shadowColor: 'gray', // iOS box shadow
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
   },
 });

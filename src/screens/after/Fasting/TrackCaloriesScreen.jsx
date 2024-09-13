@@ -232,7 +232,10 @@ const TrackCaloriesScreen = () => {
               justifyContent: 'center',
               marginTop: -10,
             }}>
-            <DailyReportView isType={ScreenType} />
+            <DailyReportView
+              isType={ScreenType}
+              onSelectData={pre => console.log(pre)}
+            />
           </ImageBackground>
 
           <Text
@@ -591,7 +594,10 @@ const TrackCaloriesScreen = () => {
               justifyContent: 'center',
               marginTop: -30,
             }}>
-            <WeeklyReportView isType={ScreenType} />
+            <WeeklyReportView
+              isType={ScreenType}
+              onSelectData={pre => console.log(pre)}
+            />
           </ImageBackground>
 
           <Text

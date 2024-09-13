@@ -15,17 +15,27 @@ import TrackWaterScreen from '../screens/after/Fasting/TrackWaterScreen';
 import TrackHealthScreen from '../screens/after/Fasting/TrackHealthScreen';
 
 import DashboardNavigation from './DashboardNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const [isLoading, setIsLoading] = useState(true);
+  const [screenName, setScreenName] = useState('Fasting');
 
   useEffect(() => {
+    navHandle();
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
   }, []);
+
+  const navHandle = async () => {
+    const loginType = await AsyncStorage.getItem('loginType');
+    if (JSON.parse(loginType)) {
+      setScreenName('DashboardNavigation');
+    }
+  };
 
   const disabledHeader = {headerShown: false};
   return (
@@ -33,7 +43,7 @@ export default function AppNavigation() {
       {isLoading ? (
         <LoadingScreen />
       ) : (
-        <Stack.Navigator initialRouteName={'Fasting'}>
+        <Stack.Navigator initialRouteName={screenName}>
           <Stack.Screen
             name="Fasting"
             options={disabledHeader}

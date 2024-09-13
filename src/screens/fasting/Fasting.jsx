@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -17,13 +18,15 @@ import bgimage from '../../assets/common/base.png';
 import bgimage2 from '../../assets/common/base2.png';
 import bgimage3 from '../../assets/common/base3.png';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const fastingPlans = [
   {
     id: 1,
     name: 'Classic TRF',
     subname: 'Tap to customise your eating window',
-    startTime: '6:30 AM',
-    endTime: '10:30 PM',
+    startTime: '10:30 AM',
+    endTime: '6:30 PM',
     fasting: 16,
     eating: 8,
     isRecommended: true,
@@ -36,8 +39,8 @@ const fastingPlans = [
     id: 2,
     name: 'Basic TRF',
     subname: 'Tap to customise your eating window',
-    startTime: '9:30 AM',
-    endTime: '7:30 PM',
+    startTime: '9:00 AM',
+    endTime: '7:00 PM',
     fasting: 14,
     eating: 10,
     isRecommended: false,
@@ -67,12 +70,19 @@ export default function Fasting() {
   const [continueBtn, setContinueBtn] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState(1);
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [fastingData, setFastingData] = useState(fastingPlans || []);
 
-  const handleGoForward = () => {
+  const handleGoForward = async () => {
+    await AsyncStorage.setItem(
+      'FastingPlan',
+      JSON.stringify(fastingData[activeSlide]),
+    );
+    navigation.navigate('FastingSchedule');
+  };
+
+  const skipHandle = async () => {
+    await AsyncStorage.setItem('FastingPlan', JSON.stringify(fastingPlans[0]));
     navigation.navigate('FastingSchedule');
   };
 
@@ -172,7 +182,7 @@ export default function Fasting() {
         contentContainerStyle={{paddingBottom: 150}}>
         <TouchableOpacity
           style={styles.skipButton}
-          onPress={() => navigation.navigate('FastingSchedule')}>
+          onPress={() => skipHandle()}>
           <Text style={styles.skipButtonText}>SKIP</Text>
         </TouchableOpacity>
 

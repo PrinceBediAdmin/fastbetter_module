@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
@@ -11,7 +13,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-export const DailyReportView = ({isType}) => {
+export const DailyReportView = ({isType, onSelectData}) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const flatListRef = useRef(null);
@@ -22,10 +24,10 @@ export const DailyReportView = ({isType}) => {
   }, []);
 
   useEffect(() => {
-    if (dates.length > 0 && flatListRef.current) {
+    if (dates?.length > 0 && flatListRef?.current) {
       scrollToCurrentDate();
     }
-  }, [dates, isType]);
+  }, [dates]);
 
   const generateDateArray = () => {
     const dateArray = [];
@@ -42,26 +44,27 @@ export const DailyReportView = ({isType}) => {
     }
 
     setDates(dateArray);
+    //onSelectData(currentDate);
     setSelectedDate(currentDate); // Initialize selected date to current date
   };
 
   const scrollToCurrentDate = () => {
     const today = new Date();
-    const index = dates.findIndex(
+    const CurrentIndex = dates.findIndex(
       date =>
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear(),
     );
 
-    if (index !== -1) {
+    if (CurrentIndex !== -1) {
       setTimeout(() => {
         flatListRef.current?.scrollToIndex({
-          index,
+          index: CurrentIndex - 1,
           animated: true,
           viewPosition: 0.5,
         });
-      }, 100); // Add a slight delay to ensure the list has been rendered
+      }, 500); // Add a slight delay to ensure the list has been rendered
     }
   };
 
@@ -95,9 +98,18 @@ export const DailyReportView = ({isType}) => {
     const dayName = item.toLocaleDateString('en-US', {weekday: 'short'});
     const dateText = item.getDate();
 
+    const CurrentDate = new Date();
+
+    const Itemhandle = itemValue => {
+      if (item <= CurrentDate) {
+        setSelectedDate(itemValue);
+        onSelectData(itemValue);
+      }
+    };
+
     return (
       <Pressable
-        onPress={() => setSelectedDate(item)}
+        onPress={() => Itemhandle(item)}
         style={{
           height: 60,
           width: 44,
@@ -106,7 +118,8 @@ export const DailyReportView = ({isType}) => {
           justifyContent: 'center',
           backgroundColor: isSelected(item) ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
-          borderWidth: 0.2,
+          borderWidth: item <= CurrentDate ? 0.2 : 0,
+          opacity: item <= CurrentDate ? 1 : 0.3,
           borderColor: isSelected(item) ? 'transparent' : '#CFC5C5',
         }}>
         <Text
@@ -140,7 +153,7 @@ export const DailyReportView = ({isType}) => {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
       style={{marginVertical: 20}}
-      contentContainerStyle={styles.flatListContent}
+      contentContainerStyle={{alignItems: 'center'}}
       getItemLayout={getItemLayout}
       onScrollToIndexFailed={handleScrollToIndexFailed}
     />

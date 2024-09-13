@@ -31,15 +31,43 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false/>
+		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSAdvertisingAttributionReportEndpoint</key>
+	<string>https://attest.apple.com</string>
+	<key>AppsFlyerAppID</key>
+	<string>6473776196</string> <!-- Replace with your iOS App ID -->
+	<key>AppsFlyerDevKey</key>
+	<string>EdUywoA7KQSqeLcJqKJn8F</string> <!-- Replace with your AppsFlyer Dev Key -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>We need your location to provide better service.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to provide relevant notifications.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to provide relevant notifications.</string>
+
+	<key>WCSessionDelegate</key>
+    <string>$(PRODUCT_MODULE_NAME).WCSessionDelegate</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data for tracking your activity.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need to update your health data for better activity tracking.</string>
 	<key>UIBackgroundModes</key>
 	<array>
-	<string>fetch</string>
+	    <string>fetch</string>
+		<string>background-fetch</string>
+		<string>processing</string>
+		<string>location</string>
+		<string>external-accessory</string>
+		<string>voip</string>
+		<string>remote-notification</string>
+        <string>backgroundMode</string>
+	</array>
+	 <key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>
