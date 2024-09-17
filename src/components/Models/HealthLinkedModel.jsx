@@ -104,24 +104,39 @@ const HealthLinkedModel = ({
       </View>
     );
   };
+  console.log(headerText);
 
   const onButtonHandle = async () => {
     if (headerText === 'Health Connect linked') {
       if (ScreenType === 0) {
-        checkAppInstalled();
+        if (Platform.OS === 'android') {
+          checkAppInstalled();
+        }
       } else {
-        AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
-          if (isInstalled) {
-            redirectToHealthConnect();
-          } else {
-            openHealthConnectInPlayStore();
-            LocalStoreData(null, false);
-          }
-        });
+        if (Platform.OS === 'android') {
+          AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+            if (isInstalled) {
+              redirectToHealthConnect();
+            } else {
+              openHealthConnectInPlayStore();
+              LocalStoreData(null, false);
+            }
+          });
+        }
+        setScreenType(0);
+      }
+    } else if (headerText === 'Apple health linked') {
+      if (ScreenType === 0) {
+        setScreenType(1);
+      } else {
         setScreenType(0);
       }
     } else {
-      setScreenType(1);
+      if (ScreenType === 0) {
+        setScreenType(1);
+      } else {
+        setScreenType(0);
+      }
     }
   };
 
@@ -245,6 +260,7 @@ const HealthLinkedModel = ({
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
       ];
+      console.log(totalCaloriesBurnedResult);
       LocalStoreData(HealthData, true);
       hanldeCloseModel('success');
     } catch (error) {

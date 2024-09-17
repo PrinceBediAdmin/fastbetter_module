@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, Text, View, Image, Linking} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  Image,
+  Linking,
+  Platform,
+} from 'react-native';
 import LinkDeviceModel from './Models/LinkDeviceModel';
 import HealthLinkedModel from './Models/HealthLinkedModel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,7 +34,9 @@ export default function LinkDevice() {
   });
 
   useEffect(() => {
-    checkWatchStatus();
+    if (Platform.OS === 'android') {
+      checkWatchStatus();
+    }
   }, []);
 
   const checkWatchStatus = async () => {

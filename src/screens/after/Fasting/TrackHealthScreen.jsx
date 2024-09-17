@@ -174,6 +174,7 @@ const TrackHealthScreen = () => {
             return dateB.localeCompare(dateA);
           }),
       }));
+      console.log(filteredDataList[1]);
 
       const updatedActivitiesData = ActivitiesData.map(activity => {
         const matchingData = filteredDataList.find(

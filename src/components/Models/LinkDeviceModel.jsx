@@ -41,9 +41,14 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       title: 'Fitbit',
       subTitle: 'Link the FastBetter app with \nfitbit',
       image: fitbit_icon,
-      modelTitle: 'Health Connect linked',
+      modelTitle: 'Fitbit Connect linked',
     },
   ];
+
+  const filteredData =
+    Platform.OS === 'android'
+      ? Data.filter(item => item.title !== 'Apple health')
+      : Data.filter(item => item.title !== 'Health Connect');
 
   useEffect(() => {
     requestActivityRecognitionPermission();
@@ -132,10 +137,7 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
             </Text>
           </Text>
 
-          {Data.map((item, index) => {
-            if (index === 1 && Platform.OS === 'android') {
-              return null;
-            }
+          {filteredData.map((item, index) => {
             return (
               <View
                 key={index}
