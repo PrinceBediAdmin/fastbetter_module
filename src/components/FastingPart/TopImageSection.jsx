@@ -97,12 +97,10 @@ const TopImageSection = () => {
   const timerActive = async () => {
     const playTime = await AsyncStorage.getItem('Playtime');
     const savedIsRunning = await AsyncStorage.getItem('isRunning');
-    console.log(playTime);
 
     if (JSON.parse(savedIsRunning)) {
       if (playTime) {
         const diffInSeconds = getTimeDifferenceInSeconds(playTime);
-        console.log(playTime, '--', diffInSeconds);
         // const newTime = timer - diffInSeconds;
         // if (newTime > 0) {
         //   setTimer(pre => pre + diffInSeconds);

@@ -1,16 +1,180 @@
-import React, {useState} from 'react';
-import {TouchableOpacity, Text, View, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {TouchableOpacity, Text, View, Image, Linking} from 'react-native';
 import LinkDeviceModel from './Models/LinkDeviceModel';
 import HealthLinkedModel from './Models/HealthLinkedModel';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  HealthConnect,
+  requestPermission,
+  initialize,
+  readRecords,
+  openHealthConnectSettings,
+  isAvailable,
+} from 'react-native-health-connect';
+import {
+  AppInstalledChecker,
+  CheckPackageInstallation,
+} from 'react-native-check-app-install';
 
 export default function LinkDevice() {
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [isLinkModelOpen, setIsLinkModelOpen] = useState(false);
   const [isModelTitle, setIsModelTitle] = useState('');
+  const [status, setStatus] = useState(false);
+  const [connectMsg, setConnectMsg] = useState({
+    title: 'Link your device with FastBetter',
+    subTitle: 'Bring a new level of efficiency to your daily tasks.',
+  });
+
+  useEffect(() => {
+    checkWatchStatus();
+  }, []);
+
+  const checkWatchStatus = async () => {
+    const WatchConnect = await AsyncStorage.getItem('WatchConnect');
+    AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+      if (isInstalled) {
+        if (JSON.parse(WatchConnect)) {
+          getinitializeCheck();
+        } else {
+          setStatus(false);
+          setConnectMsg({
+            title: 'Link your device with FastBetter',
+            subTitle: 'Bring a new level of efficiency to your daily tasks.',
+          });
+        }
+      } else {
+        setStatus(false);
+        setConnectMsg({
+          title: 'Link your device with FastBetter',
+          subTitle: 'Bring a new level of efficiency to your daily tasks.',
+        });
+      }
+    });
+  };
+
+  const initializeHealthConnect = async () => {
+    try {
+      const type = await initialize();
+      console.log('HealthConnect initialized', type);
+      if (type) {
+        return type;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error('Initialization failed', error);
+      return false;
+    }
+  };
+
+  const getinitializeCheck = async () => {
+    const initializeCheck = await initializeHealthConnect();
+    if (initializeCheck) {
+      const permissions = await requestPermission([
+        {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+        {accessType: 'read', recordType: 'Steps'},
+        {accessType: 'read', recordType: 'HeartRate'},
+        {accessType: 'read', recordType: 'Distance'},
+        {accessType: 'read', recordType: 'SleepSession'},
+        {accessType: 'read', recordType: 'Height'},
+        {accessType: 'read', recordType: 'Weight'},
+        {accessType: 'read', recordType: 'BloodPressure'},
+      ]);
+      const grantedPermissions = permissions.filter(
+        permission => permission.granted,
+      );
+
+      if (grantedPermissions.length >= 0) {
+        fetchWatchData();
+      } else {
+        setStatus(false);
+        setConnectMsg({
+          title: 'Link your device with FastBetter',
+          subTitle: 'Bring a new level of efficiency to your daily tasks.',
+        });
+      }
+    } else {
+      setStatus(false);
+      setConnectMsg({
+        title: 'Link your device with FastBetter',
+        subTitle: 'Bring a new level of efficiency to your daily tasks.',
+      });
+    }
+  };
+
+  const fetchWatchData = async () => {
+    try {
+      const StartValue = '2024-08-25T03:43:54.898Z';
+      const endValue = new Date().toISOString();
+
+      // Helper function to fetch data for each health metric
+      const fetchHealthData = async type => {
+        const result = await readRecords(type, {
+          timeRangeFilter: {
+            operator: 'between',
+            startTime: StartValue,
+            endTime: endValue,
+          },
+        });
+        return result?.records || [];
+      };
+
+      // Fetching all health data
+      const stepsResult = await fetchHealthData('Steps');
+      const totalCaloriesBurnedResult = await fetchHealthData(
+        'TotalCaloriesBurned',
+      );
+      const heartRateResult = await fetchHealthData('HeartRate');
+      const distanceResult = await fetchHealthData('Distance');
+      const sleepSessionResult = await fetchHealthData('SleepSession');
+      const heightResult = await fetchHealthData('Height');
+      const weightResult = await fetchHealthData('Weight');
+      const BloodPressureResult = await fetchHealthData('BloodPressure');
+
+      // Organize health data into an array
+      const HealthData = [
+        {id: 'stepsResult', data: stepsResult},
+        {id: 'totalCaloriesBurnedResult', data: totalCaloriesBurnedResult},
+        {id: 'heartRateResult', data: heartRateResult},
+        {id: 'distanceResult', data: distanceResult},
+        {id: 'sleepSessionResult', data: sleepSessionResult},
+        {id: 'weightResult', data: weightResult}, // This should now log properly
+        {id: 'heightResult', data: heightResult},
+        {id: 'BloodPressureResult', data: BloodPressureResult},
+      ];
+      LocalStoreData(HealthData, true);
+    } catch (error) {
+      setStatus(false);
+      setConnectMsg({
+        title: 'Link your device with FastBetter',
+        subTitle: 'Bring a new level of efficiency to your daily tasks.',
+      });
+    }
+  };
+
+  const LocalStoreData = async (HelthData = null, status = false) => {
+    if (status) {
+      setStatus(true);
+      setConnectMsg({
+        title: 'Syncing with your health connect',
+        subTitle:
+          'Your health connect stats are being synced, to change fo to settings.',
+      });
+      if (HelthData) {
+        await AsyncStorage.setItem(
+          'HealthConnectData',
+          JSON.stringify(HelthData),
+        );
+      }
+    }
+    await AsyncStorage.setItem('WatchConnect', JSON.stringify(status));
+  };
 
   const hanldeCloseModel = async () => {
     setIsModelOpen(false);
   };
+
   const handleLinkItenModel = res => {
     setIsModelOpen(false);
     setIsModelTitle(res);
@@ -18,46 +182,63 @@ export default function LinkDevice() {
       setIsLinkModelOpen(true);
     }, 1000);
   };
-  const HandleCloseLinkModel = () => {
+
+  const HandleCloseLinkModel = res => {
     setIsLinkModelOpen(false);
-    setTimeout(() => {
-      setIsModelOpen(true);
-    }, 1000);
+    if (res !== 'success') {
+      setTimeout(() => {
+        setIsModelOpen(true);
+      }, 1000);
+    } else {
+      setStatus(true);
+      setConnectMsg({
+        title: 'Syncing with your health connect',
+        subTitle:
+          'Your health connect stats are being synced, to change fo to settings.',
+      });
+    }
   };
+
   return (
     <>
       <View className="flex flex-row pr-3 mt-6 shadow-lg shadow-black-100 bg-white rounded-3xl h-[175px]">
         <View className="w-5/12">
           <Image
-            source={require('../assets/afterscreen/home/device.png')}
+            source={
+              status
+                ? require('../assets/afterscreen/track/apple-watch.png')
+                : require('../assets/afterscreen/home/device.png')
+            }
             style={{width: 150, height: 176}}
             resizeMode="contain"
           />
         </View>
-        <View className="w-6/12 flex justify-center">
+        <View className="w-6/12 flex justify-center" style={{marginLeft: 10}}>
           <Text
             className="text-black text-base font-[700]"
             style={{lineHeight: 16, marginBottom: 4}}>
-            Link your device with FastBetter
+            {connectMsg?.title}
           </Text>
           <Text
             className="text-gray-500 text-[10px] font-[400]"
             style={{lineHeight: 11.82, marginBottom: 8}}>
-            Bring a new level of efficiency to your daily tasks.
+            {connectMsg?.subTitle}
           </Text>
-          <TouchableOpacity
-            onPress={() => setIsModelOpen(true)}
-            className={`text-center bg-[#FF995033] py-1.5 mt-2.5 rounded-lg w-8/12 mx-a`}>
-            <Text className="text-orange-theme text-center text-xs font-medium">
-              Tap to link now
-            </Text>
-          </TouchableOpacity>
+          {!status && (
+            <TouchableOpacity
+              onPress={() => setIsModelOpen(true)}
+              className={`text-center bg-[#FF995033] py-1.5 mt-2.5 rounded-lg w-8/12 mx-a`}>
+              <Text className="text-orange-theme text-center text-xs font-medium">
+                Tap to link now
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
       <HealthLinkedModel
         isModelOpen={isLinkModelOpen}
-        hanldeCloseModel={() => HandleCloseLinkModel()}
+        hanldeCloseModel={res => HandleCloseLinkModel(res)}
         headerText={isModelTitle}
       />
       <LinkDeviceModel

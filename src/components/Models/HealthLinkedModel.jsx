@@ -8,10 +8,12 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Linking,
   Platform,
   Pressable,
   FlatList,
   Dimensions,
+  Alert,
 } from 'react-native';
 import {ModelBox} from '../../components/Models/Models';
 import bottom_bg from '../../assets/diagnosed/bottom_bg.png';
@@ -19,9 +21,31 @@ import NextButton from '../../components/NextButton';
 
 import connection from '../../assets/afterscreen/Profile/connection.png';
 import connection_error from '../../assets/afterscreen/Profile/connection_error.png';
+import {
+  HealthConnect,
+  requestPermission,
+  initialize,
+  readRecords,
+  openHealthConnectSettings,
+  isAvailable,
+} from 'react-native-health-connect';
+import {
+  AppInstalledChecker,
+  CheckPackageInstallation,
+} from 'react-native-check-app-install';
 
-const HealthLinkedModel = ({isModelOpen, hanldeCloseModel, headerText}) => {
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const HealthLinkedModel = ({
+  isModelOpen,
+  hanldeCloseModel,
+  headerText,
+  updateWatch,
+}) => {
   const [ScreenType, setScreenType] = useState(0);
+  const [subErrorMsg, setsubErrorMsg] = useState(
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  );
 
   const DeviceConn = () => {
     return (
@@ -75,20 +99,172 @@ const HealthLinkedModel = ({isModelOpen, hanldeCloseModel, headerText}) => {
             marginTop: 16,
             marginBottom: 80,
           }}>
-          {
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-          }
+          {subErrorMsg}
         </Text>
       </View>
     );
   };
 
-  const onButtonHandle = () => {
-    if (ScreenType === 0) {
-      setScreenType(1);
+  const onButtonHandle = async () => {
+    if (headerText === 'Health Connect linked') {
+      if (ScreenType === 0) {
+        checkAppInstalled();
+      } else {
+        AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+          if (isInstalled) {
+            redirectToHealthConnect();
+          } else {
+            openHealthConnectInPlayStore();
+            LocalStoreData(null, false);
+          }
+        });
+        setScreenType(0);
+      }
     } else {
-      setScreenType(0);
+      setScreenType(1);
     }
+  };
+
+  const redirectToHealthConnect = async () => {
+    try {
+      await openHealthConnectSettings();
+      console.log('Opened Health Connect settings');
+    } catch (error) {
+      console.error('Failed to open Health Connect settings', error);
+    }
+  };
+
+  const checkAppInstalled = async () => {
+    try {
+      AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+        if (isInstalled) {
+          getHealthData();
+        } else {
+          setScreenType(1);
+          setsubErrorMsg(
+            'Health Connect is not installed. Redirecting to Play Store...',
+          );
+        }
+      });
+    } catch (err) {}
+  };
+
+  const getHealthData = async () => {
+    try {
+      const initializeCheck = await initializeHealthConnect();
+      if (initializeCheck) {
+        const permissions = await requestPermission([
+          {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+          {accessType: 'read', recordType: 'Steps'},
+          {accessType: 'read', recordType: 'HeartRate'},
+          {accessType: 'read', recordType: 'Distance'},
+          {accessType: 'read', recordType: 'SleepSession'},
+          {accessType: 'read', recordType: 'Height'},
+          {accessType: 'read', recordType: 'Weight'},
+          {accessType: 'read', recordType: 'BloodPressure'},
+        ]);
+        const grantedPermissions = permissions.filter(
+          permission => permission.granted,
+        );
+
+        console.log(grantedPermissions);
+
+        if (grantedPermissions.length >= 0) {
+          fetchWatchData();
+        } else {
+          setScreenType(1);
+          setsubErrorMsg('Opened Health Connect settings');
+        }
+      } else {
+        setScreenType(1);
+        setsubErrorMsg('Opened Health Connect settings');
+      }
+    } catch (error) {
+      console.error('Authorization failed', error);
+    }
+  };
+
+  const initializeHealthConnect = async () => {
+    try {
+      const type = await initialize();
+      console.log('HealthConnect initialized', type);
+      return type;
+    } catch (error) {
+      console.error('Initialization failed', error);
+      return false;
+    }
+  };
+
+  const openHealthConnectInPlayStore = () => {
+    const url = Platform.select({
+      android:
+        'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata',
+    });
+
+    Linking.openURL(url).catch(err =>
+      console.error('Failed to open Play Store', err),
+    );
+  };
+  const fetchWatchData = async () => {
+    try {
+      const StartValue = '2024-08-25T03:43:54.898Z';
+      const endValue = new Date().toISOString();
+
+      // Helper function to fetch data for each health metric
+      const fetchHealthData = async type => {
+        const result = await readRecords(type, {
+          timeRangeFilter: {
+            operator: 'between',
+            startTime: StartValue,
+            endTime: endValue,
+          },
+        });
+        return result?.records || [];
+      };
+
+      // Fetching all health data
+      const stepsResult = await fetchHealthData('Steps');
+      const totalCaloriesBurnedResult = await fetchHealthData(
+        'TotalCaloriesBurned',
+      );
+      const heartRateResult = await fetchHealthData('HeartRate');
+      const distanceResult = await fetchHealthData('Distance');
+      const sleepSessionResult = await fetchHealthData('SleepSession');
+      const heightResult = await fetchHealthData('Height');
+      const weightResult = await fetchHealthData('Weight');
+      const BloodPressureResult = await fetchHealthData('BloodPressure');
+
+      // Organize health data into an array
+      const HealthData = [
+        {id: 'stepsResult', data: stepsResult},
+        {id: 'totalCaloriesBurnedResult', data: totalCaloriesBurnedResult},
+        {id: 'heartRateResult', data: heartRateResult},
+        {id: 'distanceResult', data: distanceResult},
+        {id: 'sleepSessionResult', data: sleepSessionResult},
+        {id: 'weightResult', data: weightResult}, // This should now log properly
+        {id: 'heightResult', data: heightResult},
+        {id: 'BloodPressureResult', data: BloodPressureResult},
+      ];
+      LocalStoreData(HealthData, true);
+      hanldeCloseModel('success');
+    } catch (error) {
+      setScreenType(1);
+      LocalStoreData(null, false);
+      setsubErrorMsg('Opened Health Connect settings');
+      console.error('Failed to fetch health data', error);
+    }
+  };
+
+  const LocalStoreData = async (HelthData = null, status = false) => {
+    if (status) {
+      if (HelthData) {
+        await AsyncStorage.setItem(
+          'HealthConnectData',
+          JSON.stringify(HelthData),
+        );
+      }
+    }
+    await AsyncStorage.setItem('WatchConnect', JSON.stringify(status));
   };
 
   return (

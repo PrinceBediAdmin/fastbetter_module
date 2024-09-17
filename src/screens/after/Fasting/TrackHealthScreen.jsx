@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React, {useState, useRef, useEffect} from 'react';
@@ -12,6 +13,8 @@ import {
   FlatList,
   StyleSheet,
   ImageBackground,
+  Alert,
+  Linking,
 } from 'react-native';
 import Background from '../../../components/Background';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -29,6 +32,20 @@ import {ModelBox} from '../../../components/Models/Models';
 import {DateReportView} from './DateReportView';
 import {DailyReportView} from './DailyReportView';
 import {WeeklyReportView} from './WeeklyReportView';
+import {
+  HealthConnect,
+  requestPermission,
+  initialize,
+  readRecords,
+  openHealthConnectSettings,
+  isAvailable,
+} from 'react-native-health-connect';
+import {
+  AppInstalledChecker,
+  CheckPackageInstallation,
+} from 'react-native-check-app-install';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ActivitiesData = [
   {
@@ -40,6 +57,8 @@ const ActivitiesData = [
     textColor: '#E91717',
     bg1: '#FDE5E4',
     bg2: '#FBD0CF',
+    subId: 'heartRateResult',
+    data: null,
   },
   {
     id: 2,
@@ -50,6 +69,8 @@ const ActivitiesData = [
     textColor: '#0DB1AD',
     bg1: '#E7F4F3',
     bg2: '#D2EDEC',
+    subId: 'weightResult',
+    data: null,
   },
   {
     id: 3,
@@ -60,6 +81,32 @@ const ActivitiesData = [
     textColor: '#197BD2',
     bg1: '#E9EFF7',
     bg2: '#D3E3F3',
+    subId: 'distanceResult',
+    data: null,
+  },
+  {
+    id: 4,
+    name: 'B.P',
+    value: '80/120',
+    type: 'mm/hg',
+    img: Walk_icon,
+    textColor: '#197BD2',
+    bg1: '#E9EFF7',
+    bg2: '#D3E3F3',
+    subId: 'BloodPressureResult',
+    data: null,
+  },
+  {
+    id: 5,
+    name: '',
+    value: '',
+    type: '',
+    img: Walk_icon,
+    textColor: '#197BD2',
+    bg1: '#E9EFF7',
+    bg2: '#D3E3F3',
+    subId: 'totalCaloriesBurnedResult',
+    data: null,
   },
 ];
 
@@ -71,16 +118,194 @@ const TrackHealthScreen = () => {
   const flatlistRef = useRef(null);
 
   const [isModelOpen, setIsModelOpen] = useState(false);
-  const [ActiveItemId, setActiveItemId] = useState(1);
+  const [ActiveItem, setActiveItem] = useState(1);
+  const [AllLocalData, setAllLocalData] = useState(ActivitiesData);
+  const [AllWeekLocalData, setAllWeekLocalData] = useState(ActivitiesData);
+
+  const currentDateTime = new Date();
+
+  const [DailySelectData, setDailySelectData] = useState(null);
+  const [WeekSelectData, setWeekSelectData] = useState(0);
+
+  useEffect(() => {
+    getData();
+  }, [DailySelectData, ScreenType, WeekSelectData]);
+
+  const getData = async () => {
+    const HealthConnectData = await AsyncStorage.getItem('HealthConnectData');
+    const HelthDataObject = JSON.parse(HealthConnectData);
+    let date = DailySelectData ? new Date(DailySelectData) : currentDateTime;
+    if (DailySelectData) {
+      date.setDate(date.getDate() + 1);
+    }
+    const newDateValue = date.toISOString();
+
+    if (HelthDataObject) {
+      const getDateOnly = dateTime => dateTime.split('T')[0];
+      const dateToMatch = getDateOnly(newDateValue);
+
+      const filteredDataList = HelthDataObject.flatMap(item => ({
+        id: item.id,
+        data: item.data
+          .filter(dataItem => {
+            if (dataItem) {
+              if (
+                item.id === 'heightResult' ||
+                item.id === 'weightResult' ||
+                item.id === 'BloodPressureResult'
+              ) {
+                return getDateOnly(dataItem?.time) === dateToMatch;
+              } else if (
+                item?.id === 'distanceResult' ||
+                item?.id === 'heartRateResult' ||
+                item?.id === 'totalCaloriesBurnedResult'
+              ) {
+                return getDateOnly(dataItem?.startTime) === dateToMatch;
+              } else {
+                return false;
+              }
+            } else {
+              return false;
+            }
+          })
+          .sort((a, b) => {
+            const dateA = getDateOnly(a.time || a.startTime);
+            const dateB = getDateOnly(b.time || b.startTime);
+            return dateB.localeCompare(dateA);
+          }),
+      }));
+
+      const updatedActivitiesData = ActivitiesData.map(activity => {
+        const matchingData = filteredDataList.find(
+          data =>
+            data?.id.toLocaleLowerCase() === activity.subId.toLocaleLowerCase(),
+        );
+        return {
+          ...activity,
+          data: matchingData ? matchingData.data : null,
+        };
+      });
+
+      setAllLocalData(updatedActivitiesData);
+      setWeeKData(HelthDataObject, WeekSelectData);
+    }
+  };
+
+  const setWeeKData = (HelthDataObject, WeekSelectData) => {
+    const getWeekDateRange = weekNumber => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+
+      // Calculate the first day of the current month
+      const firstDayOfMonth = new Date(year, month, 1);
+
+      // Calculate the start of the week
+      const startOfWeek = new Date(firstDayOfMonth);
+      startOfWeek.setDate(1 + (weekNumber - 1) * 7);
+
+      // Correct if the startOfWeek is in the previous month
+      if (startOfWeek.getMonth() !== month) {
+        startOfWeek.setDate(0); // Go to the last day of the previous month
+        startOfWeek.setDate(
+          startOfWeek.getDate() - (startOfWeek.getDate() - 1),
+        );
+      }
+
+      // Calculate the end of the week
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      return {
+        start: startOfWeek.toISOString().split('T')[0],
+        end: endOfWeek.toISOString().split('T')[0],
+      };
+    };
+
+    const {start: weekStart, end: weekEnd} = getWeekDateRange(
+      parseInt(WeekSelectData + 1, 10),
+    );
+
+    const getDateOnly = dateTime => dateTime.split('T')[0];
+
+    const filteredDataList = HelthDataObject.flatMap(item => ({
+      id: item.id,
+      data: item.data
+        .filter(dataItem => {
+          if (dataItem) {
+            if (
+              item.id === 'heightResult' ||
+              item.id === 'weightResult' ||
+              item.id === 'BloodPressureResult'
+            ) {
+              const itemDate = getDateOnly(dataItem.time);
+              return itemDate >= weekStart && itemDate <= weekEnd;
+            } else if (
+              item?.id === 'distanceResult' ||
+              item?.id === 'heartRateResult'
+            ) {
+              const itemDate = getDateOnly(dataItem.startTime);
+              return itemDate >= weekStart && itemDate <= weekEnd;
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        })
+        .sort((a, b) => {
+          const dateA = getDateOnly(a.time || a.startTime);
+          const dateB = getDateOnly(b.time || b.startTime);
+          return dateB.localeCompare(dateA);
+        }),
+    }));
+
+    const updatedActivitiesData = ActivitiesData.map(activity => {
+      const matchingData = filteredDataList.find(
+        data =>
+          data?.id.toLocaleLowerCase() === activity.subId.toLocaleLowerCase(),
+      );
+      return {
+        ...activity,
+        data: matchingData ? matchingData.data : null,
+      };
+    });
+    setAllWeekLocalData(updatedActivitiesData);
+  };
 
   const onBackPress = () => {
     navigation.goBack();
   };
 
   const ActivitiesRenderItem = ({item, index}) => {
+    if (index >= 3) {
+      return null;
+    }
+    let value = 0;
+    if (index === 0) {
+      value = item?.data ? item?.data[0]?.samples[0]?.beatsPerMinute || 0 : 0;
+    } else if (index === 1) {
+      value = item?.data ? item?.data[0]?.weight?.inKilograms || 0 : 0;
+    } else if (index === 2) {
+      value = item?.data
+        ? item?.data?.reduce(
+            (acc, item) => acc + item?.distance?.inKilometers,
+            0,
+          )
+        : 0;
+    } else {
+    }
+
+    const ItemHandle = itemValue => {
+      if (itemValue.data && itemValue.data.length > 0) {
+        setIsModelOpen(true);
+        setActiveItem(itemValue);
+      }
+    };
+
     return (
       <TouchableOpacity
-        onPress={() => (setIsModelOpen(true), setActiveItemId(item.id))}
+        onPress={() => ItemHandle(item)}
         style={{
           width: 153,
           height: 160,
@@ -98,7 +323,7 @@ const TrackHealthScreen = () => {
             padding: 8,
           }}>
           <Image
-            source={item.img}
+            source={item?.img}
             style={{width: 40, height: 40, marginBottom: 4}}
             resizeMode="contain"
           />
@@ -110,7 +335,7 @@ const TrackHealthScreen = () => {
               textAlign: 'center',
               color: item.textColor,
             }}>
-            {item.name}
+            {item?.name}
           </Text>
         </View>
         <View
@@ -131,7 +356,7 @@ const TrackHealthScreen = () => {
               textAlign: 'center',
               color: item.textColor,
             }}>
-            {item.value}
+            {value ? parseFloat(value?.toFixed(2)) : 0}
           </Text>
           <Text
             style={{
@@ -141,7 +366,7 @@ const TrackHealthScreen = () => {
               textAlign: 'center',
               color: item.textColor,
             }}>
-            {item.type}
+            {item?.type}
           </Text>
         </View>
       </TouchableOpacity>
@@ -174,7 +399,7 @@ const TrackHealthScreen = () => {
               {'Sun, 15th Nov '}
             </Text>
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => checkAppInstalled()}>
             <Image
               source={Sync_retry}
               style={{width: 24, height: 24, marginRight: 30}}
@@ -188,11 +413,11 @@ const TrackHealthScreen = () => {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             numColumns={2}
-            data={ActivitiesData}
+            data={ScreenType === 0 ? AllLocalData : AllWeekLocalData}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={ActivitiesRenderItem}
             style={{marginTop: 30}}
             contentContainerStyle={{gap: 16}}
-            keyExtractor={item => item.id}
           />
         </View>
       </View>
@@ -218,7 +443,7 @@ const TrackHealthScreen = () => {
             }}>
             <DailyReportView
               isType={ScreenType}
-              onSelectData={pre => console.log(pre)}
+              onSelectData={pre => setDailySelectData(pre)}
             />
           </ImageBackground>
 
@@ -248,13 +473,173 @@ const TrackHealthScreen = () => {
             }}>
             <WeeklyReportView
               isType={ScreenType}
-              onSelectData={pre => console.log(pre)}
+              onSelectData={pre => setWeekSelectData(pre)}
             />
           </ImageBackground>
           {ActiveView()}
         </View>
       </ScrollView>
     );
+  };
+
+  const checkAppInstalled = async () => {
+    try {
+      AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+        if (isInstalled) {
+          getHealthData();
+        } else {
+          Alert.alert(
+            'App Not Installed',
+            'Please install the Health Data app',
+            [
+              {text: 'OK', onPress: () => openHealthConnectInPlayStore()}, // Button actions
+            ],
+          );
+        }
+      });
+    } catch (err) {}
+  };
+
+  const getHealthData = async () => {
+    try {
+      const initializeCheck = await initializeHealthConnect();
+      if (initializeCheck) {
+        const permissions = await requestPermission([
+          {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+          {accessType: 'read', recordType: 'Steps'},
+          {accessType: 'read', recordType: 'HeartRate'},
+          {accessType: 'read', recordType: 'Distance'},
+          {accessType: 'read', recordType: 'SleepSession'},
+          {accessType: 'read', recordType: 'Height'},
+          {accessType: 'read', recordType: 'Weight'},
+          {accessType: 'read', recordType: 'BloodPressure'},
+        ]);
+
+        // Check if all required permissions are granted
+        const grantedPermissions = permissions.filter(
+          permission => permission?.granted,
+        );
+
+        if (grantedPermissions.length >= 0) {
+          fetchWatchData();
+        } else {
+          Alert.alert(
+            'Permissions not granted',
+            'Please grant the necessary permissions to fetch health data.',
+            {text: 'OK', onPress: () => redirectToHealthConnect()},
+          );
+        }
+      } else {
+        Alert.alert('Opened Health Connect settings', [
+          {text: 'OK', onPress: () => redirectToHealthConnect()}, // Button actions
+        ]);
+      }
+    } catch (error) {
+      console.error('Authorization failed', error);
+    }
+  };
+
+  const redirectToHealthConnect = async () => {
+    try {
+      await openHealthConnectSettings();
+      console.log('Opened Health Connect settings');
+    } catch (error) {
+      console.error('Failed to open Health Connect settings', error);
+    }
+  };
+
+  const initializeHealthConnect = async () => {
+    try {
+      const type = await initialize();
+      console.log('HealthConnect initialized', type);
+      return type;
+    } catch (error) {
+      console.error('Initialization failed', error);
+      return false;
+    }
+  };
+
+  const openHealthConnectInPlayStore = () => {
+    const url = Platform.select({
+      android:
+        'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata',
+    });
+
+    Linking.openURL(url).catch(err =>
+      console.error('Failed to open Play Store', err),
+    );
+  };
+
+  const fetchWatchData = async () => {
+    try {
+      const StartValue = '2024-08-25T03:43:54.898Z';
+      const endValue = new Date().toISOString();
+
+      // Helper function to fetch data for each health metric
+      const fetchHealthData = async type => {
+        const result = await readRecords(type, {
+          timeRangeFilter: {
+            operator: 'between',
+            startTime: StartValue,
+            endTime: endValue,
+          },
+        });
+        return result?.records || [];
+      };
+
+      // Fetching all health data
+      const stepsResult = await fetchHealthData('Steps');
+      const totalCaloriesBurnedResult = await fetchHealthData(
+        'TotalCaloriesBurned',
+      );
+      const heartRateResult = await fetchHealthData('HeartRate');
+      const distanceResult = await fetchHealthData('Distance');
+      const sleepSessionResult = await fetchHealthData('SleepSession');
+      const heightResult = await fetchHealthData('Height');
+      const weightResult = await fetchHealthData('Weight');
+      const BloodPressureResult = await fetchHealthData('BloodPressure');
+
+      // Organize health data into an array
+      const HealthData = [
+        {id: 'stepsResult', data: stepsResult},
+        {id: 'totalCaloriesBurnedResult', data: totalCaloriesBurnedResult},
+        {id: 'heartRateResult', data: heartRateResult},
+        {id: 'distanceResult', data: distanceResult},
+        {id: 'sleepSessionResult', data: sleepSessionResult},
+        {id: 'weightResult', data: weightResult}, // This should now log properly
+        {id: 'heightResult', data: heightResult},
+        {id: 'BloodPressureResult', data: BloodPressureResult},
+      ];
+
+      // console.log(JSON.stringify(HealthData[1]));
+      // Store the health data locally
+      if (HealthData.length > 0) {
+        LocalStoreData(HealthData, true);
+      } else {
+        LocalStoreData(null, false);
+      }
+    } catch (error) {
+      LocalStoreData(null, false);
+      Alert.alert('Opened Health Connect settings', [
+        {text: 'OK', onPress: () => redirectToHealthConnect()}, // Button actions
+      ]);
+      console.error('Failed to fetch health data', error);
+    }
+  };
+
+  const LocalStoreData = async (HelthData = null, status = false) => {
+    if (status) {
+      if (HelthData) {
+        await AsyncStorage.setItem(
+          'HealthConnectData',
+          JSON.stringify(HelthData),
+        );
+        setTimeout(() => {
+          getData();
+        }, 1000);
+      }
+    }
+    await AsyncStorage.setItem('WatchConnect', JSON.stringify(status));
   };
 
   return (
@@ -336,7 +721,8 @@ const TrackHealthScreen = () => {
         <TrackHealthtModel
           isModelOpen={isModelOpen}
           hanldeCloseModel={() => setIsModelOpen(false)}
-          type={ActiveItemId}
+          data={ActiveItem}
+          localData={ScreenType === 0 ? AllLocalData : AllWeekLocalData}
         />
       </View>
     </Background>
@@ -367,13 +753,97 @@ const styles = StyleSheet.create({
 
 export default TrackHealthScreen;
 
+const formatDate = dateString => {
+  const date = new Date(dateString);
+  // Array of day names
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  // Extract day of the week
+  const dayOfWeek = daysOfWeek[date.getDay()];
+
+  // Extract day of the month
+  const dayOfMonth = date.getDate();
+
+  // Determine suffix for day of the month
+  const suffix =
+    dayOfMonth % 10 === 1 && dayOfMonth !== 11
+      ? 'st'
+      : dayOfMonth % 10 === 2 && dayOfMonth !== 12
+      ? 'nd'
+      : dayOfMonth % 10 === 3 && dayOfMonth !== 13
+      ? 'rd'
+      : 'th';
+
+  // Format the date as 'DayOfWeek DayOfMonthSuffix'
+  return `${dayOfWeek} ${dayOfMonth}${suffix}`;
+};
+
+const formatTimeDifference = dataList => {
+  let totalMinutes = 0;
+
+  dataList.forEach(item => {
+    const startTime = new Date(item.startTime);
+    const endTime = new Date(item.endTime);
+
+    // Get the difference in milliseconds and convert to minutes
+    const diffInMs = endTime - startTime;
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60)); // Convert milliseconds to minutes
+
+    totalMinutes += diffInMinutes;
+  });
+
+  // Convert total minutes into hours and minutes
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h ${minutes}m`;
+};
+
+const formatTimeTo12Hour = timeString => {
+  const date = new Date(timeString);
+  let hours = date.getUTCHours(); // Get hours in UTC
+  const minutes = date.getUTCMinutes(); // Get minutes in UTC
+
+  // Determine AM or PM suffix
+  const ampm = hours >= 12 ? 'pm' : 'am';
+
+  // Convert 24-hour time to 12-hour time
+  hours = hours % 12;
+  hours = hours ? hours : 12; // If hour is 0, set it to 12 (midnight or noon)
+
+  // Format minutes to always show two digits (e.g., '09' instead of '9')
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  // Return the formatted time
+  return `${hours}:${formattedMinutes}${ampm}`;
+};
+
 const TrackHealthtModel = ({
   isModelOpen,
   hanldeCloseModel,
-  itemName = '~ 83 bpm',
-  type = 1,
+  localData = null,
+  data = {
+    id: 1,
+    data: null,
+  },
 }) => {
   const HeartView = () => {
+    let totalbpm = 0;
+    let StartDate = null;
+    let endTime = null;
+    if (parseInt(data?.id) === 1) {
+      totalbpm = data?.data
+        ? data?.data[0]?.samples[0]?.beatsPerMinute
+        : '-- --';
+      StartDate = data?.data ? data?.data[0]?.startTime : null;
+      endTime = data?.data ? data?.data[0]?.metadata?.lastModifiedTime : null;
+    }
+    let Bpdata = null;
+    if (localData) {
+      if (localData[3]?.data && localData[3]?.data?.length > 0) {
+        Bpdata = localData ? localData[3]?.data[0] : null;
+      }
+    }
     return (
       <ScrollView
         style={{flex: 1}}
@@ -388,7 +858,7 @@ const TrackHealthtModel = ({
             marginHorizontal: 30,
             marginTop: 30,
           }}>
-          {itemName}
+          {totalbpm ? '~ ' + totalbpm + ' bpm' : '----'}
         </Text>
         <Text
           style={{
@@ -397,7 +867,7 @@ const TrackHealthtModel = ({
             lineHeight: 14.18,
             marginHorizontal: 30,
           }}>
-          {'Sun, 15th'}
+          {formatDate(StartDate)}
         </Text>
         <View style={{alignSelf: 'center'}}>
           <Image
@@ -413,8 +883,7 @@ const TrackHealthtModel = ({
                 lineHeight: 14.4,
                 textAlign: 'left',
               }}>
-              {'8.00'}
-              <Text style={{fontWeight: '400'}}>{'am'}</Text>
+              {StartDate ? formatTimeTo12Hour(StartDate) : '---'}
             </Text>
             <Text
               style={{
@@ -423,8 +892,8 @@ const TrackHealthtModel = ({
                 lineHeight: 14.4,
                 textAlign: 'right',
               }}>
-              {'11.00'}
-              <Text style={{fontWeight: '400'}}>{'pm'}</Text>
+              {endTime ? formatTimeTo12Hour(endTime) : '---'}
+              {/* <Text style={{fontWeight: '400'}}>{'pm'}</Text> */}
             </Text>
           </View>
 
@@ -447,7 +916,7 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  83 bpm
+                  {totalbpm ? totalbpm + ' bpm' : '---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -468,7 +937,8 @@ const TrackHealthtModel = ({
                     Lowest
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    65 bpm
+                    {/* {' 65 bpm'} */}
+                    {'----'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -476,7 +946,8 @@ const TrackHealthtModel = ({
                     Highest
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    145 bpm
+                    {/* {"145 bpm"} */}
+                    {'----'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -484,7 +955,8 @@ const TrackHealthtModel = ({
                     Sleeping
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    53 bpm
+                    {/* {'53 bpm'} */}
+                    {'----'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -492,7 +964,8 @@ const TrackHealthtModel = ({
                     Resting
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    80 bpm
+                    {/* {' 80 bpm'} */}
+                    {'----'}
                   </Text>
                 </View>
               </View>
@@ -517,12 +990,20 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  120/80
+                  {/* {' 120/80'} */}
+                  {Bpdata
+                    ? Bpdata?.systolic?.inMillimetersOfMercury +
+                      '/' +
+                      Bpdata?.diastolic?.inMillimetersOfMercury
+                    : '---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
                   style={{textAlign: 'right'}}>
-                  at 3.30pm GST
+                  {/* {'  at 3.30pm GST'} */}
+                  {StartDate
+                    ? 'at ' + formatTimeTo12Hour(StartDate) + ' GST'
+                    : '----'}
                 </Text>
               </View>
             </View>
@@ -542,7 +1023,9 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    120 mm/hg
+                    {Bpdata
+                      ? Bpdata?.systolic?.inMillimetersOfMercury + 'mm/hg'
+                      : '---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -554,7 +1037,9 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    80 mm/hg
+                    {Bpdata
+                      ? Bpdata?.diastolic?.inMillimetersOfMercury + 'mm/hg'
+                      : '---'}
                   </Text>
                 </View>
               </View>
@@ -566,6 +1051,14 @@ const TrackHealthtModel = ({
   };
 
   const WeightView = () => {
+    let totalKg = 0;
+    let StartDate = null;
+
+    if (data?.id === 2) {
+      totalKg = data?.data ? data?.data[0]?.weight?.inKilograms : '-- --';
+      StartDate = data?.data ? data?.data[0]?.time : null;
+    }
+
     return (
       <ScrollView
         style={{flex: 1}}
@@ -580,7 +1073,7 @@ const TrackHealthtModel = ({
             marginHorizontal: 30,
             marginTop: 30,
           }}>
-          {'82 kg'}
+          {totalKg ? totalKg + ' kg' : '---'}
         </Text>
         <Text
           style={{
@@ -589,7 +1082,7 @@ const TrackHealthtModel = ({
             lineHeight: 14.18,
             marginHorizontal: 30,
           }}>
-          {'Sun, 15th'}
+          {StartDate ? formatDate(StartDate) : '-- --'}
         </Text>
         <View style={{alignSelf: 'center'}}>
           <View className="flex flex-row items-center align-middle justify-between mt-[24px] mb-1">
@@ -599,7 +1092,8 @@ const TrackHealthtModel = ({
                   {'Weight'}
                 </Text>
                 <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                  {'98 kg'}
+                  {/* {'98 kg'} */}
+                  {'---'}
                 </Text>
               </View>
               <View className="border h-[15px] border-[#18192B]/80 bg-[#18192B]/80"></View>
@@ -608,7 +1102,8 @@ const TrackHealthtModel = ({
                   {'Target weight'}
                 </Text>
                 <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                  {'75 kg'}
+                  {/* {'75 kg'} */}
+                  {'---'}
                 </Text>
               </View>
             </View>
@@ -617,7 +1112,8 @@ const TrackHealthtModel = ({
                 {'Goal'}
               </Text>
               <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                {'Dec 25th, 2023'}
+                {/* {'Dec 25th, 2023'} */}
+                {'---'}
               </Text>
             </View>
           </View>
@@ -635,7 +1131,9 @@ const TrackHealthtModel = ({
               marginBottom: 24,
             }}>
             {'Current weight: '}
-            <Text style={{fontWeight: '700'}}>{'82 kg'}</Text>
+            <Text style={{fontWeight: '700'}}>
+              {totalKg ? totalKg + ' kg' : '---'}
+            </Text>
           </Text>
 
           <View
@@ -657,7 +1155,7 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', alignSelf: 'flex-end'}}>
-                  {'82 kg'}
+                  {totalKg ? totalKg + ' kg' : '---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -678,7 +1176,8 @@ const TrackHealthtModel = ({
                     {'Initial'}
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {'95 kg'}
+                    {/* {'95 kg'} */}
+                    {'---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -686,7 +1185,7 @@ const TrackHealthtModel = ({
                     {'Current'}
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {'82 kg'}
+                    {totalKg ? totalKg + ' kg' : '---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -694,7 +1193,8 @@ const TrackHealthtModel = ({
                     {'Target'}
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {'75 kg'}
+                    {/* {'75 kg'} */}
+                    {'---'}
                   </Text>
                 </View>
               </View>
@@ -720,7 +1220,8 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', alignSelf: 'flex-end'}}>
-                  {'28.5'}
+                  {/* {'28.5'} */}
+                  {'---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -745,7 +1246,8 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    {'5 ft 8 in'}
+                    {/* {'5 ft 8 in'} */}
+                    {'---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -757,7 +1259,8 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    {'98 kg'}
+                    {/* {'98 kg'} */}
+                    {'---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -769,7 +1272,8 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    {'Male'}
+                    {/* {'Male'} */}
+                    {'---'}
                   </Text>
                 </View>
               </View>
@@ -781,6 +1285,20 @@ const TrackHealthtModel = ({
   };
 
   const WalkView = () => {
+    let totalKilometers = 0;
+    let StartDate = new Date();
+    let endData = null;
+    if (parseInt(data?.id) === 3) {
+      totalKilometers = data?.data
+        ? data?.data.reduce(
+            (acc, item) => acc + item?.distance?.inKilometers,
+            0,
+          )
+        : 0;
+      StartDate = data?.data ? data?.data[0]?.startTime : '-- --';
+      endData = data?.data ? data?.data[0]?.endTime : '-- --';
+    }
+
     return (
       <ScrollView
         style={{flex: 1}}
@@ -795,7 +1313,10 @@ const TrackHealthtModel = ({
             marginHorizontal: 30,
             marginTop: 30,
           }}>
-          {'2.3 km'}
+          {totalKilometers !== null
+            ? parseFloat(totalKilometers?.toFixed(2))
+            : 2}
+          {' km'}
         </Text>
         <Text
           style={{
@@ -804,7 +1325,7 @@ const TrackHealthtModel = ({
             lineHeight: 14.18,
             marginHorizontal: 30,
           }}>
-          {'Sun, 15th'}
+          {formatDate(StartDate)}
         </Text>
         <View style={{alignSelf: 'center'}}>
           <Image
@@ -820,8 +1341,7 @@ const TrackHealthtModel = ({
                 lineHeight: 14.4,
                 textAlign: 'left',
               }}>
-              {'10.00'}
-              <Text style={{fontWeight: '400'}}>{'am'}</Text>
+              {StartDate ? formatTimeTo12Hour(StartDate) : '---'}
             </Text>
             <Text
               style={{
@@ -830,8 +1350,7 @@ const TrackHealthtModel = ({
                 lineHeight: 14.4,
                 textAlign: 'right',
               }}>
-              {'12.30'}
-              <Text style={{fontWeight: '400'}}>{'pm'}</Text>
+              {endData ? formatTimeTo12Hour(endData) : '---'}
             </Text>
           </View>
 
@@ -854,7 +1373,7 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  2h 30m
+                  {data?.data ? formatTimeDifference(data?.data) : '----'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -884,7 +1403,8 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  24.5 kcal
+                  {/* {" 24.5 kcal"} */}
+                  {'---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -914,7 +1434,8 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  1,541 kcal
+                  {/* {"  1,541 kcal"} */}
+                  {'---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
@@ -956,9 +1477,9 @@ const TrackHealthtModel = ({
           />
         </Pressable>
 
-        {type == 1 && HeartView()}
-        {type == 2 && WeightView()}
-        {type == 3 && WalkView()}
+        {parseInt(data?.id) === 1 && HeartView()}
+        {parseInt(data?.id) === 2 && WeightView()}
+        {parseInt(data?.id) === 3 && WalkView()}
       </View>
     </ModelBox>
   );

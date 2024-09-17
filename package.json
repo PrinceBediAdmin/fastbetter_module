@@ -41,6 +41,7 @@
     "react-native-background-timer": "^2.4.1",
     "react-native-chart-kit": "^6.12.0",
     "react-native-charts-wrapper": "^0.6.0",
+    "react-native-check-app-install": "^0.0.5",
     "react-native-circular-progress": "^1.4.0",
     "react-native-circular-slider": "^1.0.1",
     "react-native-device-info": "^11.1.0",

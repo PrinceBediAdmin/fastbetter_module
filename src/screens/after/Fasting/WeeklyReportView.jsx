@@ -130,7 +130,6 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
 
   return (
     <View style={{width: '100%', marginBottom: 30}}>
-      {console.log(currentMonthWeeks)}
       <FlatList
         ref={flatListRef}
         data={currentMonthWeeks}

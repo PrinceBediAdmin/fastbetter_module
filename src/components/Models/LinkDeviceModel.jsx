@@ -18,59 +18,7 @@ import HealthConnect_Icon from '../../assets/linkDevice/HealthConnect_Icon.png';
 import Applehealth_Icon from '../../assets/linkDevice/Applehealth_Icon.png';
 import fitbit_icon from '../../assets/linkDevice/fitbit_icon.png';
 import AppleHealthKit from 'react-native-health';
-import GoogleFit, {Scopes} from 'react-native-google-fit';
 import {PermissionsAndroid} from 'react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {
-  HealthConnect,
-  requestPermission,
-  initialize,
-  readRecords,
-  openHealthConnectSettings,
-} from 'react-native-health-connect';
-
-const getHealthData = async () => {
-  try {
-    await initializeHealthConnect();
-    const permissions = await requestPermission([
-      {accessType: 'read', recordType: 'TotalCaloriesBurned'},
-      {accessType: 'read', recordType: 'Steps'},
-      {accessType: 'read', recordType: 'HeartRate'},
-      {accessType: 'read', recordType: 'Distance'},
-      {accessType: 'read', recordType: 'SleepSession'},
-    ]);
-    console.log('Requested permissions:', permissions);
-    fetchStepsData();
-  } catch (error) {
-    console.error('Authorization failed', error);
-  }
-};
-
-// Initialize HealthConnect if required
-const initializeHealthConnect = async () => {
-  try {
-    const type = await initialize();
-    console.log('HealthConnect initialized', type);
-  } catch (error) {
-    console.error('Initialization failed', error);
-  }
-};
-
-const fetchStepsData = async () => {
-  try {
-    const result = await readRecords('Height', {
-      timeRangeFilter: {
-        operator: 'between',
-        startTime: '2024-07-19T03:43:54.898Z',
-        endTime: new Date().toISOString(),
-      },
-    });
-    console.log('Health data:', JSON.stringify(result));
-  } catch (error) {
-    await openHealthConnectSettings();
-    console.error('Failed to fetch steps data', error);
-  }
-};
 
 const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
   const Data = [
@@ -97,48 +45,9 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
     },
   ];
 
-  const signInAndGetUserInfo = async () => {
-    try {
-      // Sign in
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-
-      // Extract user information
-      const {user} = userInfo;
-      console.log('User Info:', user);
-      console.log('Name:', user.name);
-      console.log('Email:', user.email);
-      console.log('Id Token:', user.idToken);
-    } catch (error) {
-      console.error('Error signing in', error);
-    }
-  };
-
   useEffect(() => {
     requestActivityRecognitionPermission();
   }, []);
-
-  // Function to revoke Google Fit access
-  const revokeGoogleFitAccess = async () => {
-    getHealthData();
-    // await GoogleFit.disconnect(); // Retrieve the OAuth token
-
-    // console.log(token);
-    // if (token) {
-    //   // Call Google's revoke endpoint
-    //   const revokeUrl = `https://accounts.google.com/o/oauth2/revoke?token=${token}`;
-    //   Linking.openURL(revokeUrl)
-    //     .then(() => {
-    //       console.log('Successfully revoked Google Fit access');
-    //       // Perform any additional cleanup, such as clearing stored data
-    //     })
-    //     .catch(error => {
-    //       console.warn('Error revoking Google Fit access:', error);
-    //     });
-    // } else {
-    //   console.warn('No token available to revoke');
-    // }
-  };
 
   async function requestActivityRecognitionPermission() {
     try {
@@ -162,164 +71,20 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       console.warn(err);
     }
   }
-
-  const googleConnect = () => {
-    const options = {
-      scopes: [
-        //Scopes.FITNESS_ACTIVITY_READ,
-        //Scopes.FITNESS_BODY_READ,
-        // Scopes.FITNESS_BODY_WRITE,
-        // Scopes.FITNESS_LOCATION_READ,
-        // Scopes.FITNESS_SLEEP_READ,
-      ],
-    };
-
-    GoogleFit.checkIsAuthorized().then(() => {
-      console.log(JSON.stringify(GoogleFit));
-      if (!GoogleFit.isAuthorized) {
-        GoogleFit.authorize(options)
-          .then(authResult => {
-            if (authResult.success) {
-              Alert.alert(
-                '' + authResult.success,
-                '.' + JSON.stringify(authResult.success),
-              );
-              fetchHeightData();
-
-              console.log('Authorization successful');
-            } else {
-              Alert.alert(
-                '' + authResult.success,
-                '.' + JSON.stringify(authResult),
-              );
-              console.log('Authorization failed', authResult);
-            }
-          })
-          .catch(error => {
-            console.error('Authorization error', error);
-          });
-      } else {
-        //saveHeightData(1.75);
-        fetchHeightData();
-      }
-    });
-  };
-
-  const saveHeightData = async height => {
-    try {
-      const endDate = new Date().toISOString(); // Current time
-      const startDate = new Date(endDate).toISOString(); // Use the same time for the current entry
-
-      const heightSample = {
-        startDate,
-        endDate,
-        value: height, // Height in meters
-        // Add additional fields if needed
-      };
-
-      // Save height data
-      await GoogleFit.saveHeight({
-        ...heightSample,
-        type: 'HEIGHT', // Specify the type of body sample
-      });
-
-      console.log('Height data saved successfully');
-    } catch (error) {
-      console.error('Error saving height data', error);
-    }
-  };
-
-  const fetchHealthData = async () => {
-    try {
-      const today = new Date();
-      const startDate = new Date(
-        today.setDate(today.getDate() - 7),
-      ).toISOString(); // 1 week ago
-      const endDate = new Date().toISOString(); // today
-
-      // Fetch daily step count
-      const stepCount = await GoogleFit.getDailyStepCountSamples({
-        startDate,
-        endDate,
-      });
-      console.log('Step Count Data:', stepCount);
-
-      // Fetch sleep data
-      const sleepData = await GoogleFit.getSleepSamples({startDate, endDate});
-      console.log('Sleep Data:', sleepData);
-
-      // Fetch heart rate data
-      const heartRateData = await GoogleFit.getHeartRateSamples({
-        startDate,
-        endDate,
-      });
-      console.log('Heart Rate Data:', heartRateData);
-
-      // Fetch sessions data (if available)
-      const sessionsData = await GoogleFit.getSessions({startDate, endDate});
-      console.log('Sessions Data:', sessionsData);
-    } catch (error) {
-      console.error('Error fetching health data', error);
-    }
-  };
-
-  const fetchHeightData = () => {
-    const today = new Date();
-    const startDate = new Date(
-      today.setDate(today.getDate() - 7),
-    ).toISOString(); // 1 week ago
-    const endDate = new Date().toISOString(); // today
-    GoogleFit.getDailySteps({
-      startDate,
-      endDate,
-    })
-      .then(res => {
-        console.log(' Data:', res);
-        // Process the data as needed
-      })
-      .catch(err => {
-        console.error('Error fetching height data', err);
-        Alert.alert('Error', 'Failed to fetch height data.');
-      });
-  };
-
-  const fetchStepCountData = async () => {
-    const today = new Date();
-    const startDate = new Date(
-      today.setDate(today.getDate() - 7),
-    ).toISOString(); // 1 week ago
-    const endDate = new Date().toISOString(); // today
-
-    GoogleFit.getDailyStepCountSamples({
-      startDate,
-      endDate,
-    })
-      .then(res => {
-        console.log('Step Count Data:', res);
-        // Process the data as needed
-      })
-      .catch(err => {
-        console.error('Error fetching step count data', err);
-        Alert.alert('Error', 'Failed to fetch step count data.');
-      });
-  };
-
   const onClickHandle = (itemValue, index) => {
-    if (index === 0) {
-      googleConnect();
-    } else if (index === 1) {
-      // onItemClick(itemValue.modelTitle);
-      AppleHealthKit.initHealthKit(healthKitOptions, (err, results) => {
-        if (err) {
-          console.log('Error initializing HealthKit: ', err);
-          return;
-        }
-        console.log('HealthKit initialized: ', results);
-      });
-    } else {
-      // signInAndGetUserInfo();
-      revokeGoogleFitAccess();
-    }
+    onItemClick(itemValue.modelTitle);
+    // if (index === 0) {
+
+    // } else if (index === 1) {
+    //   AppleHealthKit.initHealthKit(healthKitOptions, (err, results) => {
+    //     if (err) {
+    //       console.log('Error initializing HealthKit: ', err);
+    //       return;
+    //     }
+    //     console.log('HealthKit initialized: ', results);
+    //   });
+    // } else {
+    // }
   };
 
   const healthKitOptions = {
