@@ -120,6 +120,18 @@ const ActivitiesData = [
     subId: 'stepsResult',
     data: null,
   },
+  {
+    id: 7,
+    name: 'Nutrition',
+    value: '',
+    type: '',
+    img: Walk_icon,
+    textColor: '#197BD2',
+    bg1: '#E9EFF7',
+    bg2: '#D3E3F3',
+    subId: 'Nutrition',
+    data: null,
+  },
 ];
 
 const Monthdata = [
@@ -202,8 +214,6 @@ const TrackHealthScreen = () => {
       const getDateOnly = dateTime => dateTime.split('T')[0];
       const dateToMatch = getDateOnly(newDateValue);
 
-      // console.log(JSON.stringify(HelthDataObject[0]));
-
       const filteredDataList = HelthDataObject.flatMap(item => ({
         id: item.id,
         data: item.data
@@ -219,7 +229,8 @@ const TrackHealthScreen = () => {
                 item?.id === 'distanceResult' ||
                 item?.id === 'heartRateResult' ||
                 item?.id === 'totalCaloriesBurnedResult' ||
-                item.id === 'stepsResult'
+                item.id === 'stepsResult' ||
+                item.id === 'Nutrition'
               ) {
                 return getDateOnly(dataItem?.startTime) === dateToMatch;
               } else {
@@ -305,7 +316,8 @@ const TrackHealthScreen = () => {
               item?.id === 'distanceResult' ||
               item?.id === 'heartRateResult' ||
               item?.id === 'totalCaloriesBurnedResult' ||
-              item.id === 'stepsResult'
+              item.id === 'stepsResult' ||
+              item.id === 'Nutrition'
             ) {
               const itemDate = getDateOnly(dataItem.startTime);
               return itemDate >= weekStart && itemDate <= weekEnd;
@@ -586,6 +598,8 @@ const TrackHealthScreen = () => {
           {accessType: 'read', recordType: 'Weight'},
           {accessType: 'read', recordType: 'BloodPressure'},
           {accessType: 'read', recordType: 'Nutrition'},
+          {accessType: 'read', recordType: 'RestingHeartRate'},
+          {accessType: 'write', recordType: 'RestingHeartRate'},
         ]);
 
         // Check if all required permissions are granted
@@ -1374,6 +1388,7 @@ const TrackHealthtModel = ({
     let StartDate = new Date();
     let endData = null;
     let ActiveSteps = null;
+    let ActiveEnergy = null;
     let calories = null;
 
     if (parseInt(data?.id) === 3) {
@@ -1392,6 +1407,12 @@ const TrackHealthtModel = ({
     if (localData && localData[5]?.data?.length > 0) {
       ActiveSteps = localData[5]?.data
         ? localData[5].data.reduce((acc, item) => acc + item?.count, 0)
+        : 0;
+    }
+
+    if (localData && localData[6]?.data?.length > 0) {
+      ActiveEnergy = localData[6]?.data
+        ? localData[6].data[0].energy?.inKilocalories
         : 0;
     }
 
@@ -1482,7 +1503,7 @@ const TrackHealthtModel = ({
 
           {/* new design */}
 
-          <View
+          {/* <View
             className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
             style={{alignSelf: 'center'}}>
             <View className="flex flex-row justify-between items-center">
@@ -1501,9 +1522,6 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  {/* {" 24.5 kcal"} */}
-                  {/* {ActiveEnergy ? parseInt(ActiveEnergy) : 0}
-                  {' kcal'} */}
                   {ActiveSteps ? ActiveSteps : '0'}
                 </Text>
                 <Text
@@ -1513,9 +1531,9 @@ const TrackHealthtModel = ({
                 </Text>
               </View>
             </View>
-          </View>
+          </View> */}
 
-          <View
+          {/* <View
             className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
             style={{alignSelf: 'center'}}>
             <View className="flex flex-row justify-between items-center">
@@ -1534,7 +1552,6 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 150}}>
-                  {/* {"  1,541 kcal"} */}
                   {calories ? calories : 0}
                   {' kcal'}
                 </Text>
@@ -1549,7 +1566,7 @@ const TrackHealthtModel = ({
                 </Text>
               </View>
             </View>
-          </View>
+          </View> */}
 
           {/* old design */}
 
@@ -1573,9 +1590,8 @@ const TrackHealthtModel = ({
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
                   {/* {" 24.5 kcal"} */}
-                  {/* {ActiveEnergy ? parseInt(ActiveEnergy) : 0}
-                  {' kcal'} */}
-                  {'----'}
+                  {ActiveEnergy ? parseInt(ActiveEnergy) : 0}
+                  {' kcal'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"

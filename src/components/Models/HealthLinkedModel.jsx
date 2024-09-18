@@ -28,6 +28,9 @@ import {
   readRecords,
   openHealthConnectSettings,
   isAvailable,
+  insertRecords,
+  RecordingMethod,
+  DeviceType,
 } from 'react-native-health-connect';
 import {
   AppInstalledChecker,
@@ -178,14 +181,14 @@ const HealthLinkedModel = ({
           {accessType: 'read', recordType: 'Weight'},
           {accessType: 'read', recordType: 'BloodPressure'},
           {accessType: 'read', recordType: 'Nutrition'},
+          {accessType: 'write', recordType: 'RestingHeartRate'},
         ]);
         const grantedPermissions = permissions.filter(
           permission => permission.granted,
         );
 
-        console.log(grantedPermissions);
-
         if (grantedPermissions.length >= 0) {
+          // setRestingHeartRate(55);
           fetchWatchData();
         } else {
           setScreenType(1);
@@ -199,6 +202,32 @@ const HealthLinkedModel = ({
       console.error('Authorization failed', error);
     }
   };
+  // const setRestingHeartRate = async restingHeartRateValue => {
+  //   try {
+  //     const records = [
+  //       {
+  //         recordType: 'RestingHeartRate', // Ensure this record type is supported
+  //         heartRate: {unit: 'beats_per_minute', value: restingHeartRateValue}, // Resting heart rate value
+  //         startTime: new Date().toISOString(), // Time the resting heart rate was recorded
+  //         endTime: new Date().toISOString(), // Same as start time for instant measurement
+  //         metadata: {
+  //           recordingMethod:
+  //             RecordingMethod.RECORDING_METHOD_AUTOMATICALLY_RECORDED, // Example metadata
+  //           device: {
+  //             manufacturer: 'Google',
+  //             model: 'Pixel 4',
+  //             type: DeviceType.TYPE_PHONE,
+  //           },
+  //         },
+  //       },
+  //     ];
+  //     console.log('Attempting to insert records:', records);
+  //     const ids = await insertRecords(records);
+  //     console.log(`Resting heart rate of ${ids} bpm has been set.`);
+  //   } catch (error) {
+  //     console.error('Error setting resting heart rate:', error);
+  //   }
+  // };
 
   const initializeHealthConnect = async () => {
     try {
