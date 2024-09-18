@@ -1,3 +1,7 @@
+/* eslint-disable quotes */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable radix */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
@@ -264,10 +268,20 @@ const TrackHealthScreen = () => {
   };
 
   const setWeeKData = (HelthDataObject, WeekSelectData) => {
+    let yearData = null;
+    const yearIndex = YearData.findIndex(
+      res => parseInt(res.key) === parseInt(YearValue),
+    );
+    if (yearIndex !== -1) {
+      yearData = YearData[yearIndex]?.value;
+    }
+
     const getWeekDateRange = weekNumber => {
       const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth();
+      const year = yearData ? parseInt(yearData) : now.getFullYear();
+      const month =
+        Monthvalue !== null ? parseInt(Monthvalue) - 1 : now.getMonth();
+      console.log(YearValue);
 
       // Calculate the first day of the current month
       const firstDayOfMonth = new Date(year, month, 1);
@@ -778,7 +792,7 @@ const TrackHealthScreen = () => {
           <TouchableOpacity
             onPress={() => setScreenType(0)}
             style={
-              ScreenType == 0
+              ScreenType === 0
                 ? styles.SelectTypeButton
                 : styles.unSelectTypeButton
             }>
@@ -795,7 +809,7 @@ const TrackHealthScreen = () => {
           <TouchableOpacity
             onPress={() => setScreenType(1)}
             style={
-              ScreenType == 1
+              ScreenType === 1
                 ? styles.SelectTypeButton
                 : styles.unSelectTypeButton
             }>
