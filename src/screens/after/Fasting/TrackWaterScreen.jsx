@@ -542,6 +542,8 @@ const TrackWaterScreen = () => {
             <WeeklyReportView
               isType={ScreenType}
               onSelectData={pre => console.log(pre)}
+              Monthvalue={Monthvalue}
+              YearValue={YearValue}
             />
           </ImageBackground>
 

@@ -740,6 +740,8 @@ const TrackFastingScreen = () => {
               <WeeklyReportView
                 isType={ScreenType}
                 onSelectData={pre => setWeekSelectData(pre)}
+                Monthvalue={Monthvalue}
+                YearValue={YearValue}
               />
             </View>
           </View>
