@@ -5,8 +5,7 @@
 #import <React/RCTLinkingManager.h>
 #import <BackgroundTasks/BackgroundTasks.h>
 #import <React/RCTBridgeModule.h>
-
-
+#import "RCTAppleHealthKit.h" // Import the HealthKit library
 
 @implementation AppDelegate
 
@@ -28,6 +27,9 @@
   [[BGTaskScheduler sharedScheduler] registerForTaskWithIdentifier:@"com.yourapp.backgroundtask" usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
       [self handleAppRefreshTask:(BGAppRefreshTask *)task];
   }];
+  
+  // Initialize HealthKit background observers
+  [[RCTAppleHealthKit new] initializeBackgroundObservers:bridge];
 
   return YES;
 }

@@ -39,7 +39,12 @@ const getCurrentWeekOfMonth = () => {
   return weekNumber - 1;
 };
 
-export const WeeklyReportView = ({isType, onSelectData}) => {
+export const WeeklyReportView = ({
+  isType,
+  onSelectData,
+  YearValue = null,
+  Monthvalue = null,
+}) => {
   const flatListRef = useRef(null);
   const currentDate = new Date();
   const currentMonthWeeks = getWeeksInMonth(
@@ -67,22 +72,15 @@ export const WeeklyReportView = ({isType, onSelectData}) => {
   };
 
   useEffect(() => {
-    onSelectData(currentWeekIndex);
-    // Scroll to the current week
     if (flatListRef.current) {
-      // flatListRef.current.scrollToIndex({
-      //   index: currentWeekIndex + 1,
-      //   animated: true,
-      //   viewPosition: 0.5,
-      // });
-
       setTimeout(() => {
         flatListRef.current?.scrollToIndex({
           index:
-            currentWeekIndex === 0 ? currentWeekIndex : currentWeekIndex - 1,
+            currentWeekIndex <= 1 ? currentWeekIndex : currentWeekIndex - 1,
           animated: true,
           viewPosition: 0.5,
         });
+        onSelectData(currentWeekIndex);
       }, 500);
     }
   }, [currentWeekIndex, isType]);

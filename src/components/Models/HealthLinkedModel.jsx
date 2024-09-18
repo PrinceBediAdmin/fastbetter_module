@@ -177,6 +177,7 @@ const HealthLinkedModel = ({
           {accessType: 'read', recordType: 'Height'},
           {accessType: 'read', recordType: 'Weight'},
           {accessType: 'read', recordType: 'BloodPressure'},
+          {accessType: 'read', recordType: 'Nutrition'},
         ]);
         const grantedPermissions = permissions.filter(
           permission => permission.granted,
@@ -251,6 +252,7 @@ const HealthLinkedModel = ({
       const ActiveCaloriesBurned = await fetchHealthData(
         'ActiveCaloriesBurned',
       );
+      const Nutrition = await fetchHealthData('Nutrition');
       // Organize health data into an array
       const HealthData = [
         {id: 'stepsResult', data: stepsResult},
@@ -262,6 +264,7 @@ const HealthLinkedModel = ({
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
         {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
+        {id: 'Nutrition', data: Nutrition},
       ];
 
       LocalStoreData(HealthData, true);

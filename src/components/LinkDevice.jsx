@@ -90,6 +90,7 @@ export default function LinkDevice() {
         {accessType: 'read', recordType: 'Height'},
         {accessType: 'read', recordType: 'Weight'},
         {accessType: 'read', recordType: 'BloodPressure'},
+        {accessType: 'read', recordType: 'Nutrition'},
       ]);
       const grantedPermissions = permissions.filter(
         permission => permission.granted,
@@ -144,6 +145,7 @@ export default function LinkDevice() {
       const ActiveCaloriesBurned = await fetchHealthData(
         'ActiveCaloriesBurned',
       );
+      const Nutrition = await fetchHealthData('Nutrition');
 
       // Organize health data into an array
       const HealthData = [
@@ -156,6 +158,7 @@ export default function LinkDevice() {
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
         {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
+        {id: 'Nutrition', data: Nutrition},
       ];
 
       LocalStoreData(HealthData, true);

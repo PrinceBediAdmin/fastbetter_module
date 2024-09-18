@@ -4,16 +4,29 @@ import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   Pressable,
-  ScrollView,
   FlatList,
-  Platform,
   Dimensions,
 } from 'react-native';
 
-export const DailyReportView = ({isType, onSelectData}) => {
+const YearData = [
+  {key: '1', value: '2024'},
+  {key: '2', value: '2025'},
+  {key: '3', value: '2026'},
+  {key: '4', value: '2027'},
+  {key: '5', value: '2028'},
+  {key: '6', value: '2029'},
+  {key: '7', value: '2030'},
+  {key: '8', value: '2031'},
+];
+
+export const DailyReportView = ({
+  isType,
+  onSelectData,
+  YearValue = null,
+  Monthvalue = null,
+}) => {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const flatListRef = useRef(null);
@@ -21,7 +34,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
 
   useEffect(() => {
     generateDateArray();
-  }, []);
+  }, [Monthvalue, YearValue]);
 
   useEffect(() => {
     if (dates?.length > 0 && flatListRef?.current) {
@@ -30,37 +43,46 @@ export const DailyReportView = ({isType, onSelectData}) => {
   }, [dates]);
 
   const generateDateArray = () => {
+    let yearData = null;
+    const yearIndex = YearData.findIndex(
+      res => parseInt(res.key) === parseInt(YearValue),
+    );
+    if (yearIndex !== -1) {
+      yearData = YearData[yearIndex]?.value;
+    }
+
     const dateArray = [];
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-
-    let date = new Date(currentYear, currentMonth, 1);
-    const endDate = new Date(currentYear, currentMonth + 1, 0);
-
+    const monthIndex = Monthvalue
+      ? parseInt(Monthvalue) - 1
+      : currentDate.getMonth(); // Months are 0-indexed
+    const year = yearData ? parseInt(yearData) : currentDate.getFullYear();
+    const startDate = new Date(year, monthIndex, 1);
+    const endDate = new Date(year, monthIndex + 1, 0);
+    let date = new Date(startDate);
     while (date <= endDate) {
       dateArray.push(new Date(date));
       date.setDate(date.getDate() + 1);
     }
 
     setDates(dateArray);
-    //onSelectData(currentDate);
-    setSelectedDate(currentDate); // Initialize selected date to current date
+
+    setSelectedDate(new Date()); // Initialize selected date to current date
   };
 
   const scrollToCurrentDate = () => {
     const today = new Date();
-    const CurrentIndex = dates.findIndex(
+    const currentIndex = dates.findIndex(
       date =>
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear(),
     );
 
-    if (CurrentIndex !== -1) {
+    if (currentIndex !== -1) {
       setTimeout(() => {
         flatListRef.current?.scrollToIndex({
-          index: CurrentIndex - 1,
+          index: currentIndex >= 5 ? currentIndex - 2 : currentIndex,
           animated: true,
           viewPosition: 0.5,
         });
@@ -98,10 +120,10 @@ export const DailyReportView = ({isType, onSelectData}) => {
     const dayName = item.toLocaleDateString('en-US', {weekday: 'short'});
     const dateText = item.getDate();
 
-    const CurrentDate = new Date();
+    const currentDate = new Date();
 
-    const Itemhandle = itemValue => {
-      if (item <= CurrentDate) {
+    const itemHandle = itemValue => {
+      if (item <= currentDate) {
         setSelectedDate(itemValue);
         onSelectData(itemValue);
       }
@@ -109,7 +131,7 @@ export const DailyReportView = ({isType, onSelectData}) => {
 
     return (
       <Pressable
-        onPress={() => Itemhandle(item)}
+        onPress={() => itemHandle(item)}
         style={{
           height: 60,
           width: 44,
@@ -118,8 +140,8 @@ export const DailyReportView = ({isType, onSelectData}) => {
           justifyContent: 'center',
           backgroundColor: isSelected(item) ? '#FC9B5E' : 'transparent',
           borderRadius: 12,
-          borderWidth: item <= CurrentDate ? 0.2 : 0,
-          opacity: item <= CurrentDate ? 1 : 0.3,
+          borderWidth: item <= currentDate ? 0.2 : 0,
+          opacity: item <= currentDate ? 1 : 0.3,
           borderColor: isSelected(item) ? 'transparent' : '#CFC5C5',
         }}>
         <Text

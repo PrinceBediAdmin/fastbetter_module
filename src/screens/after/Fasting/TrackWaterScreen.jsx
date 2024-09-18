@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import React, {useState, useRef, useEffect} from 'react';
 import {
@@ -134,10 +135,55 @@ const weekHistryList = [
   },
 ];
 
+const Monthdata = [
+  {key: '1', value: 'January'},
+  {key: '2', value: 'February'},
+  {key: '3', value: 'March'},
+  {key: '4', value: 'April'},
+  {key: '5', value: 'May'},
+  {key: '6', value: 'June'},
+  {key: '7', value: 'July'},
+  {key: '8', value: 'August'},
+  {key: '9', value: 'September'},
+  {key: '10', value: 'October'},
+  {key: '11', value: 'November'},
+  {key: '12', value: 'December'},
+];
+
+const YearData = [
+  {key: '1', value: '2024'},
+  {key: '2', value: '2025'},
+  {key: '3', value: '2026'},
+  {key: '4', value: '2027'},
+  {key: '5', value: '2028'},
+  {key: '6', value: '2029'},
+  {key: '7', value: '2030'},
+  {key: '8', value: '2031'},
+];
+
+const getCurrentMonthKey = () => {
+  const currentMonthIndex = new Date().getMonth(); // getMonth() returns 0 for January, 1 for February, etc.
+  const currentMonth = Monthdata[currentMonthIndex];
+  return currentMonth ? currentMonth.key : null;
+};
+
+const getCurrentYearKey = () => {
+  const currentYear = new Date().getFullYear(); // Get the current year (e.g., 2024)
+  const yearObject = YearData.find(
+    year => year.value === currentYear.toString(),
+  );
+  return yearObject ? yearObject.key : null;
+};
+
 const TrackWaterScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [ScreenType, setScreenType] = useState(0);
+  const currentMonthKey = getCurrentMonthKey();
+  const currentYearKey = getCurrentYearKey();
+
+  const [Monthvalue, setMonthValue] = useState(currentMonthKey.toString());
+  const [YearValue, setYearValue] = useState(currentYearKey.toString());
 
   const onBackPress = () => {
     navigation.goBack();
@@ -163,6 +209,8 @@ const TrackWaterScreen = () => {
             <DailyReportView
               isType={ScreenType}
               onSelectData={pre => console.log(pre)}
+              Monthvalue={Monthvalue}
+              YearValue={YearValue}
             />
           </ImageBackground>
 
@@ -634,7 +682,10 @@ const TrackWaterScreen = () => {
             {'Track water'}
           </Text>
         </View>
-        <DateReportView />
+        <DateReportView
+          onSelectMonth={pre => setMonthValue(pre)}
+          onSelectYear={pre => setYearValue(pre)}
+        />
         <View
           style={{
             height: 41,

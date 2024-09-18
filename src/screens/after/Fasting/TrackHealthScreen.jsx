@@ -98,7 +98,7 @@ const ActivitiesData = [
   },
   {
     id: 5,
-    name: '',
+    name: 'total Calories Burned',
     value: '',
     type: '',
     img: Walk_icon,
@@ -108,7 +108,59 @@ const ActivitiesData = [
     subId: 'totalCaloriesBurnedResult',
     data: null,
   },
+  {
+    id: 6,
+    name: 'steps',
+    value: '',
+    type: '',
+    img: Walk_icon,
+    textColor: '#197BD2',
+    bg1: '#E9EFF7',
+    bg2: '#D3E3F3',
+    subId: 'stepsResult',
+    data: null,
+  },
 ];
+
+const Monthdata = [
+  {key: '1', value: 'January'},
+  {key: '2', value: 'February'},
+  {key: '3', value: 'March'},
+  {key: '4', value: 'April'},
+  {key: '5', value: 'May'},
+  {key: '6', value: 'June'},
+  {key: '7', value: 'July'},
+  {key: '8', value: 'August'},
+  {key: '9', value: 'September'},
+  {key: '10', value: 'October'},
+  {key: '11', value: 'November'},
+  {key: '12', value: 'December'},
+];
+
+const YearData = [
+  {key: '1', value: '2024'},
+  {key: '2', value: '2025'},
+  {key: '3', value: '2026'},
+  {key: '4', value: '2027'},
+  {key: '5', value: '2028'},
+  {key: '6', value: '2029'},
+  {key: '7', value: '2030'},
+  {key: '8', value: '2031'},
+];
+
+const getCurrentMonthKey = () => {
+  const currentMonthIndex = new Date().getMonth(); // getMonth() returns 0 for January, 1 for February, etc.
+  const currentMonth = Monthdata[currentMonthIndex];
+  return currentMonth ? currentMonth.key : null;
+};
+
+const getCurrentYearKey = () => {
+  const currentYear = new Date().getFullYear(); // Get the current year (e.g., 2024)
+  const yearObject = YearData.find(
+    year => year.value === currentYear.toString(),
+  );
+  return yearObject ? yearObject.key : null;
+};
 
 const TrackHealthScreen = () => {
   const navigation = useNavigation();
@@ -127,9 +179,15 @@ const TrackHealthScreen = () => {
   const [DailySelectData, setDailySelectData] = useState(null);
   const [WeekSelectData, setWeekSelectData] = useState(0);
 
+  const currentMonthKey = getCurrentMonthKey();
+  const currentYearKey = getCurrentYearKey();
+
+  const [Monthvalue, setMonthValue] = useState(currentMonthKey.toString());
+  const [YearValue, setYearValue] = useState(currentYearKey.toString());
+
   useEffect(() => {
     getData();
-  }, [DailySelectData, ScreenType, WeekSelectData]);
+  }, [Monthvalue, YearValue, DailySelectData, ScreenType, WeekSelectData]);
 
   const getData = async () => {
     const HealthConnectData = await AsyncStorage.getItem('HealthConnectData');
@@ -144,7 +202,7 @@ const TrackHealthScreen = () => {
       const getDateOnly = dateTime => dateTime.split('T')[0];
       const dateToMatch = getDateOnly(newDateValue);
 
-      // console.log(JSON.stringify(HelthDataObject[8]));
+      // console.log(JSON.stringify(HelthDataObject[0]));
 
       const filteredDataList = HelthDataObject.flatMap(item => ({
         id: item.id,
@@ -160,7 +218,8 @@ const TrackHealthScreen = () => {
               } else if (
                 item?.id === 'distanceResult' ||
                 item?.id === 'heartRateResult' ||
-                item?.id === 'totalCaloriesBurnedResult'
+                item?.id === 'totalCaloriesBurnedResult' ||
+                item.id === 'stepsResult'
               ) {
                 return getDateOnly(dataItem?.startTime) === dateToMatch;
               } else {
@@ -244,7 +303,9 @@ const TrackHealthScreen = () => {
               return itemDate >= weekStart && itemDate <= weekEnd;
             } else if (
               item?.id === 'distanceResult' ||
-              item?.id === 'heartRateResult'
+              item?.id === 'heartRateResult' ||
+              item?.id === 'totalCaloriesBurnedResult' ||
+              item.id === 'stepsResult'
             ) {
               const itemDate = getDateOnly(dataItem.startTime);
               return itemDate >= weekStart && itemDate <= weekEnd;
@@ -446,6 +507,8 @@ const TrackHealthScreen = () => {
             <DailyReportView
               isType={ScreenType}
               onSelectData={pre => setDailySelectData(pre)}
+              Monthvalue={Monthvalue}
+              YearValue={YearValue}
             />
           </ImageBackground>
 
@@ -476,6 +539,8 @@ const TrackHealthScreen = () => {
             <WeeklyReportView
               isType={ScreenType}
               onSelectData={pre => setWeekSelectData(pre)}
+              Monthvalue={Monthvalue}
+              YearValue={YearValue}
             />
           </ImageBackground>
           {ActiveView()}
@@ -485,21 +550,25 @@ const TrackHealthScreen = () => {
   };
 
   const checkAppInstalled = async () => {
-    try {
-      AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
-        if (isInstalled) {
-          getHealthData();
-        } else {
-          Alert.alert(
-            'App Not Installed',
-            'Please install the Health Data app',
-            [
-              {text: 'OK', onPress: () => openHealthConnectInPlayStore()}, // Button actions
-            ],
-          );
-        }
-      });
-    } catch (err) {}
+    if (Platform.OS === 'android') {
+      try {
+        AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
+          if (isInstalled) {
+            getHealthData();
+          } else {
+            Alert.alert(
+              'App Not Installed',
+              'Please install the Health Data app',
+              [
+                {text: 'OK', onPress: () => openHealthConnectInPlayStore()}, // Button actions
+              ],
+            );
+          }
+        });
+      } catch (err) {
+        console.log('error : ', err);
+      }
+    }
   };
 
   const getHealthData = async () => {
@@ -516,6 +585,7 @@ const TrackHealthScreen = () => {
           {accessType: 'read', recordType: 'Height'},
           {accessType: 'read', recordType: 'Weight'},
           {accessType: 'read', recordType: 'BloodPressure'},
+          {accessType: 'read', recordType: 'Nutrition'},
         ]);
 
         // Check if all required permissions are granted
@@ -604,7 +674,7 @@ const TrackHealthScreen = () => {
       const ActiveCaloriesBurned = await fetchHealthData(
         'ActiveCaloriesBurned',
       );
-
+      const Nutrition = await fetchHealthData('Nutrition');
       // Organize health data into an array
       const HealthData = [
         {id: 'stepsResult', data: stepsResult},
@@ -616,6 +686,7 @@ const TrackHealthScreen = () => {
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
         {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
+        {id: 'Nutrition', data: Nutrition},
       ];
       // Store the health data locally
       if (HealthData.length > 0) {
@@ -675,7 +746,10 @@ const TrackHealthScreen = () => {
             {'Track health'}
           </Text>
         </View>
-        <DateReportView />
+        <DateReportView
+          onSelectMonth={pre => setMonthValue(pre)}
+          onSelectYear={pre => setYearValue(pre)}
+        />
         <View
           style={{
             height: 41,
@@ -821,6 +895,12 @@ const formatTimeTo12Hour = timeString => {
 
   // Return the formatted time
   return `${hours}:${formattedMinutes}${ampm}`;
+};
+const calculateCaloriesBurned = (distance, weight) => {
+  const caloriesBurned = distance * weight * 1.036;
+  return caloriesBurned % 1 === 0
+    ? caloriesBurned.toFixed(0)
+    : caloriesBurned.toFixed(2);
 };
 
 const TrackHealthtModel = ({
@@ -1293,7 +1373,9 @@ const TrackHealthtModel = ({
     let totalKilometers = 0;
     let StartDate = new Date();
     let endData = null;
-    let ActiveEnergy = null;
+    let ActiveSteps = null;
+    let calories = null;
+
     if (parseInt(data?.id) === 3) {
       totalKilometers = data?.data
         ? data?.data.reduce(
@@ -1301,18 +1383,18 @@ const TrackHealthtModel = ({
             0,
           )
         : 0;
-      StartDate = data?.data ? data?.data[0]?.startTime : '-- --';
+      StartDate = data?.data
+        ? data?.data[data?.data?.length - 1]?.startTime
+        : '-- --';
       endData = data?.data ? data?.data[0]?.endTime : '-- --';
+      calories = calculateCaloriesBurned(totalKilometers, 60);
     }
-    // if (localData && localData[4]?.data?.length > 0) {
-    //   ActiveEnergy = localData[4]?.data
-    //     ? localData[4].data.reduce(
-    //         (acc, item) => acc + item?.energy?.inKilocalories,
-    //         0,
-    //       )
-    //     : 0;
-    // }
-    // console.log(JSON.stringify(localData[4]?.data));
+    if (localData && localData[5]?.data?.length > 0) {
+      ActiveSteps = localData[5]?.data
+        ? localData[5].data.reduce((acc, item) => acc + item?.count, 0)
+        : 0;
+    }
+
     return (
       <ScrollView
         style={{flex: 1}}
@@ -1398,6 +1480,79 @@ const TrackHealthtModel = ({
             </View>
           </View>
 
+          {/* new design */}
+
+          <View
+            className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
+            style={{alignSelf: 'center'}}>
+            <View className="flex flex-row justify-between items-center">
+              <View className="flex flex-row gap-x-2 justify-center items-center">
+                <Image source={Active_icon} className="h-[40px] w-[36.26px]" />
+                <View className="flex justify-start items-start">
+                  <Text className="text-black text-base font-semibold leading-[0.1]">
+                    Steps
+                  </Text>
+                  <Text className="text-gray-600 text-[10px] leading-[0.1] -mt-1">
+                    Count
+                  </Text>
+                </View>
+              </View>
+              <View className="flex justify-center items-start align-middle">
+                <Text
+                  className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
+                  style={{textAlign: 'right', width: 82}}>
+                  {/* {" 24.5 kcal"} */}
+                  {/* {ActiveEnergy ? parseInt(ActiveEnergy) : 0}
+                  {' kcal'} */}
+                  {ActiveSteps ? ActiveSteps : '0'}
+                </Text>
+                <Text
+                  className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
+                  style={{textAlign: 'right', width: 82}}>
+                  steps
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View
+            className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
+            style={{alignSelf: 'center'}}>
+            <View className="flex flex-row justify-between items-center">
+              <View className="flex flex-row gap-x-2 justify-center items-center">
+                <Image source={Resting_icon} className="h-[40px] w-[36.26px]" />
+                <View className="flex justify-start items-start">
+                  <Text className="text-black text-base font-semibold leading-[0.1]">
+                    Calories
+                  </Text>
+                  <Text className="text-gray-600 text-[10px] leading-[0.1] -mt-1">
+                    Burned
+                  </Text>
+                </View>
+              </View>
+              <View className="flex justify-center items-start align-middle">
+                <Text
+                  className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
+                  style={{textAlign: 'right', width: 150}}>
+                  {/* {"  1,541 kcal"} */}
+                  {calories ? calories : 0}
+                  {' kcal'}
+                </Text>
+                <Text
+                  className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
+                  style={{
+                    textAlign: 'right',
+                    width: 82,
+                    alignSelf: 'flex-end',
+                  }}>
+                  Average
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* old design */}
+
           <View
             className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
             style={{alignSelf: 'center'}}>
@@ -1430,7 +1585,6 @@ const TrackHealthtModel = ({
               </View>
             </View>
           </View>
-
           <View
             className={`flex bg-white w-[330px] px-[24px] py-[24px] rounded-[30px] mb-2 border border-gray-100 shadow-lg shadow-gray-100 sha overflow-hidden-`}
             style={{alignSelf: 'center'}}>

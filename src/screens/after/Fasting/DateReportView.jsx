@@ -64,6 +64,12 @@ export const DateReportView = ({onSelectMonth, onSelectYear}) => {
   const [YearValue, setYearValue] = useState(currentYearKey.toString());
   const [isYearFocus, setIsYearFocus] = useState(false);
 
+  const handleDropDown = item => {
+    setYearValue(item?.key);
+    onSelectYear(item?.key);
+    setIsYearFocus(false);
+  };
+
   return (
     <View
       style={{
@@ -132,11 +138,7 @@ export const DateReportView = ({onSelectMonth, onSelectYear}) => {
         value={YearValue}
         onFocus={() => setIsYearFocus(true)}
         onBlur={() => setIsYearFocus(false)}
-        onChange={item => {
-          setYearValue(item?.key);
-          onSelectYear(item?.key);
-          setIsYearFocus(false);
-        }}
+        onChange={item => handleDropDown(item)}
         renderRightIcon={() => (
           <Image
             source={down_arrow_Icon}

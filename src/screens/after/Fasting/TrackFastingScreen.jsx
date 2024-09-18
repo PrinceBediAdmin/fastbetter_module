@@ -445,6 +445,8 @@ const TrackFastingScreen = () => {
             <DailyReportView
               isType={ScreenType}
               onSelectData={pre => setDailySelectData(pre)}
+              Monthvalue={Monthvalue}
+              YearValue={YearValue}
             />
           </ImageBackground>
           <View style={{alignItems: 'center', padding: 10}}>

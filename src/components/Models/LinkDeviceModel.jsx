@@ -51,10 +51,12 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
       : Data.filter(item => item.title !== 'Health Connect');
 
   useEffect(() => {
-    requestActivityRecognitionPermission();
+    if (Platform.OS === 'android') {
+      requestActivityRecognitionPermission();
+    }
   }, []);
 
-  async function requestActivityRecognitionPermission() {
+  const requestActivityRecognitionPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION,
@@ -75,21 +77,9 @@ const LinkDeviceModel = ({isModelOpen, hanldeCloseModel, onItemClick}) => {
     } catch (err) {
       console.warn(err);
     }
-  }
+  };
   const onClickHandle = (itemValue, index) => {
     onItemClick(itemValue.modelTitle);
-    // if (index === 0) {
-
-    // } else if (index === 1) {
-    //   AppleHealthKit.initHealthKit(healthKitOptions, (err, results) => {
-    //     if (err) {
-    //       console.log('Error initializing HealthKit: ', err);
-    //       return;
-    //     }
-    //     console.log('HealthKit initialized: ', results);
-    //   });
-    // } else {
-    // }
   };
 
   const healthKitOptions = {
