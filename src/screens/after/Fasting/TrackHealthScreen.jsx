@@ -144,6 +144,8 @@ const TrackHealthScreen = () => {
       const getDateOnly = dateTime => dateTime.split('T')[0];
       const dateToMatch = getDateOnly(newDateValue);
 
+      // console.log(JSON.stringify(HelthDataObject[8]));
+
       const filteredDataList = HelthDataObject.flatMap(item => ({
         id: item.id,
         data: item.data
@@ -174,7 +176,6 @@ const TrackHealthScreen = () => {
             return dateB.localeCompare(dateA);
           }),
       }));
-      console.log(filteredDataList[1]);
 
       const updatedActivitiesData = ActivitiesData.map(activity => {
         const matchingData = filteredDataList.find(
@@ -507,6 +508,7 @@ const TrackHealthScreen = () => {
       if (initializeCheck) {
         const permissions = await requestPermission([
           {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+          {accessType: 'read', recordType: 'ActiveCaloriesBurned'},
           {accessType: 'read', recordType: 'Steps'},
           {accessType: 'read', recordType: 'HeartRate'},
           {accessType: 'read', recordType: 'Distance'},
@@ -599,6 +601,9 @@ const TrackHealthScreen = () => {
       const heightResult = await fetchHealthData('Height');
       const weightResult = await fetchHealthData('Weight');
       const BloodPressureResult = await fetchHealthData('BloodPressure');
+      const ActiveCaloriesBurned = await fetchHealthData(
+        'ActiveCaloriesBurned',
+      );
 
       // Organize health data into an array
       const HealthData = [
@@ -610,9 +615,8 @@ const TrackHealthScreen = () => {
         {id: 'weightResult', data: weightResult}, // This should now log properly
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
+        {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
       ];
-
-      // console.log(JSON.stringify(HealthData[1]));
       // Store the health data locally
       if (HealthData.length > 0) {
         LocalStoreData(HealthData, true);
@@ -1289,6 +1293,7 @@ const TrackHealthtModel = ({
     let totalKilometers = 0;
     let StartDate = new Date();
     let endData = null;
+    let ActiveEnergy = null;
     if (parseInt(data?.id) === 3) {
       totalKilometers = data?.data
         ? data?.data.reduce(
@@ -1299,7 +1304,15 @@ const TrackHealthtModel = ({
       StartDate = data?.data ? data?.data[0]?.startTime : '-- --';
       endData = data?.data ? data?.data[0]?.endTime : '-- --';
     }
-
+    // if (localData && localData[4]?.data?.length > 0) {
+    //   ActiveEnergy = localData[4]?.data
+    //     ? localData[4].data.reduce(
+    //         (acc, item) => acc + item?.energy?.inKilocalories,
+    //         0,
+    //       )
+    //     : 0;
+    // }
+    // console.log(JSON.stringify(localData[4]?.data));
     return (
       <ScrollView
         style={{flex: 1}}
@@ -1405,7 +1418,9 @@ const TrackHealthtModel = ({
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
                   {/* {" 24.5 kcal"} */}
-                  {'---'}
+                  {/* {ActiveEnergy ? parseInt(ActiveEnergy) : 0}
+                  {' kcal'} */}
+                  {'----'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"

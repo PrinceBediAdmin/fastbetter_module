@@ -104,7 +104,6 @@ const HealthLinkedModel = ({
       </View>
     );
   };
-  console.log(headerText);
 
   const onButtonHandle = async () => {
     if (headerText === 'Health Connect linked') {
@@ -170,6 +169,7 @@ const HealthLinkedModel = ({
       if (initializeCheck) {
         const permissions = await requestPermission([
           {accessType: 'read', recordType: 'TotalCaloriesBurned'},
+          {accessType: 'read', recordType: 'ActiveCaloriesBurned'},
           {accessType: 'read', recordType: 'Steps'},
           {accessType: 'read', recordType: 'HeartRate'},
           {accessType: 'read', recordType: 'Distance'},
@@ -248,7 +248,9 @@ const HealthLinkedModel = ({
       const heightResult = await fetchHealthData('Height');
       const weightResult = await fetchHealthData('Weight');
       const BloodPressureResult = await fetchHealthData('BloodPressure');
-
+      const ActiveCaloriesBurned = await fetchHealthData(
+        'ActiveCaloriesBurned',
+      );
       // Organize health data into an array
       const HealthData = [
         {id: 'stepsResult', data: stepsResult},
@@ -259,8 +261,9 @@ const HealthLinkedModel = ({
         {id: 'weightResult', data: weightResult}, // This should now log properly
         {id: 'heightResult', data: heightResult},
         {id: 'BloodPressureResult', data: BloodPressureResult},
+        {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
       ];
-      console.log(totalCaloriesBurnedResult);
+
       LocalStoreData(HealthData, true);
       hanldeCloseModel('success');
     } catch (error) {
