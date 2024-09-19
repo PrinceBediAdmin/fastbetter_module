@@ -16,7 +16,8 @@ export default function Background({
   changeBottomBarColor();
   return (
     <View
-      className={`bg-[#FFFCFB] dark:bg-black h-full ${className && className}`}>
+      className={`bg-[#FFFCFB] dark:bg-black h-full ${className && className}`}
+      style={{backgroundColor: '#fff'}}>
       <StatusBar
         backgroundColor={statusBarBgColor}
         translucent={statusBarTranslucent}

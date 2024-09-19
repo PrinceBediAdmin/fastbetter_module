@@ -210,9 +210,9 @@ export default function LinkDevice() {
     } else {
       setStatus(true);
       setConnectMsg({
-        title: 'Syncing with your health connect',
+        title: 'Syncing with your data',
         subTitle:
-          'Your health connect stats are being synced, to change fo to settings.',
+          'Your connect stats are being synced, to change fo to settings.',
       });
     }
   };

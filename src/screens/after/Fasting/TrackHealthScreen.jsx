@@ -208,6 +208,7 @@ const TrackHealthScreen = () => {
   const getData = async () => {
     const HealthConnectData = await AsyncStorage.getItem('HealthConnectData');
     const HelthDataObject = JSON.parse(HealthConnectData);
+
     let date = DailySelectData ? new Date(DailySelectData) : currentDateTime;
     if (DailySelectData) {
       date.setDate(date.getDate() + 1);
@@ -220,35 +221,37 @@ const TrackHealthScreen = () => {
 
       const filteredDataList = HelthDataObject.flatMap(item => ({
         id: item.id,
-        data: item.data
-          .filter(dataItem => {
-            if (dataItem) {
-              if (
-                item.id === 'heightResult' ||
-                item.id === 'weightResult' ||
-                item.id === 'BloodPressureResult'
-              ) {
-                return getDateOnly(dataItem?.time) === dateToMatch;
-              } else if (
-                item?.id === 'distanceResult' ||
-                item?.id === 'heartRateResult' ||
-                item?.id === 'totalCaloriesBurnedResult' ||
-                item.id === 'stepsResult' ||
-                item.id === 'Nutrition'
-              ) {
-                return getDateOnly(dataItem?.startTime) === dateToMatch;
-              } else {
-                return false;
-              }
-            } else {
-              return false;
-            }
-          })
-          .sort((a, b) => {
-            const dateA = getDateOnly(a.time || a.startTime);
-            const dateB = getDateOnly(b.time || b.startTime);
-            return dateB.localeCompare(dateA);
-          }),
+        data: item?.data
+          ? item?.data
+              .filter(dataItem => {
+                if (dataItem) {
+                  if (
+                    item.id === 'heightResult' ||
+                    item.id === 'weightResult' ||
+                    item.id === 'BloodPressureResult'
+                  ) {
+                    return getDateOnly(dataItem?.time) === dateToMatch;
+                  } else if (
+                    item?.id === 'distanceResult' ||
+                    item?.id === 'heartRateResult' ||
+                    item?.id === 'totalCaloriesBurnedResult' ||
+                    item.id === 'stepsResult' ||
+                    item.id === 'Nutrition'
+                  ) {
+                    return getDateOnly(dataItem?.startTime) === dateToMatch;
+                  } else {
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
+              })
+              .sort((a, b) => {
+                const dateA = getDateOnly(a.time || a.startTime);
+                const dateB = getDateOnly(b.time || b.startTime);
+                return dateB.localeCompare(dateA);
+              })
+          : null,
       }));
 
       const updatedActivitiesData = ActivitiesData.map(activity => {
@@ -261,6 +264,7 @@ const TrackHealthScreen = () => {
           data: matchingData ? matchingData.data : null,
         };
       });
+      // console.log(JSON.stringify(updatedActivitiesData[3]));
 
       setAllLocalData(updatedActivitiesData);
       setWeeKData(HelthDataObject, WeekSelectData);
@@ -275,13 +279,11 @@ const TrackHealthScreen = () => {
     if (yearIndex !== -1) {
       yearData = YearData[yearIndex]?.value;
     }
-
     const getWeekDateRange = weekNumber => {
       const now = new Date();
       const year = yearData ? parseInt(yearData) : now.getFullYear();
       const month =
         Monthvalue !== null ? parseInt(Monthvalue) - 1 : now.getMonth();
-      console.log(YearValue);
 
       // Calculate the first day of the current month
       const firstDayOfMonth = new Date(year, month, 1);
@@ -316,37 +318,39 @@ const TrackHealthScreen = () => {
 
     const filteredDataList = HelthDataObject.flatMap(item => ({
       id: item.id,
-      data: item.data
-        .filter(dataItem => {
-          if (dataItem) {
-            if (
-              item.id === 'heightResult' ||
-              item.id === 'weightResult' ||
-              item.id === 'BloodPressureResult'
-            ) {
-              const itemDate = getDateOnly(dataItem.time);
-              return itemDate >= weekStart && itemDate <= weekEnd;
-            } else if (
-              item?.id === 'distanceResult' ||
-              item?.id === 'heartRateResult' ||
-              item?.id === 'totalCaloriesBurnedResult' ||
-              item.id === 'stepsResult' ||
-              item.id === 'Nutrition'
-            ) {
-              const itemDate = getDateOnly(dataItem.startTime);
-              return itemDate >= weekStart && itemDate <= weekEnd;
-            } else {
-              return false;
-            }
-          } else {
-            return false;
-          }
-        })
-        .sort((a, b) => {
-          const dateA = getDateOnly(a.time || a.startTime);
-          const dateB = getDateOnly(b.time || b.startTime);
-          return dateB.localeCompare(dateA);
-        }),
+      data: item?.data
+        ? item?.data
+            .filter(dataItem => {
+              if (dataItem) {
+                if (
+                  item?.id === 'heightResult' ||
+                  item?.id === 'weightResult' ||
+                  item?.id === 'BloodPressureResult'
+                ) {
+                  const itemDate = getDateOnly(dataItem.time);
+                  return itemDate >= weekStart && itemDate <= weekEnd;
+                } else if (
+                  item?.id === 'distanceResult' ||
+                  item?.id === 'heartRateResult' ||
+                  item?.id === 'totalCaloriesBurnedResult' ||
+                  item?.id === 'stepsResult' ||
+                  item?.id === 'Nutrition'
+                ) {
+                  const itemDate = getDateOnly(dataItem?.startTime);
+                  return itemDate >= weekStart && itemDate <= weekEnd;
+                } else {
+                  return false;
+                }
+              } else {
+                return false;
+              }
+            })
+            .sort((a, b) => {
+              const dateA = getDateOnly(a?.time || a?.startTime);
+              const dateB = getDateOnly(b?.time || b?.startTime);
+              return dateB.localeCompare(dateA);
+            })
+        : null,
     }));
 
     const updatedActivitiesData = ActivitiesData.map(activity => {
@@ -359,6 +363,7 @@ const TrackHealthScreen = () => {
         data: matchingData ? matchingData.data : null,
       };
     });
+
     setAllWeekLocalData(updatedActivitiesData);
   };
 
@@ -372,9 +377,35 @@ const TrackHealthScreen = () => {
     }
     let value = 0;
     if (index === 0) {
-      value = item?.data ? item?.data[0]?.samples[0]?.beatsPerMinute || 0 : 0;
+      if (item?.data && item?.data.length > 0) {
+        const latestItem = item?.data
+          ? item?.data?.reduce((latest, current) => {
+              return new Date(current?.startTime) > new Date(latest?.startTime)
+                ? current
+                : latest;
+            })
+          : 0;
+
+        const earliestBeatsPerMinute = item?.data
+          ? latestItem?.samples[0]?.beatsPerMinute
+          : 0;
+        value = earliestBeatsPerMinute;
+      }
     } else if (index === 1) {
-      value = item?.data ? item?.data[0]?.weight?.inKilograms || 0 : 0;
+      if (item?.data && item?.data.length > 0) {
+        const latestItem = item?.data
+          ? item?.data?.reduce((latest, current) => {
+              return new Date(current?.time) > new Date(latest?.time)
+                ? current
+                : latest;
+            })
+          : 0;
+
+        const earliestBeatsPerMinute = item?.data
+          ? latestItem?.weight?.inKilograms
+          : 0;
+        value = earliestBeatsPerMinute;
+      }
     } else if (index === 2) {
       value = item?.data
         ? item?.data?.reduce(
@@ -940,21 +971,72 @@ const TrackHealthtModel = ({
     data: null,
   },
 }) => {
+  const [touchY, setTouchY] = useState(0);
+
   const HeartView = () => {
     let totalbpm = 0;
     let StartDate = null;
     let endTime = null;
+    let highestBeatsPerMinute = 0;
+    let lowestBeatsPerMinute = 0;
     if (parseInt(data?.id) === 1) {
-      totalbpm = data?.data
-        ? data?.data[0]?.samples[0]?.beatsPerMinute
-        : '-- --';
-      StartDate = data?.data ? data?.data[0]?.startTime : null;
-      endTime = data?.data ? data?.data[0]?.metadata?.lastModifiedTime : null;
+      if (data?.data && data?.data?.length > 0) {
+        const latestItem = data?.data
+          ? data?.data?.reduce((latest, current) => {
+              return new Date(current?.startTime) > new Date(latest?.startTime)
+                ? current
+                : latest;
+            })
+          : 0;
+
+        const earliestBeatsPerMinute = data?.data
+          ? latestItem?.samples[0]?.beatsPerMinute
+          : 0;
+        StartDate = data?.data ? latestItem?.startTime : null;
+        endTime = data?.data ? latestItem?.metadata?.lastModifiedTime : null;
+        totalbpm = earliestBeatsPerMinute;
+      }
+      if (data?.data?.length > 1) {
+        const beatsPerMinuteValues = data?.data.map(
+          item => item.samples[0].beatsPerMinute,
+        );
+        highestBeatsPerMinute = Math.max(...beatsPerMinuteValues);
+        lowestBeatsPerMinute = Math.min(...beatsPerMinuteValues);
+      }
+
+      // StartDate = data?.data ? data?.data[0]?.startTime : null;
+      // endTime = data?.data ? data?.data[0]?.metadata?.lastModifiedTime : null;
     }
     let Bpdata = null;
+    let BpDiastolic = 0;
+    let BpSystolic = 0;
+    let BpStartTime = null;
     if (localData) {
       if (localData[3]?.data && localData[3]?.data?.length > 0) {
         Bpdata = localData ? localData[3]?.data[0] : null;
+
+        if (localData[3]?.data && localData[3]?.data.length > 0) {
+          const latestItem = localData[3]?.data
+            ? localData[3]?.data?.reduce((latest, current) => {
+                return new Date(current?.time) > new Date(latest?.time)
+                  ? current
+                  : latest;
+              })
+            : 0;
+
+          const earliestBeatsPerMinute = localData[3]?.data
+            ? latestItem?.diastolic?.inMillimetersOfMercury
+            : 0;
+          BpDiastolic = earliestBeatsPerMinute;
+          const BpSystolicMM = localData[3]?.data
+            ? latestItem?.systolic?.inMillimetersOfMercury
+            : 0;
+          BpSystolic = BpSystolicMM;
+
+          BpStartTime = localData[3]?.data
+            ? latestItem?.metadata?.lastModifiedTime
+            : null;
+        }
       }
     }
     return (
@@ -1050,8 +1132,9 @@ const TrackHealthtModel = ({
                     Lowest
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {/* {' 65 bpm'} */}
-                    {'----'}
+                    {lowestBeatsPerMinute
+                      ? lowestBeatsPerMinute + ' bpm'
+                      : '---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -1059,8 +1142,9 @@ const TrackHealthtModel = ({
                     Highest
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {/* {"145 bpm"} */}
-                    {'----'}
+                    {highestBeatsPerMinute
+                      ? highestBeatsPerMinute + ' bpm'
+                      : '---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -1103,19 +1187,13 @@ const TrackHealthtModel = ({
                 <Text
                   className="text-[20px] text-[#FE7701] font-[700] -mt-0.5"
                   style={{textAlign: 'right', width: 82}}>
-                  {/* {' 120/80'} */}
-                  {Bpdata
-                    ? Bpdata?.systolic?.inMillimetersOfMercury +
-                      '/' +
-                      Bpdata?.diastolic?.inMillimetersOfMercury
-                    : '---'}
+                  {BpSystolic ? BpSystolic + '/' + BpDiastolic || 0 : '---'}
                 </Text>
                 <Text
                   className="text-[12px] text-[#18192B] font-[400] -mt-0.5"
                   style={{textAlign: 'right'}}>
-                  {/* {'  at 3.30pm GST'} */}
-                  {StartDate
-                    ? 'at ' + formatTimeTo12Hour(StartDate) + ' GST'
+                  {BpStartTime
+                    ? 'at ' + formatTimeTo12Hour(BpStartTime) + ' GST'
                     : '----'}
                 </Text>
               </View>
@@ -1136,9 +1214,7 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    {Bpdata
-                      ? Bpdata?.systolic?.inMillimetersOfMercury + 'mm/hg'
-                      : '---'}
+                    {BpSystolic ? BpSystolic + 'mm/hg' : '---'}
                   </Text>
                 </View>
                 <View className="flex">
@@ -1150,9 +1226,7 @@ const TrackHealthtModel = ({
                   <Text
                     className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] "
                     style={{textAlign: 'center'}}>
-                    {Bpdata
-                      ? Bpdata?.diastolic?.inMillimetersOfMercury + 'mm/hg'
-                      : '---'}
+                    {BpDiastolic ? BpDiastolic + 'mm/hg' : '---'}
                   </Text>
                 </View>
               </View>
@@ -1167,8 +1241,21 @@ const TrackHealthtModel = ({
     let totalKg = 0;
     let StartDate = null;
 
-    if (data?.id === 2) {
-      totalKg = data?.data ? data?.data[0]?.weight?.inKilograms : '-- --';
+    if (parseInt(data?.id) === 2) {
+      if (data?.data && data?.data.length > 0) {
+        const latestItem = data?.data
+          ? data?.data?.reduce((latest, current) => {
+              return new Date(current?.time) > new Date(latest?.time)
+                ? current
+                : latest;
+            })
+          : 0;
+
+        const earliestBeatsPerMinute = data?.data
+          ? latestItem?.weight?.inKilograms
+          : 0;
+        totalKg = earliestBeatsPerMinute;
+      }
       StartDate = data?.data ? data?.data[0]?.time : null;
     }
 
@@ -1426,7 +1513,10 @@ const TrackHealthtModel = ({
 
     if (localData && localData[6]?.data?.length > 0) {
       ActiveEnergy = localData[6]?.data
-        ? localData[6].data[0].energy?.inKilocalories
+        ? localData[6]?.data.reduce(
+            (acc, item) => acc + item?.energy?.inKilocalories,
+            0,
+          )
         : 0;
     }
 
@@ -1444,9 +1534,7 @@ const TrackHealthtModel = ({
             marginHorizontal: 30,
             marginTop: 30,
           }}>
-          {totalKilometers !== null
-            ? parseFloat(totalKilometers?.toFixed(2))
-            : 2}
+          {totalKilometers ? parseFloat(totalKilometers?.toFixed(2)) : 0}
           {' km'}
         </Text>
         <Text
@@ -1657,7 +1745,11 @@ const TrackHealthtModel = ({
       Directio={null}>
       <View
         className=" bg-[#FFFCFB] bottom-0 w-full rounded-t-[40px]"
-        style={{flex: 1, alignSelf: 'center'}}>
+        style={{flex: 1, alignSelf: 'center'}}
+        onTouchStart={e => setTouchY(e.nativeEvent.pageY)}
+        onTouchEnd={e => {
+          if (e.nativeEvent.pageY - touchY > 5) hanldeCloseModel();
+        }}>
         <Pressable
           onPress={hanldeCloseModel}
           style={{

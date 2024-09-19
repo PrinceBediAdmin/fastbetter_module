@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
@@ -38,6 +39,28 @@ import {
 } from 'react-native-check-app-install';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppleHealthKit, {
+  HealthValue,
+  HealthKitPermissions,
+} from 'react-native-health';
+import {getAppleHealthData} from './AppleFatchData';
+
+//fetchDailyDistanceData
+const permissions = {
+  permissions: {
+    read: [
+      AppleHealthKit.Constants.Permissions.StepCount,
+      AppleHealthKit.Constants.Permissions.DistanceWalkingRunning,
+      AppleHealthKit.Constants.Permissions.HeartRate, // Heart rate
+      AppleHealthKit.Constants.Permissions.HeartRateVariability, // Variability (for resting/lowest/highest)
+      AppleHealthKit.Constants.Permissions.BloodPressureSystolic, // Systolic BP
+      AppleHealthKit.Constants.Permissions.BloodPressureDiastolic, // Diastolic BP
+      AppleHealthKit.Constants.Permissions.Weight, // Weight
+      AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
+    ],
+    write: [], // Add any write permissions if needed
+  },
+};
 
 const HealthLinkedModel = ({
   isModelOpen,
@@ -128,11 +151,7 @@ const HealthLinkedModel = ({
         setScreenType(0);
       }
     } else if (headerText === 'Apple health linked') {
-      if (ScreenType === 0) {
-        setScreenType(1);
-      } else {
-        setScreenType(0);
-      }
+      AppleInitHealth();
     } else {
       if (ScreenType === 0) {
         setScreenType(1);
@@ -141,7 +160,30 @@ const HealthLinkedModel = ({
       }
     }
   };
+  //<-apple->
+  const AppleInitHealth = async () => {
+    if (Platform.OS === 'ios') {
+      AppleHealthKit.initHealthKit(permissions, (err, results) => {
+        if (err) {
+          console.log('error initializing HealthKit: ', err);
+          setScreenType(1);
+          return;
+        } else {
+          fetchAppleData();
+        }
+      });
+    }
+  };
 
+  const fetchAppleData = async () => {
+    const HealthData = await getAppleHealthData();
+    //console.log(JSON.stringify(HealthData[2]));
+
+    //LocalStoreData(HealthData, true);
+    // hanldeCloseModel('success');
+  };
+
+  //<-apple->
   const redirectToHealthConnect = async () => {
     try {
       await openHealthConnectSettings();
@@ -202,32 +244,6 @@ const HealthLinkedModel = ({
       console.error('Authorization failed', error);
     }
   };
-  // const setRestingHeartRate = async restingHeartRateValue => {
-  //   try {
-  //     const records = [
-  //       {
-  //         recordType: 'RestingHeartRate', // Ensure this record type is supported
-  //         heartRate: {unit: 'beats_per_minute', value: restingHeartRateValue}, // Resting heart rate value
-  //         startTime: new Date().toISOString(), // Time the resting heart rate was recorded
-  //         endTime: new Date().toISOString(), // Same as start time for instant measurement
-  //         metadata: {
-  //           recordingMethod:
-  //             RecordingMethod.RECORDING_METHOD_AUTOMATICALLY_RECORDED, // Example metadata
-  //           device: {
-  //             manufacturer: 'Google',
-  //             model: 'Pixel 4',
-  //             type: DeviceType.TYPE_PHONE,
-  //           },
-  //         },
-  //       },
-  //     ];
-  //     console.log('Attempting to insert records:', records);
-  //     const ids = await insertRecords(records);
-  //     console.log(`Resting heart rate of ${ids} bpm has been set.`);
-  //   } catch (error) {
-  //     console.error('Error setting resting heart rate:', error);
-  //   }
-  // };
 
   const initializeHealthConnect = async () => {
     try {
