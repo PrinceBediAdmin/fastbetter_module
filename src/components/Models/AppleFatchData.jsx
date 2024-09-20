@@ -92,18 +92,17 @@ export const fetchDailyStepsData = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  // A map to store the aggregated step count results
-  const stepCountMap = new Map();
+  // A map to store the aggregated results
+  const stepMap = new Map();
 
   const fetchForDay = day => {
     let options = {
       startDate: getISODateForDay(day), // Start of the day
       endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
-      includeManuallyAdded: false,
     };
 
-    return new Promise((resolve, reject) => {
-      AppleHealthKit.getStepCount(options, (err, results) => {
+    return new Promise(async (resolve, reject) => {
+      await AppleHealthKit.getStepCount(options, (err, results) => {
         if (err) {
           console.log('Error fetching step count data: ', err);
           reject(err);
@@ -112,20 +111,20 @@ export const fetchDailyStepsData = (startDate, endDate) => {
 
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
 
-        if (!stepCountMap.has(dateStr)) {
+        if (!stepMap.has(dateStr)) {
           // If there's no entry for the date yet, create a new one
-          stepCountMap.set(dateStr, {
+          stepMap.set(dateStr, {
             startTime: results?.startDate
               ? new Date(results?.startDate).toISOString()
               : null,
             endTime: results?.endDate
               ? new Date(results?.endDate).toISOString()
               : null,
-            count: results?.value || 0, // Step count
+            count: results?.value || 0, // Step count for the day
           });
         } else {
-          // If an entry for the date exists, update the step count
-          const existingEntry = stepCountMap.get(dateStr);
+          // If an entry for the date exists, update the count
+          const existingEntry = stepMap.get(dateStr);
           existingEntry.count += results?.value || 0;
         }
 
@@ -134,20 +133,26 @@ export const fetchDailyStepsData = (startDate, endDate) => {
     });
   };
 
-  // Iterate over each day in the range and fetch data
+  // Create a list of promises for each day
   const promises = [];
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    promises.push(fetchForDay(new Date(d)));
+  let currentDate = new Date(start);
+
+  while (currentDate <= end) {
+    // Push a new promise for fetching data for the current date
+    promises.push(fetchForDay(new Date(currentDate)));
+
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  // Resolve all the promises and return the step count results
+  // Resolve all the promises and return stepResults
   return Promise.all(promises)
     .then(() => {
       // Convert the map values to an array
-      return Array.from(stepCountMap.values());
+      return Array.from(stepMap.values());
     })
     .catch(error => {
-      console.error('Error fetching step count data: ', error);
+      console.error('Error fetching data: ', error);
       throw error;
     });
 };
@@ -173,8 +178,6 @@ export const fetchDailyHeartRateData = (startDate, endDate) => {
           reject(err);
           return;
         }
-
-        console.log(JSON.stringify(results));
 
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
 
@@ -440,7 +443,7 @@ export const getAppleHealthData = async () => {
       {id: 'stepsResult', data: stepsResult},
       {id: 'totalCaloriesBurnedResult', data: null},
       {id: 'heartRateResult', data: heartRateResult},
-      {id: 'distanceResult', data: filteredDistanceResult},
+      {id: 'distanceResult', data: distanceResult},
       {id: 'sleepSessionResult', data: null},
       {id: 'weightResult', data: filteredWeightData},
       {id: 'heightResult', data: null},
@@ -449,10 +452,9 @@ export const getAppleHealthData = async () => {
       {id: 'Nutrition', data: null},
     ];
 
-    return HealthData;
+    // console.log(stepsResult);
 
-    // LocalStoreData(HealthData, true);
-    // handleCloseModel('success');
+    return HealthData;
   } catch (error) {
     console.error('Error fetching Apple Health data: ', error);
   }

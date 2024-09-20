@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
@@ -22,6 +23,25 @@ import {
   AppInstalledChecker,
   CheckPackageInstallation,
 } from 'react-native-check-app-install';
+import AppleHealthKit, {
+  HealthValue,
+  HealthKitPermissions,
+} from 'react-native-health';
+const permissions = {
+  permissions: {
+    read: [
+      AppleHealthKit.Constants.Permissions.StepCount,
+      AppleHealthKit.Constants.Permissions.DistanceWalkingRunning,
+      AppleHealthKit.Constants.Permissions.HeartRate, // Heart rate
+      AppleHealthKit.Constants.Permissions.HeartRateVariability, // Variability (for resting/lowest/highest)
+      AppleHealthKit.Constants.Permissions.BloodPressureSystolic, // Systolic BP
+      AppleHealthKit.Constants.Permissions.BloodPressureDiastolic, // Diastolic BP
+      AppleHealthKit.Constants.Permissions.Weight, // Weight
+      AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
+    ],
+    write: [], // Add any write permissions if needed
+  },
+};
 
 export default function LinkDevice() {
   const [isModelOpen, setIsModelOpen] = useState(false);
@@ -36,8 +56,40 @@ export default function LinkDevice() {
   useEffect(() => {
     if (Platform.OS === 'android') {
       checkWatchStatus();
+    } else {
+      AppleWatchStatus();
     }
   }, []);
+
+  const AppleWatchStatus = async () => {
+    const WatchConnect = await AsyncStorage.getItem('WatchConnect');
+    if (JSON.parse(WatchConnect)) {
+      AppleHealthKit.initHealthKit(permissions, (err, results) => {
+        if (err) {
+          setStatus(false);
+          setConnectMsg({
+            title: 'Link your device with FastBetter',
+            subTitle: 'Bring a new level of efficiency to your daily tasks.',
+          });
+          console.log('error initializing HealthKit: ', err);
+          return;
+        } else {
+          setStatus(true);
+          setConnectMsg({
+            title: 'Syncing with your health connect',
+            subTitle:
+              'Your health connect stats are being synced, to change fo to settings.',
+          });
+        }
+      });
+    } else {
+      setStatus(false);
+      setConnectMsg({
+        title: 'Link your device with FastBetter',
+        subTitle: 'Bring a new level of efficiency to your daily tasks.',
+      });
+    }
+  };
 
   const checkWatchStatus = async () => {
     const WatchConnect = await AsyncStorage.getItem('WatchConnect');

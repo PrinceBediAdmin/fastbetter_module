@@ -177,10 +177,8 @@ const HealthLinkedModel = ({
 
   const fetchAppleData = async () => {
     const HealthData = await getAppleHealthData();
-    //console.log(JSON.stringify(HealthData[2]));
-
-    //LocalStoreData(HealthData, true);
-    // hanldeCloseModel('success');
+    LocalStoreData(HealthData, true);
+    hanldeCloseModel('success');
   };
 
   //<-apple->
@@ -266,6 +264,7 @@ const HealthLinkedModel = ({
       console.error('Failed to open Play Store', err),
     );
   };
+
   const fetchWatchData = async () => {
     try {
       const StartValue = '2024-08-25T03:43:54.898Z';
