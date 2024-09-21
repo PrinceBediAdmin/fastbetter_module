@@ -314,24 +314,23 @@ const TrackHealthScreen = () => {
       const month =
         Monthvalue !== null ? parseInt(Monthvalue) - 1 : now.getMonth();
 
-      // Calculate the first day of the current month
+      // Calculate the first day of the month
       const firstDayOfMonth = new Date(year, month, 1);
 
-      // Calculate the start of the week
-      const startOfWeek = new Date(firstDayOfMonth);
-      startOfWeek.setDate(1 + (weekNumber - 1) * 7);
-
-      // Correct if the startOfWeek is in the previous month
-      if (startOfWeek.getMonth() !== month) {
-        startOfWeek.setDate(0); // Go to the last day of the previous month
-        startOfWeek.setDate(
-          startOfWeek.getDate() - (startOfWeek.getDate() - 1),
-        );
+      // Calculate the first Monday of the month
+      const firstMonday = new Date(firstDayOfMonth);
+      while (firstMonday.getDay() !== 1) {
+        // 1 = Monday
+        firstMonday.setDate(firstMonday.getDate() + 1);
       }
 
-      // Calculate the end of the week
+      // Calculate the start of the desired week
+      const startOfWeek = new Date(firstMonday);
+      startOfWeek.setDate(firstMonday.getDate() + (weekNumber - 1) * 7);
+
+      // Calculate the end of the week (Sunday)
       const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 7);
+      endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday is 6 days after Monday
 
       return {
         start: startOfWeek.toISOString().split('T')[0],
