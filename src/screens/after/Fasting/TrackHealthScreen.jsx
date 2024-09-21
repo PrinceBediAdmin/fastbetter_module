@@ -48,6 +48,28 @@ import {
   AppInstalledChecker,
   CheckPackageInstallation,
 } from 'react-native-check-app-install';
+import AppleHealthKit, {
+  HealthValue,
+  HealthKitPermissions,
+} from 'react-native-health';
+import {getAppleHealthData} from '../../../components/Models/AppleFatchData';
+
+//fetchDailyDistanceData
+const permissions = {
+  permissions: {
+    read: [
+      AppleHealthKit.Constants.Permissions.StepCount,
+      AppleHealthKit.Constants.Permissions.DistanceWalkingRunning,
+      AppleHealthKit.Constants.Permissions.HeartRate, // Heart rate
+      AppleHealthKit.Constants.Permissions.HeartRateVariability, // Variability (for resting/lowest/highest)
+      AppleHealthKit.Constants.Permissions.BloodPressureSystolic, // Systolic BP
+      AppleHealthKit.Constants.Permissions.BloodPressureDiastolic, // Diastolic BP
+      AppleHealthKit.Constants.Permissions.Weight, // Weight
+      AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
+    ],
+    write: [], // Add any write permissions if needed
+  },
+};
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -221,50 +243,57 @@ const TrackHealthScreen = () => {
 
       const filteredDataList = HelthDataObject.flatMap(item => ({
         id: item.id,
-        data: item?.data
-          ? item?.data
-              .filter(dataItem => {
-                if (dataItem) {
-                  if (
-                    item.id === 'heightResult' ||
-                    item.id === 'weightResult' ||
-                    item.id === 'BloodPressureResult'
-                  ) {
-                    return getDateOnly(dataItem?.time) === dateToMatch;
-                  } else if (
-                    item?.id === 'distanceResult' ||
-                    item?.id === 'heartRateResult' ||
-                    item?.id === 'totalCaloriesBurnedResult' ||
-                    item.id === 'stepsResult' ||
-                    item.id === 'Nutrition'
-                  ) {
-                    return getDateOnly(dataItem?.startTime) === dateToMatch;
+        data:
+          item?.data !== null && item?.data?.length > 0
+            ? item?.data
+                .filter(dataItem => {
+                  if (dataItem) {
+                    if (
+                      item?.id === 'heightResult' ||
+                      item?.id === 'weightResult' ||
+                      item?.id === 'BloodPressureResult'
+                    ) {
+                      return dataItem?.time
+                        ? getDateOnly(dataItem?.time) === dateToMatch
+                        : false;
+                    } else if (
+                      item?.id === 'distanceResult' ||
+                      item?.id === 'heartRateResult' ||
+                      item?.id === 'totalCaloriesBurnedResult' ||
+                      item?.id === 'stepsResult' ||
+                      item?.id === 'Nutrition'
+                    ) {
+                      return dataItem?.startTime
+                        ? getDateOnly(dataItem?.startTime) === dateToMatch
+                        : false;
+                    } else {
+                      return false;
+                    }
                   } else {
                     return false;
                   }
-                } else {
-                  return false;
-                }
-              })
-              .sort((a, b) => {
-                const dateA = getDateOnly(a.time || a.startTime);
-                const dateB = getDateOnly(b.time || b.startTime);
-                return dateB.localeCompare(dateA);
-              })
-          : null,
+                })
+                .sort((a, b) => {
+                  const dateA = getDateOnly(a?.time || a?.startTime);
+                  const dateB = getDateOnly(b?.time || b?.startTime);
+                  return dateB.localeCompare(dateA);
+                })
+            : null,
       }));
+
+      // console.log(JSON.stringify(filteredDataList));
 
       const updatedActivitiesData = ActivitiesData.map(activity => {
         const matchingData = filteredDataList.find(
           data =>
-            data?.id.toLocaleLowerCase() === activity.subId.toLocaleLowerCase(),
+            data?.id.toLocaleLowerCase() ===
+            activity?.subId.toLocaleLowerCase(),
         );
         return {
           ...activity,
-          data: matchingData ? matchingData.data : null,
+          data: matchingData ? matchingData?.data : null,
         };
       });
-      // console.log(JSON.stringify(updatedActivitiesData[3]));
 
       setAllLocalData(updatedActivitiesData);
       setWeeKData(HelthDataObject, WeekSelectData);
@@ -302,7 +331,7 @@ const TrackHealthScreen = () => {
 
       // Calculate the end of the week
       const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
+      endOfWeek.setDate(startOfWeek.getDate() + 7);
 
       return {
         start: startOfWeek.toISOString().split('T')[0],
@@ -317,40 +346,46 @@ const TrackHealthScreen = () => {
     const getDateOnly = dateTime => dateTime.split('T')[0];
 
     const filteredDataList = HelthDataObject.flatMap(item => ({
-      id: item.id,
-      data: item?.data
-        ? item?.data
-            .filter(dataItem => {
-              if (dataItem) {
-                if (
-                  item?.id === 'heightResult' ||
-                  item?.id === 'weightResult' ||
-                  item?.id === 'BloodPressureResult'
-                ) {
-                  const itemDate = getDateOnly(dataItem.time);
-                  return itemDate >= weekStart && itemDate <= weekEnd;
-                } else if (
-                  item?.id === 'distanceResult' ||
-                  item?.id === 'heartRateResult' ||
-                  item?.id === 'totalCaloriesBurnedResult' ||
-                  item?.id === 'stepsResult' ||
-                  item?.id === 'Nutrition'
-                ) {
-                  const itemDate = getDateOnly(dataItem?.startTime);
-                  return itemDate >= weekStart && itemDate <= weekEnd;
+      id: item?.id,
+      data:
+        item?.data !== null && item?.data?.length > 0
+          ? item?.data
+              .filter(dataItem => {
+                if (dataItem) {
+                  if (
+                    item?.id === 'heightResult' ||
+                    item?.id === 'weightResult' ||
+                    item?.id === 'BloodPressureResult'
+                  ) {
+                    const itemDate = getDateOnly(dataItem?.time);
+
+                    return dataItem?.time !== null
+                      ? itemDate >= weekStart && itemDate <= weekEnd
+                      : false;
+                  } else if (
+                    item?.id === 'distanceResult' ||
+                    item?.id === 'heartRateResult' ||
+                    item?.id === 'totalCaloriesBurnedResult' ||
+                    item?.id === 'stepsResult' ||
+                    item?.id === 'Nutrition'
+                  ) {
+                    const itemDate = getDateOnly(dataItem?.startTime);
+                    return dataItem?.startTime !== null
+                      ? itemDate >= weekStart && itemDate <= weekEnd
+                      : false;
+                  } else {
+                    return false;
+                  }
                 } else {
                   return false;
                 }
-              } else {
-                return false;
-              }
-            })
-            .sort((a, b) => {
-              const dateA = getDateOnly(a?.time || a?.startTime);
-              const dateB = getDateOnly(b?.time || b?.startTime);
-              return dateB.localeCompare(dateA);
-            })
-        : null,
+              })
+              .sort((a, b) => {
+                const dateA = getDateOnly(a?.time || a?.startTime);
+                const dateB = getDateOnly(b?.time || b?.startTime);
+                return dateB.localeCompare(dateA);
+              })
+          : null,
     }));
 
     const updatedActivitiesData = ActivitiesData.map(activity => {
@@ -493,6 +528,33 @@ const TrackHealthScreen = () => {
     );
   };
 
+  //<-apple->
+  const AppleInitHealth = async () => {
+    if (Platform.OS === 'ios') {
+      AppleHealthKit.initHealthKit(permissions, (err, results) => {
+        if (err) {
+          console.log('error initializing HealthKit: ', err);
+          return;
+        } else {
+          fetchAppleData();
+        }
+      });
+    }
+  };
+
+  const fetchAppleData = async () => {
+    const HealthData = await getAppleHealthData();
+    LocalStoreData(HealthData, true);
+  };
+
+  const handleReferceData = () => {
+    if (Platform.OS === 'android') {
+      checkAppInstalled();
+    } else {
+      AppleInitHealth();
+    }
+  };
+
   const ActiveView = () => {
     return (
       <View>
@@ -508,7 +570,7 @@ const TrackHealthScreen = () => {
               lineHeight: 25.44,
             }}>
             {'Your Activities\n'}
-            <Text
+            {/* <Text
               style={{
                 fontSize: 12,
                 fontWeight: '400',
@@ -517,9 +579,9 @@ const TrackHealthScreen = () => {
                 color: '#18192B',
               }}>
               {'Sun, 15th Nov '}
-            </Text>
+            </Text> */}
           </Text>
-          <TouchableOpacity onPress={() => checkAppInstalled()}>
+          <TouchableOpacity onPress={() => handleReferceData()}>
             <Image
               source={Sync_retry}
               style={{width: 24, height: 24, marginRight: 30}}
@@ -625,6 +687,7 @@ const TrackHealthScreen = () => {
       } catch (err) {
         console.log('error : ', err);
       }
+    } else {
     }
   };
 
@@ -1014,8 +1077,8 @@ const TrackHealthtModel = ({
     if (localData) {
       if (localData[3]?.data && localData[3]?.data?.length > 0) {
         Bpdata = localData ? localData[3]?.data[0] : null;
-
-        if (localData[3]?.data && localData[3]?.data.length > 0) {
+        //  console.log(localData[2]);
+        if (localData[3]?.data && localData[3]?.data?.length > 0) {
           const latestItem = localData[3]?.data
             ? localData[3]?.data?.reduce((latest, current) => {
                 return new Date(current?.time) > new Date(latest?.time)

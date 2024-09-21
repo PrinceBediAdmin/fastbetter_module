@@ -27,6 +27,8 @@ import AppleHealthKit, {
   HealthValue,
   HealthKitPermissions,
 } from 'react-native-health';
+import {getAppleHealthData} from './Models/AppleFatchData';
+
 const permissions = {
   permissions: {
     read: [
@@ -71,6 +73,7 @@ export default function LinkDevice() {
             title: 'Link your device with FastBetter',
             subTitle: 'Bring a new level of efficiency to your daily tasks.',
           });
+          fetchAppleData();
           console.log('error initializing HealthKit: ', err);
           return;
         } else {
@@ -89,6 +92,11 @@ export default function LinkDevice() {
         subTitle: 'Bring a new level of efficiency to your daily tasks.',
       });
     }
+  };
+
+  const fetchAppleData = async () => {
+    const HealthData = await getAppleHealthData();
+    LocalStoreData(HealthData, true);
   };
 
   const checkWatchStatus = async () => {

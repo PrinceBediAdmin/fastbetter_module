@@ -26,61 +26,79 @@ const calculateAverageHeartRate = results => {
 export const fetchDailyDistanceData = (startDate, endDate) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
-
-  // A map to store the aggregated results
   const distanceMap = new Map();
 
   const fetchForDay = day => {
+    const isoDate = getISODateForDay(day);
+    if (!isoDate) {
+      console.error('Invalid ISO date returned:', isoDate);
+      return Promise.reject(new Error('Invalid ISO date'));
+    }
+
     let options = {
-      unit: 'mile',
       startDate: getISODateForDay(day), // Start of the day
       endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
-      includeManuallyAdded: false,
     };
 
     return new Promise((resolve, reject) => {
-      AppleHealthKit.getDistanceWalkingRunning(options, (err, results) => {
-        if (err) {
-          console.log('Error fetching walking/running data: ', err);
-          reject(err);
-          return;
-        }
+      AppleHealthKit.getDailyDistanceWalkingRunningSamples(
+        options,
+        (err, results) => {
+          if (err) {
+            console.log(`Error fetching data for ${isoDate}: `, err);
+            reject(err);
+            return;
+          }
 
-        const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
+          const dateStr = isoDate.substring(0, 10); // YYYY-MM-DD format
 
-        if (!distanceMap.has(dateStr)) {
-          // If there's no entry for the date yet, create a new one
-          distanceMap.set(dateStr, {
-            startTime: results?.startDate
-              ? new Date(results?.startDate).toISOString()
-              : null,
-            endTime: results?.endDate
-              ? new Date(results?.endDate).toISOString()
-              : null,
-            count: results?.value || 0, // Distance in miles/meters
-          });
-        } else {
-          // If an entry for the date exists, update the count
-          const existingEntry = distanceMap.get(dateStr);
-          existingEntry.count += results?.value || 0;
-        }
+          if (results?.[0]?.value) {
+            if (!distanceMap.has(dateStr)) {
+              distanceMap.set(dateStr, {
+                startTime: results?.[0]?.startDate
+                  ? new Date(results?.[0]?.startDate).toISOString()
+                  : null,
+                endTime: results?.[0]?.endDate
+                  ? new Date(results?.[0]?.endDate).toISOString()
+                  : null,
+                distance: {
+                  inKilometers: results?.[0]?.value
+                    ? results?.[0]?.value / 1000
+                    : 0,
+                },
+                metadata: {
+                  lastModifiedTime: results?.[0]?.endDate
+                    ? new Date(results?.[0]?.endDate).toISOString()
+                    : null,
+                },
+              });
+            } else {
+              // Update the distance for an existing entry
+              const existingEntry = distanceMap.get(dateStr);
+              existingEntry.distance.inKilometers += results?.[0]?.value
+                ? results?.[0]?.value / 1000
+                : 0; // Accumulate distance
+            }
+          }
 
-        resolve();
-      });
+          resolve();
+        },
+      );
     });
   };
 
-  // Iterate over each day in the range and fetch data
   const promises = [];
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    promises.push(fetchForDay(new Date(d)));
+  let currentDate = new Date(start);
+
+  while (currentDate <= end) {
+    promises.push(fetchForDay(new Date(currentDate)));
+    currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  // Resolve all the promises and return distanceResults
   return Promise.all(promises)
     .then(() => {
-      // Convert the map values to an array
-      return Array.from(distanceMap.values());
+      const resultsArray = Array.from(distanceMap.values()); // Convert the map values to an array
+      return resultsArray;
     })
     .catch(error => {
       console.error('Error fetching data: ', error);
@@ -97,8 +115,7 @@ export const fetchDailyStepsData = (startDate, endDate) => {
 
   const fetchForDay = day => {
     let options = {
-      startDate: getISODateForDay(day), // Start of the day
-      endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
+      date: getISODateForDay(day),
     };
 
     return new Promise(async (resolve, reject) => {
@@ -111,21 +128,23 @@ export const fetchDailyStepsData = (startDate, endDate) => {
 
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
 
-        if (!stepMap.has(dateStr)) {
-          // If there's no entry for the date yet, create a new one
-          stepMap.set(dateStr, {
-            startTime: results?.startDate
-              ? new Date(results?.startDate).toISOString()
-              : null,
-            endTime: results?.endDate
-              ? new Date(results?.endDate).toISOString()
-              : null,
-            count: results?.value || 0, // Step count for the day
-          });
-        } else {
-          // If an entry for the date exists, update the count
-          const existingEntry = stepMap.get(dateStr);
-          existingEntry.count += results?.value || 0;
+        if (results?.value) {
+          if (!stepMap.has(dateStr)) {
+            // If there's no entry for the date yet, create a new one
+            stepMap.set(dateStr, {
+              startTime: results?.startDate
+                ? new Date(results?.startDate).toISOString()
+                : null,
+              endTime: results?.endDate
+                ? new Date(results?.endDate).toISOString()
+                : null,
+              count: results?.value || 0, // Step count for the day
+            });
+          } else {
+            // If an entry for the date exists, update the count
+            const existingEntry = stepMap.get(dateStr);
+            existingEntry.count += results?.value || 0;
+          }
         }
 
         resolve();
@@ -181,23 +200,34 @@ export const fetchDailyHeartRateData = (startDate, endDate) => {
 
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
 
-        if (!heartRateMap.has(dateStr)) {
-          // If there's no entry for the date yet, create a new one
-          heartRateMap.set(dateStr, {
-            startTime: results?.startDate
-              ? new Date(results?.startDate).toISOString()
-              : null,
-            endTime: results?.endDate
-              ? new Date(results?.endDate).toISOString()
-              : null,
-            avgHeartRate: calculateAverageHeartRate(results), // Average heart rate
-          });
-        } else {
-          // If an entry for the date exists, update the average heart rate
-          const existingEntry = heartRateMap.get(dateStr);
-          existingEntry.avgHeartRate += calculateAverageHeartRate(results);
+        if (results[0]?.value) {
+          if (!heartRateMap.has(dateStr)) {
+            // If there's no entry for the date yet, create a new one
+            heartRateMap.set(dateStr, {
+              startTime: results[0]?.startDate
+                ? new Date(results[0]?.startDate).toISOString()
+                : null,
+              endTime: results[0]?.endDate
+                ? new Date(results[0]?.endDate).toISOString()
+                : null,
+              metadata: {
+                lastModifiedTime: results[0]?.endDate
+                  ? new Date(results[0]?.endDate).toISOString()
+                  : null,
+              },
+              samples: [
+                {
+                  beatsPerMinute: results[0]?.value || 0,
+                },
+              ],
+            });
+          } else {
+            // If an entry for the date exists, update the average heart rate
+            const existingEntry = heartRateMap.get(dateStr);
+            existingEntry.avgHeartRate += calculateAverageHeartRate(results);
+          }
         }
-
+        //metadata?.lastModifiedTime
         resolve();
       });
     });
@@ -242,20 +272,28 @@ export const fetchDailyBloodPressureData = (startDate, endDate) => {
           reject(err);
           return;
         }
-
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
-
-        if (!bloodPressureMap.has(dateStr)) {
-          bloodPressureMap.set(dateStr, {
-            startTime: results?.[0]?.startDate
-              ? new Date(results[0].startDate).toISOString()
-              : null,
-            endTime: results?.[0]?.endDate
-              ? new Date(results[0].endDate).toISOString()
-              : null,
-            systolic: results?.[0]?.systolic || 0, // Systolic pressure
-            diastolic: results?.[0]?.diastolic || 0, // Diastolic pressure
-          });
+        if (results?.[0]?.bloodPressureDiastolicValue) {
+          if (!bloodPressureMap.has(dateStr)) {
+            bloodPressureMap.set(dateStr, {
+              time: results?.[0]?.startDate
+                ? new Date(results[0].startDate).toISOString()
+                : null,
+              metadata: {
+                lastModifiedTime: results?.[0]?.endDate
+                  ? new Date(results[0].endDate).toISOString()
+                  : null,
+              },
+              systolic: {
+                inMillimetersOfMercury:
+                  results?.[0]?.bloodPressureSystolicValue || 0,
+              },
+              diastolic: {
+                inMillimetersOfMercury:
+                  results?.[0]?.bloodPressureDiastolicValue || 0,
+              },
+            });
+          }
         }
 
         resolve();
@@ -294,31 +332,35 @@ export const fetchDailyWeightData = (startDate, endDate) => {
     }
 
     let options = {
-      startDate: isoDate, // Start of the day
+      startDate: getISODateForDay(day), // Start of the day
       endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
     };
 
     return new Promise((resolve, reject) => {
-      AppleHealthKit.getLatestWeight(options, (err, results) => {
+      AppleHealthKit.getWeightSamples(options, (err, results) => {
         if (err) {
           console.log('Error fetching weight data: ', err);
           reject(err);
           return;
         }
-
         const dateStr = isoDate.substring(0, 10); // YYYY-MM-DD format
-
-        if (!weightMap.has(dateStr)) {
-          weightMap.set(dateStr, {
-            time: results?.startDate
-              ? new Date(results?.startDate).toISOString()
-              : null,
-            weight: {
-              inKilograms: results?.value || 0, // Weight in kg
-            },
-          });
+        if (results[0]?.value) {
+          if (!weightMap.has(dateStr)) {
+            weightMap.set(dateStr, {
+              time: results[0]?.startDate
+                ? new Date(results[0]?.startDate).toISOString()
+                : null,
+              weight: {
+                inKilograms: Math.round(results[0]?.value * 0.45) || 0,
+              },
+              metadata: {
+                lastModifiedTime: results[0]?.startDate
+                  ? new Date(results[0]?.startDate).toISOString()
+                  : null,
+              },
+            });
+          }
         }
-
         resolve();
       });
     });
@@ -361,16 +403,26 @@ export const fetchDailyActiveEnergyData = (startDate, endDate) => {
         }
 
         const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
-
-        if (!activeEnergyMap.has(dateStr)) {
-          activeEnergyMap.set(dateStr, {
-            startTime: results?.[0]?.startDate
-              ? new Date(results[0].startDate).toISOString()
-              : null,
-            energyBurned: results?.[0]?.value || 0, // Active energy in kcal
-          });
+        if (results?.[0]?.value) {
+          if (!activeEnergyMap.has(dateStr)) {
+            activeEnergyMap.set(dateStr, {
+              startTime: results?.[0]?.startDate
+                ? new Date(results[0].startDate).toISOString()
+                : null,
+              endTime: results[0]?.endDate
+                ? new Date(results[0]?.endDate).toISOString()
+                : null,
+              energy: {
+                inKilocalories: results?.[0]?.value || 0,
+              },
+              metadata: {
+                lastModifiedTime: results[0]?.endDate
+                  ? new Date(results[0]?.endDate).toISOString()
+                  : null,
+              },
+            });
+          }
         }
-
         resolve();
       });
     });
@@ -395,11 +447,6 @@ export const getAppleHealthData = async () => {
   const StartValue = '2024-08-25T03:43:54.898Z';
   const endValue = new Date().toISOString();
 
-  const filteredDistanceResult = [];
-  const filteredActiveEnergyResult = [];
-  const filteredHeartRateDate = [];
-  const filteredWeightData = [];
-
   try {
     const [
       distanceResult,
@@ -417,42 +464,18 @@ export const getAppleHealthData = async () => {
       fetchDailyActiveEnergyData(StartValue, endValue),
     ]);
 
-    distanceResult.forEach(item => {
-      const date = item?.startTime.substring(0, 10); // YYYY-MM-DD format
-      if (
-        !filteredDistanceResult.find(existingItem =>
-          existingItem.startTime.startsWith(date),
-        )
-      ) {
-        filteredDistanceResult.push(item);
-      }
-    });
-
-    weightResult.forEach(item => {
-      const date = item?.time.substring(0, 10); // YYYY-MM-DD format
-      if (
-        !filteredWeightData.find(existingItem =>
-          existingItem.time.startsWith(date),
-        )
-      ) {
-        filteredWeightData.push(item);
-      }
-    });
-
     const HealthData = [
       {id: 'stepsResult', data: stepsResult},
       {id: 'totalCaloriesBurnedResult', data: null},
       {id: 'heartRateResult', data: heartRateResult},
       {id: 'distanceResult', data: distanceResult},
       {id: 'sleepSessionResult', data: null},
-      {id: 'weightResult', data: filteredWeightData},
+      {id: 'weightResult', data: weightResult},
       {id: 'heightResult', data: null},
       {id: 'BloodPressureResult', data: bloodPressureResult},
       {id: 'ActiveCaloriesBurned', data: activeEnergyResult},
-      {id: 'Nutrition', data: null},
+      {id: 'Nutrition', data: activeEnergyResult},
     ];
-
-    // console.log(stepsResult);
 
     return HealthData;
   } catch (error) {
