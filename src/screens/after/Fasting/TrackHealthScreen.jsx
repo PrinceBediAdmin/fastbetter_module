@@ -67,6 +67,7 @@ const permissions = {
       AppleHealthKit.Constants.Permissions.Weight, // Weight
       AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
       AppleHealthKit.Constants.Permissions.RestingHeartRate,
+      AppleHealthKit.Constants.Permissions.SleepAnalysis,
     ],
     write: [], // Add any write permissions if needed
   },

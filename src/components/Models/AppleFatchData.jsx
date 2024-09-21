@@ -513,6 +513,75 @@ export const fetchDailyRestingHeartRateData = (startDate, endDate) => {
     });
 };
 
+export const fetchDailySleepData = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // A map to store the aggregated results
+  const sleepMap = new Map();
+
+  const fetchForDay = day => {
+    let options = {
+      startDate: getISODateForDay(day), // Start of the day
+      endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
+      includeManuallyAdded: false,
+    };
+    //  date: getISODateForDay(day),
+
+    return new Promise((resolve, reject) => {
+      // Use the correct method for fetching heart rate samples
+      AppleHealthKit.getSleepSamples(options, (err, results) => {
+        if (err) {
+          console.log('Error fetching resting heart rate data: ', err);
+          reject(err);
+          return;
+        }
+
+        console.log(results);
+
+        const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
+        if (results.length > 0) {
+          // Calculate average resting heart rate for the day
+          const totalHeartRate = results.reduce(
+            (sum, item) => sum + item.value,
+            0,
+          );
+
+          sleepMap.set(dateStr, {
+            startTime: results[0]?.startDate
+              ? new Date(results[0].startDate).toISOString()
+              : null,
+            endTime: results[results.length - 1]?.endDate
+              ? new Date(results[results.length - 1].endDate).toISOString()
+              : null,
+            value: results[0]?.value,
+            metadata: {
+              lastModifiedTime: results[results.length - 1]?.endDate
+                ? new Date(results[results.length - 1].endDate).toISOString()
+                : null,
+            },
+          });
+        }
+        resolve();
+      });
+    });
+  };
+
+  const promises = [];
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    promises.push(fetchForDay(new Date(d)));
+  }
+
+  return Promise.all(promises)
+    .then(() => {
+      return Array.from(sleepMap.values());
+    })
+    .catch(error => {
+      console.error('Error fetching resting heart rate data: ', error);
+      throw error;
+    });
+};
+
 export const getAppleHealthData = async () => {
   const StartValue = '2024-08-25T03:43:54.898Z';
   const endValue = new Date().toISOString();
