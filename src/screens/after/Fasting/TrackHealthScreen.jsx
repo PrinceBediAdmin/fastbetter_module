@@ -66,6 +66,7 @@ const permissions = {
       AppleHealthKit.Constants.Permissions.BloodPressureDiastolic, // Diastolic BP
       AppleHealthKit.Constants.Permissions.Weight, // Weight
       AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
+      AppleHealthKit.Constants.Permissions.RestingHeartRate,
     ],
     write: [], // Add any write permissions if needed
   },
@@ -156,6 +157,18 @@ const ActivitiesData = [
     bg1: '#E9EFF7',
     bg2: '#D3E3F3',
     subId: 'Nutrition',
+    data: null,
+  },
+  {
+    id: 8,
+    name: 'RestingHeartRate',
+    value: '',
+    type: '',
+    img: Walk_icon,
+    textColor: '#197BD2',
+    bg1: '#E9EFF7',
+    bg2: '#D3E3F3',
+    subId: 'RestingHeartRate',
     data: null,
   },
 ];
@@ -261,7 +274,8 @@ const TrackHealthScreen = () => {
                       item?.id === 'heartRateResult' ||
                       item?.id === 'totalCaloriesBurnedResult' ||
                       item?.id === 'stepsResult' ||
-                      item?.id === 'Nutrition'
+                      item?.id === 'Nutrition' ||
+                      item?.id === 'RestingHeartRate'
                     ) {
                       return dataItem?.startTime
                         ? getDateOnly(dataItem?.startTime) === dateToMatch
@@ -280,8 +294,6 @@ const TrackHealthScreen = () => {
                 })
             : null,
       }));
-
-      // console.log(JSON.stringify(filteredDataList));
 
       const updatedActivitiesData = ActivitiesData.map(activity => {
         const matchingData = filteredDataList.find(
@@ -366,7 +378,8 @@ const TrackHealthScreen = () => {
                     item?.id === 'heartRateResult' ||
                     item?.id === 'totalCaloriesBurnedResult' ||
                     item?.id === 'stepsResult' ||
-                    item?.id === 'Nutrition'
+                    item?.id === 'Nutrition' ||
+                    item?.id === 'RestingHeartRate'
                   ) {
                     const itemDate = getDateOnly(dataItem?.startTime);
                     return dataItem?.startTime !== null
@@ -1073,6 +1086,7 @@ const TrackHealthtModel = ({
     let BpDiastolic = 0;
     let BpSystolic = 0;
     let BpStartTime = null;
+    let RestingRate = null;
     if (localData) {
       if (localData[3]?.data && localData[3]?.data?.length > 0) {
         Bpdata = localData ? localData[3]?.data[0] : null;
@@ -1099,6 +1113,9 @@ const TrackHealthtModel = ({
             ? latestItem?.metadata?.lastModifiedTime
             : null;
         }
+      }
+      if (localData[7]?.data && localData[7]?.data?.length > 0) {
+        RestingRate = localData[7]?.data[0]?.heartRate?.average || 0;
       }
     }
     return (
@@ -1223,8 +1240,7 @@ const TrackHealthtModel = ({
                     Resting
                   </Text>
                   <Text className="text-[12px] text-[#18192B] font-[700] leading-[14.18px] ">
-                    {/* {' 80 bpm'} */}
-                    {'----'}
+                    {RestingRate ? RestingRate + ' bpm' : '----'}
                   </Text>
                 </View>
               </View>

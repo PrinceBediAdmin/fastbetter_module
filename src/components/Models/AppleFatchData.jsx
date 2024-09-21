@@ -443,6 +443,76 @@ export const fetchDailyActiveEnergyData = (startDate, endDate) => {
     });
 };
 
+export const fetchDailyRestingHeartRateData = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // A map to store the aggregated results
+  const restingHeartRateMap = new Map();
+
+  const fetchForDay = day => {
+    let options = {
+      startDate: getISODateForDay(day), // Start of the day
+      endDate: getISODateForDay(day, 1), // End of the day (next day, midnight)
+      includeManuallyAdded: false,
+    };
+    //  date: getISODateForDay(day),
+
+    return new Promise((resolve, reject) => {
+      // Use the correct method for fetching heart rate samples
+      AppleHealthKit.getRestingHeartRateSamples(options, (err, results) => {
+        if (err) {
+          console.log('Error fetching resting heart rate data: ', err);
+          reject(err);
+          return;
+        }
+
+        const dateStr = getISODateForDay(day).substring(0, 10); // YYYY-MM-DD format
+        if (results.length > 0) {
+          // Calculate average resting heart rate for the day
+          const totalHeartRate = results.reduce(
+            (sum, item) => sum + item.value,
+            0,
+          );
+          const averageHeartRate = totalHeartRate / results.length;
+
+          restingHeartRateMap.set(dateStr, {
+            startTime: results[0]?.startDate
+              ? new Date(results[0].startDate).toISOString()
+              : null,
+            endTime: results[results.length - 1]?.endDate
+              ? new Date(results[results.length - 1].endDate).toISOString()
+              : null,
+            heartRate: {
+              average: averageHeartRate ? Math.round(averageHeartRate) : 0,
+            },
+            metadata: {
+              lastModifiedTime: results[results.length - 1]?.endDate
+                ? new Date(results[results.length - 1].endDate).toISOString()
+                : null,
+            },
+          });
+        }
+        resolve();
+      });
+    });
+  };
+
+  const promises = [];
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    promises.push(fetchForDay(new Date(d)));
+  }
+
+  return Promise.all(promises)
+    .then(() => {
+      return Array.from(restingHeartRateMap.values());
+    })
+    .catch(error => {
+      console.error('Error fetching resting heart rate data: ', error);
+      throw error;
+    });
+};
+
 export const getAppleHealthData = async () => {
   const StartValue = '2024-08-25T03:43:54.898Z';
   const endValue = new Date().toISOString();
@@ -455,6 +525,7 @@ export const getAppleHealthData = async () => {
       bloodPressureResult,
       weightResult,
       activeEnergyResult,
+      RestingHeartRate,
     ] = await Promise.all([
       fetchDailyDistanceData(StartValue, endValue),
       fetchDailyStepsData(StartValue, endValue),
@@ -462,6 +533,7 @@ export const getAppleHealthData = async () => {
       fetchDailyBloodPressureData(StartValue, endValue),
       fetchDailyWeightData(StartValue, endValue),
       fetchDailyActiveEnergyData(StartValue, endValue),
+      fetchDailyRestingHeartRateData(StartValue, endValue),
     ]);
 
     const HealthData = [
@@ -475,6 +547,7 @@ export const getAppleHealthData = async () => {
       {id: 'BloodPressureResult', data: bloodPressureResult},
       {id: 'ActiveCaloriesBurned', data: activeEnergyResult},
       {id: 'Nutrition', data: activeEnergyResult},
+      {id: 'RestingHeartRate', data: RestingHeartRate},
     ];
 
     return HealthData;

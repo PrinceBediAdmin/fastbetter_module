@@ -57,6 +57,7 @@ const permissions = {
       AppleHealthKit.Constants.Permissions.BloodPressureDiastolic, // Diastolic BP
       AppleHealthKit.Constants.Permissions.Weight, // Weight
       AppleHealthKit.Constants.Permissions.ActiveEnergyBurned, // Active energy
+      AppleHealthKit.Constants.Permissions.RestingHeartRate,
     ],
     write: [], // Add any write permissions if needed
   },
