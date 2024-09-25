@@ -40,8 +40,7 @@
     <uses-permission android:name="android.permission.health.WRITE_RESTING_HEART_RATE" />
     <uses-permission android:name="android.permission.health.READ_RESTING_HEART_RATE"/>
     <uses-permission android:name="android.permission.health.READ_NUTRITION"/>
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
 
     <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"-->
@@ -188,6 +187,13 @@
             android:enableOnBackInvokedCallback="true"
             android:exported="true"
             tools:targetApi="tiramisu">
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="myapp" android:host="auth/fitbit" />-->
+<!--            </intent-filter>-->
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -215,7 +221,6 @@
                 <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
             </intent-filter>
         </activity-alias>
-
 
     </application>
     

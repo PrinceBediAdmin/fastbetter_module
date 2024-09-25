@@ -1021,6 +1021,9 @@ PODS:
   - React-Mapbuffer (0.73.6):
     - glog
     - React-debug
+  - react-native-app-auth (8.0.0):
+    - AppAuth (>= 1.7.3)
+    - React-Core
   - react-native-appsflyer (6.14.3):
     - AppsFlyerFramework (= 6.14.3)
     - React
@@ -1307,6 +1310,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-app-auth (from `../node_modules/react-native-app-auth`)
   - react-native-appsflyer (from `../node_modules/react-native-appsflyer`)
   - react-native-background-actions (from `../node_modules/react-native-background-actions`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
@@ -1445,6 +1449,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-app-auth:
+    :path: "../node_modules/react-native-app-auth"
   react-native-appsflyer:
     :path: "../node_modules/react-native-appsflyer"
   react-native-background-actions:
@@ -1590,6 +1596,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
+  react-native-app-auth: c4a3b4edc11100070d8d7bc48d55fb66668cead9
   react-native-appsflyer: 37a0053df435bb76c330c5c15488dca29a3baa9b
   react-native-background-actions: ea5bab231a28710eea614acb9ca595594415a5ec
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe

@@ -19,7 +19,7 @@ import {
 import {ModelBox} from '../../components/Models/Models';
 import bottom_bg from '../../assets/diagnosed/bottom_bg.png';
 import NextButton from '../../components/NextButton';
-
+import {useNavigation} from '@react-navigation/native';
 import connection from '../../assets/afterscreen/Profile/connection.png';
 import connection_error from '../../assets/afterscreen/Profile/connection_error.png';
 import {
@@ -44,8 +44,7 @@ import AppleHealthKit, {
   HealthKitPermissions,
 } from 'react-native-health';
 import {getAppleHealthData} from './AppleFatchData';
-
-//fetchDailyDistanceData
+import {authorize} from 'react-native-app-auth';
 const permissions = {
   permissions: {
     read: [
@@ -64,6 +63,19 @@ const permissions = {
   },
 };
 
+// fitbitConfig.js
+export const fitbitConfig = {
+  clientId: '23PMG8',
+  clientSecret: '22f1f5b091aa499824348a7ce98986ef',
+  redirectUrl: 'https://fastbetter.com/', // This is a URL defined in your Fitbit developer dashboard
+  scopes: ['activity', 'nutrition', 'sleep', 'heartrate', 'profile'], // Scopes for required data
+  serviceConfiguration: {
+    authorizationEndpoint: 'https://www.fitbit.com/oauth2/authorize',
+    tokenEndpoint: 'https://api.fitbit.com/oauth2/token',
+    revocationEndpoint: 'https://api.fitbit.com/oauth2/revoke',
+  },
+};
+
 const HealthLinkedModel = ({
   isModelOpen,
   hanldeCloseModel,
@@ -74,6 +86,7 @@ const HealthLinkedModel = ({
   const [subErrorMsg, setsubErrorMsg] = useState(
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   );
+  const navigation = useNavigation();
 
   const DeviceConn = () => {
     return (
@@ -137,7 +150,7 @@ const HealthLinkedModel = ({
     if (headerText === 'Health Connect linked') {
       if (ScreenType === 0) {
         if (Platform.OS === 'android') {
-          checkAppInstalled();
+          checkAppInstalled('googleFit');
         }
       } else {
         if (Platform.OS === 'android') {
@@ -145,7 +158,7 @@ const HealthLinkedModel = ({
             if (isInstalled) {
               redirectToHealthConnect();
             } else {
-              openHealthConnectInPlayStore();
+              openHealthConnectInPlayStore('healthdata');
               LocalStoreData(null, false);
             }
           });
@@ -156,12 +169,27 @@ const HealthLinkedModel = ({
       AppleInitHealth();
     } else {
       if (ScreenType === 0) {
-        setScreenType(1);
+        if (Platform.OS === 'android') {
+          checkAppInstalled('FitbitMobile');
+        }
       } else {
+        if (Platform.OS === 'android') {
+          AppInstalledChecker.isAppInstalled('FitbitMobile').then(
+            isInstalled => {
+              if (isInstalled) {
+                fitbitAppInstalled(1);
+              } else {
+                openHealthConnectInPlayStore('FitbitMobile');
+                LocalStoreData(null, false);
+              }
+            },
+          );
+        }
         setScreenType(0);
       }
     }
   };
+
   //<-apple->
   const AppleInitHealth = async () => {
     if (Platform.OS === 'ios') {
@@ -193,18 +221,68 @@ const HealthLinkedModel = ({
     }
   };
 
-  const checkAppInstalled = async () => {
+  const checkAppInstalled = async (AppName = '') => {
     try {
-      AppInstalledChecker.isAppInstalled('healthdata').then(isInstalled => {
-        if (isInstalled) {
-          getHealthData();
-        } else {
-          setScreenType(1);
-          setsubErrorMsg(
-            'Health Connect is not installed. Redirecting to Play Store...',
-          );
-        }
-      });
+      AppInstalledChecker.isAppInstalledAndroid('healthdata').then(
+        isInstalled => {
+          if (isInstalled) {
+            if (AppName === 'FitbitMobile') {
+              fitbitAppInstalled();
+            } else {
+              getHealthData();
+            }
+          } else {
+            setScreenType(1);
+            setsubErrorMsg(
+              'Health Connect is not installed. Redirecting to Play Store...',
+            );
+          }
+        },
+      );
+    } catch (err) {}
+  };
+
+  const googleFitAppInstalled = async (type = 0) => {
+    try {
+      AppInstalledChecker.isAppInstalledAndroid('FitbitMobile').then(
+        isInstalled => {
+          if (isInstalled) {
+            if (type === 1) {
+              redirectToHealthConnect();
+            } else {
+              getHealthData();
+            }
+          } else {
+            openHealthConnectInPlayStore('FitbitMobile');
+            setScreenType(1);
+            setsubErrorMsg(
+              'Fitbit app is not installed. Redirecting to Play Store...',
+            );
+          }
+        },
+      );
+    } catch (err) {}
+  };
+
+  const fitbitAppInstalled = async (type = 0) => {
+    try {
+      AppInstalledChecker.isAppInstalledAndroid('FitbitMobile').then(
+        isInstalled => {
+          if (isInstalled) {
+            if (type === 1) {
+              redirectToHealthConnect();
+            } else {
+              getHealthData();
+            }
+          } else {
+            openHealthConnectInPlayStore('FitbitMobile');
+            setScreenType(1);
+            setsubErrorMsg(
+              'Fitbit app is not installed. Redirecting to Play Store...',
+            );
+          }
+        },
+      );
     } catch (err) {}
   };
 
@@ -256,10 +334,16 @@ const HealthLinkedModel = ({
     }
   };
 
-  const openHealthConnectInPlayStore = () => {
+  const openHealthConnectInPlayStore = (urlName = 'healthdata') => {
+    const healthdataUrl =
+      'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata';
+    const fitbitUrl =
+      'https://play.google.com/store/apps/details?id=com.fitbit.FitbitMobile&hl=en';
+    const googleFitUrl =
+      'https://play.google.com/store/apps/details?id=com.google.android.apps.fitness&hl=en';
+
     const url = Platform.select({
-      android:
-        'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata',
+      android: urlName === 'healthdata' ? healthdataUrl : fitbitUrl,
     });
 
     Linking.openURL(url).catch(err =>
@@ -312,6 +396,8 @@ const HealthLinkedModel = ({
         {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
         {id: 'Nutrition', data: Nutrition},
       ];
+
+      // console.log(JSON.stringify(HealthData));
 
       LocalStoreData(HealthData, true);
       hanldeCloseModel('success');

@@ -16,6 +16,7 @@ import TrackHealthScreen from '../screens/after/Fasting/TrackHealthScreen';
 
 import DashboardNavigation from './DashboardNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FitbitIntegration from '../components/Models/FitbitIntegration';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,7 +60,6 @@ export default function AppNavigation() {
             options={disabledHeader}
             component={DashboardNavigation}
           />
-
           <Stack.Screen
             name="TrackFastingScreen"
             options={disabledHeader}
@@ -84,6 +84,11 @@ export default function AppNavigation() {
             name="TrackHealthScreen"
             options={disabledHeader}
             component={TrackHealthScreen}
+          />
+          <Stack.Screen
+            name="FitbitIntegration"
+            options={disabledHeader}
+            component={FitbitIntegration}
           />
         </Stack.Navigator>
       )}
