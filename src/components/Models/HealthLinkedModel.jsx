@@ -45,6 +45,7 @@ import AppleHealthKit, {
 } from 'react-native-health';
 import {getAppleHealthData} from './AppleFatchData';
 import {authorize} from 'react-native-app-auth';
+
 const permissions = {
   permissions: {
     read: [
@@ -396,9 +397,6 @@ const HealthLinkedModel = ({
         {id: 'ActiveCaloriesBurned', data: ActiveCaloriesBurned},
         {id: 'Nutrition', data: Nutrition},
       ];
-
-      // console.log(JSON.stringify(HealthData));
-
       LocalStoreData(HealthData, true);
       hanldeCloseModel('success');
     } catch (error) {

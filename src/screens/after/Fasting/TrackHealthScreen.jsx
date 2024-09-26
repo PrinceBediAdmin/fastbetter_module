@@ -267,9 +267,17 @@ const TrackHealthScreen = () => {
                       item?.id === 'weightResult' ||
                       item?.id === 'BloodPressureResult'
                     ) {
-                      return dataItem?.time
-                        ? getDateOnly(dataItem?.time) === dateToMatch
-                        : false;
+                      if (getDateOnly(dataItem?.time) === dateToMatch) {
+                        return dataItem?.time
+                          ? getDateOnly(dataItem?.time) === dateToMatch
+                          : false;
+                      } else {
+                        return dataItem?.metadata?.lastModifiedTime
+                          ? getDateOnly(
+                              dataItem?.metadata?.lastModifiedTime,
+                            ) === dateToMatch
+                          : false;
+                      }
                     } else if (
                       item?.id === 'distanceResult' ||
                       item?.id === 'heartRateResult' ||
@@ -307,7 +315,6 @@ const TrackHealthScreen = () => {
           data: matchingData ? matchingData?.data : null,
         };
       });
-
       setAllLocalData(updatedActivitiesData);
       setWeeKData(HelthDataObject, WeekSelectData);
     }
